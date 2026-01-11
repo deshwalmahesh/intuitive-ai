@@ -65,11 +65,11 @@
             <!-- Slide 1-3: How do we measure uncertainty? -->
             <div class="slide" id="slide-1-3" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">How do we measure uncertainty?</div>
+                    <div class="slide-card-title">How do we (as humans) perceive and measure uncertainty?</div>
                     <div class="slide-card-content">
                         <strong>1. Probability:</strong> "I think there's a 70% chance..." → A spread/distribution over outcomes<br><br>
-                        <strong>2. Confidence/doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
-                        <strong>3. Variability across answers:</strong> Model says "Pink" → "No, coral" → "Actually red" → Inconsistency across responses
+                        <strong>2. Confidence/Doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
+                        <strong>3. Variability across Answers:</strong> You ask a kid: "What do you want to be when you grow up?" and it goes like: "Doctor" → "No, Politician" → "Actually AI Engineer (said no one)" → Inconsistency across responses
                     </div>
                 </div>
             </div>
@@ -79,66 +79,135 @@
                 <div class="slide-card">
                     <div class="slide-card-title">And the scientific measurement?</div>
                     <div class="slide-card-content">
-                        <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br><br>
-                        <img src="images/entropy_graph_type.png" alt="Entropy visualization" class="slide-image">
-                        <br>
+                        <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">The Equations</div>
+                            <p>
+                                <strong>Per Token:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>) log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>)<br><br>
+                                <strong>Per Sentence:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(seq) log <span class="term c-p" data-popup="posterior">p</span>(seq)<br>
+                                <span style="font-size: 0.9em; opacity: 0.8;">where <span class="term c-p" data-popup="posterior">p</span>(seq) = ∏ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span><sub>t</sub> | <span class="term c-x" data-popup="input">history</span>)</span>
+                            </p>
+                        </div>
                         • <strong>Sharp distribution</strong> (peaked, concentrated) → Low entropy → Very certain<br>
-                        • <strong>Spread out distribution</strong> (flat) → High entropy → High uncertainty
+                        • <strong>Spread out distribution</strong> (flat) → High entropy → Very uncertain
+                        <img src="images/entropy_graph_type.png" alt="Entropy visualization" class="slide-image">
+            
                     </div>
                 </div>
             </div>
-            
-            <!-- Slide 1-5: Where does uncertainty come from? -->
+
+             <!-- Slide 1-5: Aleatoric Uncertainty Deep Dive -->
             <div class="slide" id="slide-1-5" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">So where does this uncertainty come from?</div>
+                    <div class="slide-card-title">🎲 Aleatoric Uncertainty: The World's Ambiguity</div>
                     <div class="slide-card-content">
-                        Total uncertainty splits into two sources:<br><br>
-                        <strong>1. Aleatoric (from the world):</strong> Input ambiguity, inherent noise in the task<br>
-                        → <em>Irreducible</em> - can't fix even with infinite data<br><br>
-                        <strong>2. Epistemic (from the model):</strong> Knowledge gaps, model blind spots<br>
-                        → <em>Reducible</em> - can fix with more training data, RAG, fine-tuning
+                        <div class="insight-box">
+                            <div class="insight-title">What is it?</div>
+                            <p>Uncertainty from ambiguity in the <span class="term c-x" data-popup="input">input</span> itself. Even a <em>perfect</em> model would be uncertain here because the question has multiple valid answers.</p>
+                        </div>
+                        
+                        <strong>Key Properties:</strong><br>
+                        • <strong>Irreducible</strong> - can't be fixed even with infinite <span class="term c-D" data-popup="data">data</span><br>
+                        • It's error in the system/task itself, not the model<br>
+                        • If we don't change <span class="term c-theta" data-popup="theta">weights</span> but change sampling (temp, top-k), we're measuring <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span><br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt:</strong> "What is my favourite colour?"<br><br>
+                            Any answer could be correct without more context! This is ambiguous <span class="term c-x" data-popup="input">input</span>, not a knowledge gap. Similarly: "Tell me a joke" has thousands of valid answers.</p>
+                        </div>
+                        
+                        <strong>Two Types:</strong><br>
+                        • <strong>Homoscedastic:</strong> Error rate is constant (sensor gives same 0.1% error always)<br>
+                        • <strong>Heteroscedastic:</strong> Error rate varies with input (camera: 0.1% in daylight, 5% at night)<br><br>
+                        
+                        <strong>Primary Indicators in LLMs:</strong><br>
+                        • High entropy in phrasing choices (many synonyms equally likely)<br>
+                        • Sensitivity to prompt ambiguity
                     </div>
                 </div>
             </div>
             
-            <!-- Slide 1-6: Summary Table -->
+            <!-- Slide 1-6: Epistemic Uncertainty Deep Dive -->
             <div class="slide" id="slide-1-6" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">📋 Summary: Types of Uncertainty</div>
+                    <div class="slide-card-title">🧠 Epistemic Uncertainty: The Model's Ignorance</div>
                     <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">What is it?</div>
+                            <p>Uncertainty from the <span class="term c-theta" data-popup="theta">model</span> not knowing something. It's the "I haven't learned this" or "I haven't seen this before" type of doubt.</p>
+                        </div>
+                        
+                        <strong>Key Properties:</strong><br>
+                        • <strong>Reducible</strong> - can be fixed with more <span class="term c-D" data-popup="data">training data</span>, better architecture, or RAG<br>
+                        • Arises from OOD (out-of-distribution) samples or long-tail events<br>
+                        • If we change the <span class="term c-theta" data-popup="theta">model weights</span> (finetuning, SFT), we're working on <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> issues<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt:</strong> "What is the capital of Narnia?"<br><br>
+                            The model was trained on cats vs dogs and you asked about fish. Or you asked about an obscure 15th century poet. The model simply <em>doesn't have the knowledge</em> - this gap can be filled.</p>
+                        </div>
+                        
+                        <strong>Primary Indicators in LLMs:</strong><br>
+                        • Hallucination (confident but wrong answers)<br>
+                        • Inconsistency across rephrasings of same question<br>
+                        • Sycophancy (changing answer when challenged)
+                    </div>
+                </div>
+            </div>
+            
+           
+            
+            <!-- ============================================
+                  TYPES OF UNCERTAINTY (Slides 2-1 to 2-5)
+                 ============================================ -->
+            
+            <!-- Slide 2-1: Introduction - Sources of Uncertainty -->
+            <div class="slide" id="slide-2-1" data-section="1">
+                <div class="slide-card">
+                    <div class="slide-card-title">The Big Distinction: Where Does Uncertainty Come From?</div>
+                    <div class="slide-card-content">
+                        The spread we're talking about - where exactly does it come from?<br>
+                        It is the <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> and <em>where/how</em> it arises gives us two names:<br><br>
+                        
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
                                 <tr>
                                     <th>Type</th>
                                     <th>Source</th>
                                     <th>Nature</th>
-                                    <th>Fix?</th>
+                                    <th>Remediation</th>
+                                    <th>LLM Indicators</th>
                                 </tr>
                                 <tr>
-                                    <td><strong>Aleatoric</strong></td>
+                                    <td><strong><span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span></strong></td>
                                     <td>Data ambiguity, linguistic variety</td>
                                     <td>Irreducible</td>
-                                    <td>Clarify input, add constraints</td>
+                                    <td>Input clarification, constraints</td>
+                                    <td>High entropy in phrasing; prompt sensitivity</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Epistemic</strong></td>
+                                    <td><strong><span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></td>
                                     <td>Knowledge gaps, model blind spots</td>
                                     <td>Reducible</td>
                                     <td>RAG, fine-tuning, ensembling</td>
+                                    <td>Hallucination; inconsistency; sycophancy</td>
                                 </tr>
                             </table>
+                        </div>
+                        <br>
+                        <div class="insight-box">
+                            <div class="insight-title">The Formula</div>
+                            <p><strong><span class="term c-total" data-popup="total-uncertainty">Total</span> = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> + <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></p>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- ============================================
-                  TYPES OF UNCERTAINTY (Slides 2-1 to 2-3)
-                 ============================================ -->
-            
-            <!-- Slide 2-1: Variance Decomposition Equation -->
-            <div class="slide" id="slide-2-1" data-section="1">
+            <!-- Slide 2-2: Variance Decomposition Equation -->
+            <div class="slide" id="slide-2-2" data-section="1">
                 <h2>Equation 1: Variance Decomposition (Law of Total Variance)</h2>
                 
                 <div class="equation-box">
@@ -171,16 +240,16 @@
                     <div class="eq-explain">
                         <strong>In plain English:</strong> 
                         <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> = 
-                        how much different model versions <em>disagree</em> on the average prediction 
+                        how much different <span class="term c-theta" data-popup="theta">model versions</span> <em>disagree</em> on the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-y" data-popup="output">prediction</span> 
                         (<span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>) + 
-                        the average <em>spread</em> each model has within its own predictions 
+                        the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-var" data-popup="variance">spread</span> each <span class="term c-theta" data-popup="theta">model</span> has within its own <span class="term c-y" data-popup="output">predictions</span> 
                         (<span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>).
                     </div>
                 </div>
             </div>
             
-            <!-- Slide 2-2: Information-Theoretic Equation -->
-            <div class="slide" id="slide-2-2" data-section="1">
+            <!-- Slide 2-3: Information-Theoretic Equation -->
+            <div class="slide" id="slide-2-3" data-section="1">
                 <h2>Equation 2: Information-Theoretic Decomposition</h2>
                 
                 <div class="equation-box">
@@ -214,121 +283,304 @@
                     <div class="eq-explain">
                         <strong>In plain English:</strong> 
                         <span class="term c-H" data-popup="entropy">Total Entropy</span> = 
-                        how much knowing the true model parameters would reduce uncertainty about the output 
+                        how much knowing the true <span class="term c-theta" data-popup="theta">model parameters</span> would reduce uncertainty about the <span class="term c-y" data-popup="output">output</span> 
                         (<span class="term c-epistemic-info" data-popup="epistemic-info">Epistemic</span>) + 
-                        the average entropy of each model's token distribution 
+                        the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-H" data-popup="entropy">entropy</span> of each <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-y" data-popup="output">token</span> <span class="term c-p" data-popup="posterior">distribution</span> 
                         (<span class="term c-aleatoric-info" data-popup="aleatoric-info">Aleatoric</span>).
                     </div>
                 </div>
             </div>
             
-            <!-- Slide 2-3: When to Use Which -->
-            <div class="slide" id="slide-2-3" data-section="1">
+            <!-- Slide 2-4: When to Use Which -->
+            <div class="slide" id="slide-2-4" data-section="1">
                 <div class="slide-card">
-                    <div class="slide-card-title">🤔 When to Use Which Equation?</div>
+                    <div class="slide-card-title">When to Use Which Equation?</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Variance Decomposition</div>
                             <p>Best for regression tasks or when you care about continuous outputs (e.g., perplexity scores, confidence scores).</p>
+                            <p><strong>Why?</strong> Variance measures squared differences between predictions. When outputs are continuous numbers (like a score from 0 to 1), variance directly captures how "spread out" the predictions are in that number space. It's also easier to interpret: a variance of 0.05 means predictions typically differ by √0.05 ≈ 0.22 from the mean.</p>
                         </div>
                         <div class="insight-box">
                             <div class="insight-title">Entropy Decomposition</div>
                             <p>Best for classification/generation tasks with discrete tokens. More common in LLM analysis since we predict discrete tokens.</p>
+                            <p><strong>Why?</strong> Entropy measures uncertainty over categorical distributions. LLMs output probability distributions over vocabularies (50K+ discrete tokens), making entropy the natural fit. Entropy is also additive across tokens and measured in bits - directly interpretable as "how many binary questions needed to identify the answer."</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- ============================================
-                  DETECTION & MITIGATION (Slides 3-1 to 3-3)
+                  APPROACHES (Slides 3-1 to 3-9)
                  ============================================ -->
             
-            <!-- Slide 3-1: Core Idea -->
+            <!-- Slide 3-1: The Ongoing Debate (FIRST) -->
             <div class="slide" id="slide-3-1" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🎯 Core Idea: How do we detect uncertainty?</div>
-                    <div class="slide-card-content">
-                        We usually try to detect or minimize <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic uncertainty</span> at inference time because <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> is related to system/input ambiguity.<br><br>
-                        The core approaches:<br>
-                        <strong>1. Token-level:</strong> Looking at logit spread and verbalized confidence (P(True))<br>
-                        <strong>2. Model-level:</strong> Fine-tuning, RAG, ensembling<br>
-                        <strong>3. Multi-generation:</strong> If model has knowledge, it gives consistent answers regardless of how you ask
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 3-2: Methods Table -->
-            <div class="slide" id="slide-3-2" data-section="2">
-                <div class="slide-card">
-                    <div class="slide-card-title">📊 Detection & Mitigation Methods</div>
-                    <div class="slide-card-content">
-                        <div class="table-wrapper">
-                            <table class="uncertainty-table">
-                                <tr>
-                                    <th>Scenario</th>
-                                    <th>Primary Target</th>
-                                    <th>Mechanism</th>
-                                    <th>Key Insight</th>
-                                </tr>
-                                <tr>
-                                    <td><strong>Varying Decoding</strong><br>(temp, top-k, top-p)</td>
-                                    <td>Both</td>
-                                    <td>Stochastic sampling of semantic clusters</td>
-                                    <td>Semantic Entropy: High entropy over meanings reveals gaps</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Rephrased Prompts</strong></td>
-                                    <td>Aleatoric (minimize)</td>
-                                    <td>Clarification & perturbation</td>
-                                    <td>BayesPE: Sensitivity to phrasing reveals instability</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>N Models (Ensemble)</strong></td>
-                                    <td>Epistemic (detect)</td>
-                                    <td>Inter-model disagreement</td>
-                                    <td>"Gold Standard" - disagreement isolates knowledge gaps</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Adding Context (RAG)</strong></td>
-                                    <td>Epistemic (minimize)</td>
-                                    <td>Parametric vs non-parametric grounding</td>
-                                    <td>Context fills knowledge gaps; residual = Aleatoric</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Token Probabilities</strong></td>
-                                    <td>Aleatoric (detect)</td>
-                                    <td>White-box log-likelihoods</td>
-                                    <td>P(True) / Min-Prob for OOD detection</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Verbalized Confidence</strong></td>
-                                    <td>Epistemic (attempt)</td>
-                                    <td>Metacognitive prompting</td>
-                                    <td>Prone to human-mimicry; needs CoT for calibration</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Sycophancy Test</strong></td>
-                                    <td>Epistemic (detect)</td>
-                                    <td>Adversarial steering/hints</td>
-                                    <td>High susceptibility = lack of epistemic conviction</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 3-3: Important Note -->
-            <div class="slide" id="slide-3-3" data-section="2">
-                <div class="slide-card">
-                    <div class="slide-card-title">⚠️ Important Note</div>
+                    <div class="slide-card-title">⚠️ The Ongoing Debate</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
-                            <div class="insight-title">The Ongoing Debate</div>
-                            <p>There's debate on what reduces Aleatoric vs Epistemic. For example:<br><br>
-                            • <strong>Adding context:</strong> Changes input (Aleatoric?) OR fills knowledge gaps (Epistemic?)<br>
-                            • <strong>Sampling techniques:</strong> Don't change weights but reshape uncertainty exposure</p>
+                            <div class="insight-title">What reduces Aleatoric vs Epistemic?</div>
+                            <p>There's high debate in the research community on classification:</p>
                         </div>
+                        
+                        <strong>Example 1: Adding Context in Prompt</strong><br>
+                        • Changes the <span class="term c-x" data-popup="input">input</span> → reduces ambiguity → should be <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>?<br>
+                        • BUT: Fills knowledge gaps in LLM → minimizes <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>?<br>
+                        • Different papers use different classifications!<br><br>
+                        
+                        <strong>Example 2: Sampling Techniques (temp, top-k, etc.)</strong><br>
+                        • Don't change <span class="term c-theta" data-popup="theta">model weights</span> - raw token probs stay same<br>
+                        • Just filtering/reshaping the distribution<br>
+                        • By definition: not <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> (no knowledge change)<br>
+                        • But also not removing input ambiguity → not <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> either?<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">Key Insight</div>
+                            <p>Temperature, top-k, etc. just <strong>"reshape how much uncertainty you expose"</strong> - they don't fundamentally change the source.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-2: Approach 1 - Varying Decoding (Semantic Entropy) -->
+            <div class="slide" id="slide-3-2" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🎨 Approach 1: Varying Decoding (Semantic Entropy)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Sample N outputs using different temp/top-k/top-p, group by <em>meaning</em> (not words), measure spread over meanings.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Generate N responses using stochastic sampling (high temp)<br>
+                        2. Cluster responses by semantic equivalence using bidirectional NLI<br>
+                        &nbsp;&nbsp;&nbsp;• If A entails B AND B entails A → same meaning cluster<br>
+                        3. Calculate probability of each meaning cluster<br>
+                        4. Compute entropy over meaning clusters (not tokens!)<br>
+                        5. High semantic entropy → uncertain or hallucinating<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Paper</div>
+                            <p><a href="https://doi.org/10.1038/s41586-024-07421-0" target="_blank"><strong>"Detecting hallucinations in LLMs using semantic entropy"</strong></a><br>
+                            Farquhar, Kossen, Kuhn, Gal - Nature 2024</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>: Multiple valid meanings → high entropy<br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>: Inconsistent knowledge → different meanings per sample
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-3: Approach 2 - Rephrased Prompts (BayesPE/SPUQ) -->
+            <div class="slide" id="slide-3-3" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🔄 Approach 2: Rephrased Prompts (BayesPE)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Ask the same question in N different ways, see if answers stay consistent. Sensitivity to phrasing = instability.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Generate K semantically equivalent prompt rephrasings<br>
+                        2. Query LLM with each rephrased prompt<br>
+                        3. Weight prompts using Bayesian inference over small validation set<br>
+                        4. Aggregate distributions → weighted ensemble prediction<br>
+                        5. High variance across rephrasings → <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> instability<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Papers</div>
+                            <p><a href="https://aclanthology.org/2024.findings-acl.17/" target="_blank"><strong>"Bayesian Prompt Ensembles"</strong></a> - ACL 2024<br>
+                            <a href="https://aclanthology.org/2024.eacl-main.107/" target="_blank"><strong>"SPUQ: Perturbation-Based UQ for LLMs"</strong></a> - EACL 2024</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> (minimize): Clarification resolves ambiguity<br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (detect): Sensitivity to phrasing reveals unstable knowledge
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-4: Approach 3 - N Models (Ensemble) -->
+            <div class="slide" id="slide-3-4" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🤝 Approach 3: N Models (Ensemble)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Ask multiple separate <span class="term c-theta" data-popup="theta">models</span>, see if they agree. Disagreement = knowledge gaps.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Query N independent models/checkpoints with same <span class="term c-x" data-popup="input">prompt</span><br>
+                        2. Collect probability distributions from each <span class="term c-theta" data-popup="theta">model</span><br>
+                        3. Measure disagreement using Jensen-Shannon Divergence (JSD)<br>
+                        4. High JSD → <span class="term c-theta" data-popup="theta">models</span> learned different things<br>
+                        5. Low JSD → consensus = reliable prediction<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Paper</div>
+                            <p><a href="https://aclanthology.org/2024.emnlp-main.84/" target="_blank"><strong>"MUSE: Multi-LLM Uncertainty via Subset Ensembles"</strong></a> - EMNLP 2024<br>
+                            Uses JSD to identify well-calibrated LLM subsets</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (Gold Standard): Disagreement among independent agents isolates knowledge gaps from data noise
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-5: Approach 4 - Adding Context (RAG) -->
+            <div class="slide" id="slide-3-5" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">📚 Approach 4: Adding Context (RAG)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Give <span class="term c-theta" data-popup="theta">model</span> external info, see if answer becomes more consistent. Reduced uncertainty = filled knowledge gap.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Query <span class="term c-theta" data-popup="theta">model</span> WITHOUT context → baseline response & confidence<br>
+                        2. Retrieve relevant context from knowledge base<br>
+                        3. Query <span class="term c-theta" data-popup="theta">model</span> WITH context → new response & confidence<br>
+                        4. Compare uncertainty before vs after<br>
+                        5. Reduced uncertainty = was a knowledge gap (now filled)<br>
+                        6. Residual uncertainty = inherent ambiguity (<span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>)<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Papers</div>
+                            <p><a href="https://arxiv.org/abs/2501.03713" target="_blank"><strong>"Uncertainty as Feature Gaps"</strong></a> - Bakman et al. 2025<br>
+                            <a href="https://arxiv.org/abs/2410.02719" target="_blank"><strong>"UncertaintyRAG"</strong></a> - Li et al. 2024</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (minimize): Context fills parametric knowledge gaps<br>
+                        • Residual after RAG = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> (inherent to task)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-6: Approach 5 - Token Probabilities (P(True)) -->
+            <div class="slide" id="slide-3-6" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">📊 Approach 5: Token Probabilities / P(True)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Look at raw logits - how confident is <span class="term c-theta" data-popup="theta">model</span> about each <span class="term c-y" data-popup="output">token</span>? Low probability tokens = uncertain predictions.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. For each generated <span class="term c-y" data-popup="output">token</span>, check its probability<br>
+                        2. Aggregate metrics:<br>
+                        &nbsp;&nbsp;&nbsp;• <strong>Perplexity:</strong> exp(avg negative log-likelihood)<br>
+                        &nbsp;&nbsp;&nbsp;• <strong>Min-Prob:</strong> Lowest token probability in sequence<br>
+                        &nbsp;&nbsp;&nbsp;• <strong>P(True):</strong> Ask model "Is this answer true?" → check prob of "True"<br>
+                        3. High perplexity / low min-prob → uncertain prediction<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Paper</div>
+                            <p><a href="https://arxiv.org/abs/2207.05221" target="_blank"><strong>"Language Models (Mostly) Know What They Know"</strong></a><br>
+                            Kadavath et al. 2022 - Anthropic research on P(True)</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>: Per-token distribution reflects phrasing ambiguity<br>
+                        • P(True) attempts <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> detection (self-assessment)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-7: Approach 6 - Verbalized Confidence -->
+            <div class="slide" id="slide-3-7" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">💬 Approach 6: Verbalized Confidence</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Just ask the <span class="term c-theta" data-popup="theta">model</span> "How confident are you?" - let it state a number (0-100%).</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Prompt: "Answer this question and rate your confidence (0-100%)"<br>
+                        2. Optionally: Use Chain-of-Thought first (improves calibration)<br>
+                        3. Extract stated confidence score from response<br>
+                        4. Compare stated confidence vs actual accuracy<br>
+                        5. Calibration error = mismatch between stated and actual<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Papers</div>
+                            <p><a href="https://openreview.net/forum?id=gjeQKFxFpZ" target="_blank"><strong>"Can LLMs Express Their Uncertainty?"</strong></a> - ICLR 2024<br>
+                            <a href="https://arxiv.org/abs/2405.02917" target="_blank"><strong>"Overconfidence is Key"</strong></a> - Groot & Valdenegro-Toro 2024</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • Attempts <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (self-assessment of knowledge)<br>
+                        • <strong>⚠️ Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-8: Approach 7 - Sycophancy Test -->
+            <div class="slide" id="slide-3-8" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🎭 Approach 7: Sycophancy Test</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Bias <span class="term c-theta" data-popup="theta">model</span> toward wrong answer, see if it changes its mind. If it flips easily → no real knowledge.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Get initial answer from <span class="term c-theta" data-popup="theta">model</span><br>
+                        2. Present opposing "hint" or suggestion<br>
+                        &nbsp;&nbsp;&nbsp;• "Actually, I think the answer is X. Are you sure?"<br>
+                        3. Ask <span class="term c-theta" data-popup="theta">model</span> to reconsider<br>
+                        4. If <span class="term c-theta" data-popup="theta">model</span> flips to wrong answer → sycophantic (low conviction)<br>
+                        5. If <span class="term c-theta" data-popup="theta">model</span> holds firm → high <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> confidence<br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Paper</div>
+                            <p><a href="https://arxiv.org/abs/2410.13167" target="_blank"><strong>"Accounting for Sycophancy in LLM Uncertainty Estimation"</strong></a><br>
+                            Sicilia et al. 2024 - Proposes SyRoUP (Sycophancy-Robust UQ)</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (detect): High susceptibility = lack of true knowledge conviction
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-9: Approach 8 - Monte Carlo Dropout (Bonus) -->
+            <div class="slide" id="slide-3-9" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🎲 Approach 8: Monte Carlo Dropout (Advanced)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Simple Explanation</div>
+                            <p>Randomly "turn off" parts of <span class="term c-theta" data-popup="theta">model</span> multiple times, see if answers vary. Each dropout mask = different "thinned" network.</p>
+                        </div>
+                        
+                        <strong>How It Works (Pseudocode):</strong><br>
+                        1. Keep dropout ACTIVE during inference (normally off)<br>
+                        2. Run same <span class="term c-x" data-popup="input">input</span> T times with different dropout masks<br>
+                        3. Each forward pass = different effective <span class="term c-theta" data-popup="theta">θ</span><br>
+                        4. Collect T different <span class="term c-y" data-popup="output">outputs</span><br>
+                        5. <span class="term c-var" data-popup="variance">Variance</span> across T passes ≈ <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic uncertainty</span><br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">📄 Key Paper</div>
+                            <p><a href="https://proceedings.mlr.press/v48/gal16.html" target="_blank"><strong>"Dropout as Bayesian Approximation: Representing Model Uncertainty in Deep Learning"</strong></a><br>
+                            Gal & Ghahramani 2016 - Foundational paper linking dropout to Bayesian inference</p>
+                        </div>
+                        
+                        <strong>What it Captures:</strong><br>
+                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>: Parameter uncertainty via pseudo-ensemble<br>
+                        • <strong>⚠️ Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)
                     </div>
                 </div>
             </div>
@@ -371,10 +623,10 @@
             // ----- Core Variables -----
             "variance": {
                 title: "Var - Variance",
-                color: "#b45309",
+                color: "#d97706",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How spread out the <span class="term c-y" data-popup="output">predictions</span> are. If all <span class="term c-theta" data-popup="theta">model versions</span> give similar answers, <span class="term c-var" data-popup="variance">variance</span> is low. If they're all over the place, <span class="term c-var" data-popup="variance">variance</span> is high.`
                     },
@@ -390,12 +642,12 @@
                         formula: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-x" data-popup="input">X</span>) = <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>²] − <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>]²`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-var" data-popup="variance">Variance</span> of what? <strong><span class="term c-y" data-popup="output">Token</span> <span class="term c-p" data-popup="posterior">probabilities</span></strong>. If you sample 10 different <span class="term c-theta" data-popup="theta">model checkpoints</span> and ask them to predict the next <span class="term c-y" data-popup="output">token</span> after 'The capital of France is', <span class="term c-var" data-popup="variance">variance</span> measures how much their <span class="term c-p" data-popup="posterior">probability</span> for 'Paris' differs (e.g., 0.82, 0.91, 0.76, 0.88...).`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `<span class="term c-x" data-popup="input">Prompt</span>: 'The CEO of Apple is'<br><br><span class="term c-theta" data-popup="theta">Model</span> predicts: {Tim: 0.85, Cook: 0.82, Steve: 0.05, ...}<br><br>If 5 <span class="term c-theta" data-popup="theta">model checkpoints</span> give <span class="term c-p" data-popup="posterior">probabilities</span> for 'Tim': [0.82, 0.88, 0.79, 0.91, 0.85], the <span class="term c-var" data-popup="variance">variance</span> is ~0.0018. Low <span class="term c-var" data-popup="variance">variance</span> = consistent <span class="term c-y" data-popup="output">predictions</span>.`,
                         isExample: true
@@ -405,10 +657,10 @@
             
             "output": {
                 title: "y - Output",
-                color: "#be185d",
+                color: "#db2777",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `The thing the <span class="term c-theta" data-popup="theta">model</span> produces - what we're trying to predict.`
                     },
@@ -423,12 +675,12 @@
                         content: `The target random variable. In supervised learning, it's the label. In generation, it's the <span class="term c-y" data-popup="output">output</span> sequence.`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-y" data-popup="output">y</span> is the <strong>next token</strong> (or full completion). It's not just a single word - it's a <span class="term c-p" data-popup="posterior">probability distribution</span> over the entire vocabulary. Shape: [vocab_size] ≈ [50,000+] <span class="term c-p" data-popup="posterior">probabilities</span> summing to 1.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `<span class="term c-x" data-popup="input">Prompt</span>: 'Hello, how are'<br><br><span class="term c-y" data-popup="output">y</span> = <span class="term c-p" data-popup="posterior">distribution</span> over all possible next tokens:<br>{you: 0.72, things: 0.08, we: 0.03, the: 0.02, ...}<br><br>The actual token chosen depends on sampling (greedy, top-k, etc.)`,
                         isExample: true
@@ -438,10 +690,10 @@
             
             "input": {
                 title: "x - Input",
-                color: "#0e7490",
+                color: "#475569",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `What the <span class="term c-theta" data-popup="theta">model</span> sees before making a <span class="term c-y" data-popup="output">prediction</span> - the context, the question, the prompt.`
                     },
@@ -456,12 +708,12 @@
                         content: `The conditioning variable. All <span class="term c-y" data-popup="output">predictions</span> are made conditional on <span class="term c-x" data-popup="input">x</span>: <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>).`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-x" data-popup="input">x</span> is the <strong>prompt + conversation history</strong>. It's tokenized into a sequence of <span class="term c-y" data-popup="output">token</span> IDs that get embedded and processed through transformer layers. Everything before the <span class="term c-y" data-popup="output">token</span> you're predicting.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `For the <span class="term c-x" data-popup="input">prompt</span>: 'Translate to French: Good morning'<br><br><span class="term c-x" data-popup="input">x</span> = [Translate, to, French, :, Good, morning]<br><br>The <span class="term c-theta" data-popup="theta">model</span> predicts <span class="term c-y" data-popup="output">y</span> (next tokens) conditioned on this full sequence <span class="term c-x" data-popup="input">x</span>.`,
                         isExample: true
@@ -471,10 +723,10 @@
             
             "theta": {
                 title: "θ (theta) - Model Parameters",
-                color: "#047857",
+                color: "#16a34a",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `The 'brain' of the <span class="term c-theta" data-popup="theta">model</span> - all the learned weights that determine how it responds. Different <span class="term c-theta" data-popup="theta">θ</span> = different <span class="term c-theta" data-popup="theta">model</span>.`
                     },
@@ -489,12 +741,12 @@
                         content: `The set of all learnable <span class="term c-theta" data-popup="theta">parameters</span>. For neural networks: weights, biases, embeddings.`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-theta" data-popup="theta">θ</span> represents <strong>billions of <span class="term c-theta" data-popup="theta">parameters</span></strong>: embedding matrices, attention weights (Q, K, V projections), FFN weights, layer norms. For GPT-4: ~1.7T <span class="term c-theta" data-popup="theta">parameters</span>. For LLaMA-7B: 7 billion <span class="term c-theta" data-popup="theta">parameters</span>.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `LLaMA-7B has <span class="term c-theta" data-popup="theta">θ</span> with 7 billion floats stored in ~14GB (FP16).<br><br><span class="term c-theta" data-popup="theta">θ</span> includes:<br>• <span class="term c-y" data-popup="output">Token</span> embeddings: [vocab_size × hidden_dim]<br>• 32 transformer layers, each with attention + FFN weights<br>• Final classification head<br><br>Different checkpoints (epoch 1 vs epoch 10) have different <span class="term c-theta" data-popup="theta">θ</span> values.`,
                         isExample: true
@@ -504,10 +756,10 @@
             
             "data": {
                 title: "D - Training Data",
-                color: "#4d7c0f",
+                color: "#854d0e",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `Everything the <span class="term c-theta" data-popup="theta">model</span> has seen during training. The 'textbooks' it learned from.`
                     },
@@ -522,12 +774,12 @@
                         content: `The observed dataset: <span class="term c-D" data-popup="data">D</span> = {(<span class="term c-x" data-popup="input">x₁</span>, <span class="term c-y" data-popup="output">y₁</span>), (<span class="term c-x" data-popup="input">x₂</span>, <span class="term c-y" data-popup="output">y₂</span>), ... (<span class="term c-x" data-popup="input">xₙ</span>, <span class="term c-y" data-popup="output">yₙ</span>)}. Used to estimate <span class="term c-theta" data-popup="theta">θ</span>.`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
-                        content: `<span class="term c-D" data-popup="data">D</span> is the <strong>pretraining corpus</strong>: web pages (Common Crawl), books, Wikipedia, GitHub code, etc. For GPT-3: ~500B <span class="term c-y" data-popup="output">tokens</span>. The coverage and quality of <span class="term c-D" data-popup="data">D</span> determines what the <span class="term c-theta" data-popup="theta">model</span> 'knows'.`
+                        content: `<span class="term c-D" data-popup="data">D</span> is the <strong>pretraining corpus</strong>: web pages (Common Crawl), books, Wikipedia, GitHub code, etc. For GPT-3: ~300B <span class="term c-y" data-popup="output">tokens</span> (weighted training mix). The coverage and quality of <span class="term c-D" data-popup="data">D</span> determines what the <span class="term c-theta" data-popup="theta">model</span> 'knows'.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `LLaMA <span class="term c-D" data-popup="data">training data</span>:<br>• Common Crawl: 67%<br>• C4: 15%<br>• GitHub: 4.5%<br>• Wikipedia: 4.5%<br>• Books: 4.5%<br>• ArXiv: 2.5%<br>• StackExchange: 2%<br><br><span class="term c-D" data-popup="data">D</span> totaled 1.4T <span class="term c-y" data-popup="output">tokens</span> for LLaMA-65B.`,
                         isExample: true
@@ -537,10 +789,10 @@
             
             "posterior": {
                 title: "p(θ|D) - Posterior Distribution",
-                color: "#4338ca",
+                color: "#7c3aed",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `Given the <span class="term c-D" data-popup="data">training data</span>, what are all the 'plausible' sets of <span class="term c-theta" data-popup="theta">model weights</span>? It's not just one <span class="term c-theta" data-popup="theta">θ</span>, but a <span class="term c-p" data-popup="posterior">distribution</span> over many possible <span class="term c-theta" data-popup="theta">θ</span> values.`
                     },
@@ -556,12 +808,12 @@
                         formula: `<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>) = <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-D" data-popup="data">D</span>|<span class="term c-theta" data-popup="theta">θ</span>)<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>) / <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-D" data-popup="data">D</span>)`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `In practice, we can't compute exact <span class="term c-p" data-popup="posterior">posteriors</span> for LLMs (too many <span class="term c-theta" data-popup="theta">parameters</span>). We approximate via:<br>• <strong>Ensembles</strong>: Train N <span class="term c-theta" data-popup="theta">models</span>, each represents a 'sample' from <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)<br>• <strong>MC Dropout</strong>: Different dropout masks = different effective <span class="term c-theta" data-popup="theta">θ</span><br>• <strong>Different checkpoints</strong>: Same training, different epochs`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `You train 5 LLaMA-7B <span class="term c-theta" data-popup="theta">models</span> with different random seeds. Each gives a different <span class="term c-theta" data-popup="theta">θ</span>.<br><br>These 5 <span class="term c-theta" data-popup="theta">models</span> are 'samples' from <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>). When they disagree on a <span class="term c-y" data-popup="output">prediction</span>, that disagreement reveals <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic uncertainty</span>.`,
                         isExample: true
@@ -571,10 +823,10 @@
             
             "expectation": {
                 title: "E - Expectation (Mean)",
-                color: "#0f766e",
+                color: "#172554",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `The <span class="term c-E" data-popup="expectation">average</span>. If you repeat something many times, <span class="term c-E" data-popup="expectation">E</span> gives you the typical/expected result.`
                     },
@@ -590,12 +842,12 @@
                         formula: `<span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>] = Σ <span class="term c-x" data-popup="input">xᵢ</span> · <span class="term c-p" data-popup="posterior">P</span>(<span class="term c-x" data-popup="input">xᵢ</span>)`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-E" data-popup="expectation">E</span> is used as: <strong>'<span class="term c-E" data-popup="expectation">average</span> over <span class="term c-theta" data-popup="theta">models</span>'</strong>.<br><br><span class="term c-E" data-popup="expectation">E</span>[<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)][something] means: take many <span class="term c-theta" data-popup="theta">model</span> samples (different <span class="term c-theta" data-popup="theta">θ</span>), compute 'something' for each, then <span class="term c-E" data-popup="expectation">average</span>.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `5 <span class="term c-theta" data-popup="theta">models</span> predict <span class="term c-p" data-popup="posterior">P</span>('Paris') as: [0.82, 0.88, 0.79, 0.91, 0.85]<br><br><span class="term c-E" data-popup="expectation">E</span>[<span class="term c-p" data-popup="posterior">P</span>('Paris')] = (0.82+0.88+0.79+0.91+0.85)/5 = 0.85<br><br>This is the 'consensus' <span class="term c-p" data-popup="posterior">probability</span> across <span class="term c-theta" data-popup="theta">models</span>.`,
                         isExample: true
@@ -605,10 +857,10 @@
             
             "entropy": {
                 title: "H - Entropy",
-                color: "#be123c",
+                color: "#0891b2",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How 'spread out' a <span class="term c-p" data-popup="posterior">probability distribution</span> is. Sharp peak = low <span class="term c-H" data-popup="entropy">entropy</span> (confident). Flat <span class="term c-p" data-popup="posterior">distribution</span> = high <span class="term c-H" data-popup="entropy">entropy</span> (uncertain).<br><br>Think of it as the <span class="term c-E" data-popup="expectation">expected</span> (<span class="term c-E" data-popup="expectation">average</span>) surprise per <span class="term c-y" data-popup="output">token</span> in LLMs.`
                     },
@@ -624,12 +876,12 @@
                         formula: `<span class="term c-H" data-popup="entropy">H</span> = −Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>) log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>)`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-H" data-popup="entropy">H</span> measures <strong><span class="term c-y" data-popup="output">token</span>-level confidence</strong>. For each next-<span class="term c-y" data-popup="output">token</span> <span class="term c-y" data-popup="output">prediction</span>, compute <span class="term c-H" data-popup="entropy">H</span> over the vocabulary <span class="term c-p" data-popup="posterior">distribution</span>.<br><br>Range: 0 (one <span class="term c-y" data-popup="output">token</span> has <span class="term c-p" data-popup="posterior">prob</span> 1) to log(vocab_size) ≈ 15 bits (uniform over 50k <span class="term c-y" data-popup="output">tokens</span>).`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `<span class="term c-x" data-popup="input">Prompt</span>: 'The capital of France is'<br><span class="term c-p" data-popup="posterior">Distribution</span>: {Paris: 0.95, Lyon: 0.03, ...}<br><span class="term c-H" data-popup="entropy">H</span> ≈ 0.34 bits (very confident)<br><br><span class="term c-x" data-popup="input">Prompt</span>: 'I feel'<br><span class="term c-p" data-popup="posterior">Distribution</span>: {good: 0.15, bad: 0.12, happy: 0.10, ...}<br><span class="term c-H" data-popup="entropy">H</span> ≈ 4.2 bits (uncertain, many options)`,
                         isExample: true
@@ -639,10 +891,10 @@
             
             "mutual-info": {
                 title: "I - Mutual Information",
-                color: "#6d28d9",
+                color: "#9333ea",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How much knowing one thing tells you about another. If <span class="term c-theta" data-popup="theta">model parameters θ</span> and <span class="term c-y" data-popup="output">output y</span> are highly linked, knowing <span class="term c-theta" data-popup="theta">θ</span> helps predict <span class="term c-y" data-popup="output">y</span>.`
                     },
@@ -658,12 +910,12 @@
                         formula: `<span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>; <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>) = <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-D" data-popup="data">D</span>) − <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)]`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>) measures <strong>how much the <span class="term c-y" data-popup="output">output</span> depends on which <span class="term c-theta" data-popup="theta">model</span> you use</strong>. High <span class="term c-I" data-popup="mutual-info">I</span> = different <span class="term c-theta" data-popup="theta">models</span> give very different answers = <span class="term c-theta" data-popup="theta">model</span> disagreement = <span class="term c-epistemic-info" data-popup="epistemic-info">epistemic uncertainty</span>.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `<span class="term c-x" data-popup="input">Prompt</span>: 'Who won the 2024 election?'<br><br><span class="term c-theta" data-popup="theta">Model 1</span> (trained early 2024): uncertain, flat <span class="term c-p" data-popup="posterior">distribution</span><br><span class="term c-theta" data-popup="theta">Model 2</span> (trained late 2024): confident answer<br><span class="term c-theta" data-popup="theta">Model 3</span>: different confident answer<br><br>High <span class="term c-I" data-popup="mutual-info">mutual information</span> - the answer heavily depends on which <span class="term c-theta" data-popup="theta">θ</span> you sampled.`,
                         isExample: true
@@ -674,17 +926,17 @@
             // ----- Epistemic/Aleatoric (4 distinct) -----
             "epistemic-var": {
                 title: "Epistemic Uncertainty (Variance Form)",
-                color: "#1d4ed8",
+                color: "#2563eb",
                 sections: [
                     {
-                        icon: "🔢",
+                        icon: "",
                         title: "The Equation",
                         content: `<div class="popup-equation">
                             <span class="term c-var" data-popup="variance">Var</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
                         </div>`
                     },
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How much do different <span class="term c-theta" data-popup="theta">model versions</span> <em>disagree</em> on what the <span class="term c-E" data-popup="expectation">average</span> answer should be?<br><br>
                         Think of asking 5 different GPT checkpoints: "What's the capital of Atlantis?" If they each give a different confident answer (Model 1: "It's fictional", Model 2: "Unknown", Model 3: "Poseidonis"), that <span class="term c-var" data-popup="variance">disagreement</span> is epistemic uncertainty - the <span class="term c-theta" data-popup="theta">models</span> don't have reliable knowledge.`
@@ -701,7 +953,7 @@
                         <strong>Key property:</strong> <em>Reducible</em> - can be decreased with more <span class="term c-D" data-popup="data">training data</span>, better architecture, or RAG.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "LLM Example",
                         content: `<strong>Prompt:</strong> "What is the melting point of unobtainium?"<br><br>
                         <strong>5 <span class="term c-theta" data-popup="theta">model checkpoints</span> predict:</strong><br>
@@ -718,17 +970,17 @@
             
             "aleatoric-var": {
                 title: "Aleatoric Uncertainty (Variance Form)",
-                color: "#c2410c",
+                color: "#dc2626",
                 sections: [
                     {
-                        icon: "🔢",
+                        icon: "",
                         title: "The Equation",
                         content: `<div class="popup-equation">
                             <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
                         </div>`
                     },
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How spread-out is each <span class="term c-theta" data-popup="theta">model's</span> own prediction, <span class="term c-E" data-popup="expectation">on average</span>?<br><br>
                         Think of the prompt: "Tell me a joke." Even a <em>perfect</em> <span class="term c-theta" data-popup="theta">model</span> would have a flat <span class="term c-y" data-popup="output">token distribution</span> - thousands of valid jokes exist! This internal <span class="term c-var" data-popup="variance">spread</span> is unavoidable because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous, not because the <span class="term c-theta" data-popup="theta">model</span> lacks knowledge.`
@@ -745,7 +997,7 @@
                         <strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite <span class="term c-D" data-popup="data">data</span> or a perfect <span class="term c-theta" data-popup="theta">model</span>. It's intrinsic to the task.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "LLM Example",
                         content: `<strong>Prompt:</strong> "Tell me a joke"<br><br>
                         <strong>Each <span class="term c-theta" data-popup="theta">model</span>'s internal <span class="term c-var" data-popup="variance">variance</span>:</strong><br>
@@ -756,7 +1008,7 @@
                         isExample: true
                     },
                     {
-                        icon: "🔀",
+                        icon: "",
                         title: "Types",
                         content: `<strong>Homoscedastic:</strong> Same <span class="term c-var" data-popup="variance">variance</span> for all <span class="term c-x" data-popup="input">inputs</span>. Example: "Write a haiku" always has similar ambiguity.<br><br>
                         <strong>Heteroscedastic:</strong> <span class="term c-var" data-popup="variance">Variance</span> depends on <span class="term c-x" data-popup="input">input</span>. Example: "What is 2+2?" (low) vs "Write a poem" (high).`
@@ -766,17 +1018,17 @@
             
             "epistemic-info": {
                 title: "Epistemic Uncertainty (Info-Theoretic Form)",
-                color: "#7c3aed",
+                color: "#4f46e5",
                 sections: [
                     {
-                        icon: "🔢",
+                        icon: "",
                         title: "The Equation",
                         content: `<div class="popup-equation">
                             <span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>)
                         </div>`
                     },
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `How much would knowing the "true" <span class="term c-theta" data-popup="theta">model</span> reduce our uncertainty about the <span class="term c-y" data-popup="output">output</span>?<br><br>
                         If different <span class="term c-theta" data-popup="theta">model versions</span> give <em>confidently different</em> answers, that's high <span class="term c-I" data-popup="mutual-info">mutual information</span>. Model A says "Paris" (99% confident), Model B says "London" (99% confident). They disagree - so the answer heavily depends on <em>which</em> <span class="term c-theta" data-popup="theta">θ</span> you ask.`
@@ -794,7 +1046,7 @@
                         <strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more <span class="term c-D" data-popup="data">data</span>.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "LLM Example",
                         content: `<strong>Prompt:</strong> "Who won the 2024 election?"<br><br>
                         <strong>3 <span class="term c-theta" data-popup="theta">model checkpoints</span>:</strong><br>
@@ -809,17 +1061,17 @@
             
             "aleatoric-info": {
                 title: "Aleatoric Uncertainty (Info-Theoretic Form)",
-                color: "#dc2626",
+                color: "#e11d48",
                 sections: [
                     {
-                        icon: "🔢",
+                        icon: "",
                         title: "The Equation",
                         content: `<div class="popup-equation">
                             <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>))]
                         </div>`
                     },
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuitive Definition",
                         content: `<span class="term c-E" data-popup="expectation">On average</span>, how "fuzzy" is each <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-y" data-popup="output">token distribution</span>?<br><br>
                         All <span class="term c-theta" data-popup="theta">models</span> might <em>agree</em> that multiple <span class="term c-y" data-popup="output">tokens</span> are valid. For "The weather today is ___", every <span class="term c-theta" data-popup="theta">model</span> assigns high <span class="term c-H" data-popup="entropy">entropy</span> because "sunny", "rainy", "nice" are all valid. This shared fuzziness is the inherent ambiguity of the <span class="term c-x" data-popup="input">task</span>.`
@@ -836,7 +1088,7 @@
                         <strong>Key property:</strong> <em>Irreducible</em> - even with infinite <span class="term c-D" data-popup="data">data</span>, this <span class="term c-H" data-popup="entropy">entropy</span> remains because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "LLM Example",
                         content: `<strong>Prompt:</strong> "The weather today is ___"<br><br>
                         <strong>Each <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-H" data-popup="entropy">entropy</span>:</strong><br>
@@ -851,10 +1103,10 @@
             
             "total-uncertainty": {
                 title: "Total Uncertainty",
-                color: "#6b21a8",
+                color: "#7e22ce",
                 sections: [
                     {
-                        icon: "💡",
+                        icon: "",
                         title: "Intuition",
                         content: `The complete 'I don't know' of the model. Combines both 'I lack knowledge' (<span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span>) and 'The task is ambiguous' (<span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>).`
                     },
@@ -865,18 +1117,18 @@
                         formula: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>) = <span class="term c-var" data-popup="variance">Var</span>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)] + <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)]`
                     },
                     {
-                        icon: "🤖",
+                        icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-total" data-popup="total-uncertainty">Total uncertainty</span> in a token prediction comes from:<br>• The model not knowing the answer (<span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span>)<br>• Multiple tokens being valid completions (<span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>)<br><br>Uncertainty quantification helps us separate these to take appropriate action.`
                     },
                     {
-                        icon: "📝",
+                        icon: "",
                         title: "Example",
                         content: `Prompt: 'The 47th prime number is'<br><br>High <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span>: Model might not know this fact<br>Low <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>: Once you know it, there's only one answer<br><br>vs.<br><br>Prompt: 'Write a haiku about spring'<br><br>Low <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span>: Model knows how to write haikus<br>High <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>: Many valid haikus exist`,
                         isExample: true
                     },
                     {
-                        icon: "⚡",
+                        icon: "",
                         title: "Practical Use",
                         content: `<strong>High <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> → actionable:</strong> Get more <span class="term c-D" data-popup="data">data</span>, use RAG, flag for human review<br><br><strong>High <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> → inherent:</strong> Ask user to clarify, acknowledge multiple valid answers`
                     }
@@ -975,12 +1227,12 @@
                 {
                     id: 1,
                     title: " Types of Uncertainty (The Math)",
-                    slides: ["slide-2-1", "slide-2-2", "slide-2-3"]
+                    slides: ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-4"]
                 },
                 {
                     id: 2,
-                    title: " Detection & Mitigation Methods",
-                    slides: ["slide-3-1", "slide-3-2", "slide-3-3"]
+                    title: " Approaches to Detect & Mitigate",
+                    slides: ["slide-3-1", "slide-3-2", "slide-3-3", "slide-3-4", "slide-3-5", "slide-3-6", "slide-3-7", "slide-3-8", "slide-3-9"]
                 }
             ]
         };

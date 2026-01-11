@@ -36,24 +36,24 @@ h2 {
     ============================================ */
 
 /* Core Variables */
-.c-var { color: #b45309; } /* Variance - Amber-700 */
-.c-y { color: #be185d; }   /* Output y - Pink-700 */
-.c-x { color: #0e7490; }   /* Input x - Cyan-700 */
-.c-theta { color: #047857; } /* Parameters θ - Emerald-700 */
-.c-D { color: #4d7c0f; }   /* Data D - Lime-700 */
-.c-p { color: #4338ca; }   /* Probability p - Indigo-700 */
-.c-E { color: #0f766e; }   /* Expectation E - Teal-700 */
-.c-H { color: #be123c; }   /* Entropy H - Rose-700 */
-.c-I { color: #6d28d9; }   /* Mutual Info I - Violet-700 */
+.c-var { color: #d97706; } /* Variance - Amber */
+.c-y { color: #db2777; }   /* Output y - Pink-600 */
+.c-x { color: #475569; }   /* Input x - Slate-600 (distinct from Teal/Cyan) */
+.c-theta { color: #16a34a; } /* Parameters θ - Green-600 */
+.c-D { color: #854d0e; }   /* Data D - Bronze/Yellow-800 (distinct from Green) */
+.c-p { color: #7c3aed; }   /* Probability p - Violet-600 */
+.c-E { color: #172554; }   /* Expectation E - Navy/Blue-950 (distinct from Green/Teal) */
+.c-H { color: #0891b2; }   /* Entropy H - Cyan-600 (distinct from Pink/Red) */
+.c-I { color: #9333ea; }   /* Mutual Info I - Purple-600 */
 
 /* FOUR distinct Epistemic/Aleatoric colors */
-.c-epistemic-var { color: #1d4ed8; }      /* Epistemic (Variance) - Blue-700 */
-.c-aleatoric-var { color: #c2410c; }      /* Aleatoric (Variance) - Orange-700 */
-.c-epistemic-info { color: #7c3aed; }     /* Epistemic (Info Theory) - Violet-600 */
-.c-aleatoric-info { color: #dc2626; }     /* Aleatoric (Info Theory) - Red-600 */
+.c-epistemic-var { color: #2563eb; }      /* Epistemic (Variance) - Blue-600 */
+.c-aleatoric-var { color: #dc2626; }      /* Aleatoric (Variance) - Red-600 */
+.c-epistemic-info { color: #4f46e5; }     /* Epistemic (Info Theory) - Indigo-600 */
+.c-aleatoric-info { color: #e11d48; }     /* Aleatoric (Info Theory) - Rose-600 */
 
 /* Total Uncertainty */
-.c-total { color: #6b21a8; }              /* Total - Purple-700 */
+.c-total { color: #7e22ce; }              /* Total - Purple-700 */
 
 /* Clickable term styling */
 .term {
@@ -141,22 +141,22 @@ h2 {
 
 /* Underline for equation parts */
 .eq-underline-blue {
-    border-bottom: 3px solid #1d4ed8;
+    border-bottom: 3px solid #2563eb;
     padding-bottom: 3px;
 }
 
 .eq-underline-orange {
-    border-bottom: 3px solid #c2410c;
+    border-bottom: 3px solid #dc2626;
     padding-bottom: 3px;
 }
 
 .eq-underline-violet {
-    border-bottom: 3px solid #7c3aed;
+    border-bottom: 3px solid #4f46e5;
     padding-bottom: 3px;
 }
 
 .eq-underline-red {
-    border-bottom: 3px solid #dc2626;
+    border-bottom: 3px solid #e11d48;
     padding-bottom: 3px;
 }
 

@@ -97,14 +97,62 @@
                 </div>
             </div>
 
-             <!-- Slide 1-5: Aleatoric Uncertainty Deep Dive -->
-            <div class="slide" id="slide-1-5" data-section="0">
+            
+            <!-- ============================================
+                  TYPES OF UNCERTAINTY (Slides 2-1 to 2-5)
+                 ============================================ -->
+            
+            <!-- Slide 2-1: Introduction - Sources of Uncertainty -->
+            <div class="slide" id="slide-2-1" data-section="1">
+                <div class="slide-card">
+                    <div class="slide-card-title">The Big Distinction: Where Does Uncertainty Come From?</div>
+                    <div class="slide-card-content">
+                        It is the <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> and <em>where/how</em> it arises gives us two names:<br><br>
+                        
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Source</th>
+                                    <th>Nature</th>
+                                    <th>LLM Indicators</th>
+                                    <th>Remediation</th>
+                                </tr>
+                                <tr>
+                                    <td><strong><span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span></strong></td>
+                                    <td>Data ambiguity, linguistic variety</td>
+                                    <td>Irreducible</td>
+                                    <td>High entropy in phrasing; prompt sensitivity</td>
+                                    <td>Input clarification, constraints</td>
+
+                                </tr>
+                                <tr>
+                                    <td><strong><span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></td>
+                                    <td>Knowledge gaps, model blind spots</td>
+                                    <td>Reducible</td>
+                                    <td>Hallucination; inconsistency; sycophancy</td>
+                                    <td>RAG, fine-tuning, ensembling</td>
+                   
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                        <div class="insight-box">
+                            <div class="insight-title">The Formula</div>
+                            <p><strong><span class="term c-total" data-popup="total-uncertainty">Total</span> = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> + <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Slide 2-2 (Moved from 1-5): Aleatoric Uncertainty Deep Dive -->
+            <div class="slide" id="slide-2-2" data-section="1">
                 <div class="slide-card">
                     <div class="slide-card-title">🎲 Aleatoric Uncertainty: The World's Ambiguity</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">What is it?</div>
-                            <p>Uncertainty from ambiguity in the <span class="term c-x" data-popup="input">input</span> itself. Even a <em>perfect</em> model would be uncertain here because the question has multiple valid answers.</p>
+                            <p>Uncertainty from ambiguity in the <span class="term c-x" data-popup="input">input</span> itself. A patient's BP can't be 100% same every time. And even a <em>perfect</em> model would be uncertain because the question has multiple valid answers.</p>
                         </div>
                         
                         <strong>Key Properties:</strong><br>
@@ -129,8 +177,8 @@
                 </div>
             </div>
             
-            <!-- Slide 1-6: Epistemic Uncertainty Deep Dive -->
-            <div class="slide" id="slide-1-6" data-section="0">
+            <!-- Slide 2-3 (Moved from 1-6): Epistemic Uncertainty Deep Dive -->
+            <div class="slide" id="slide-2-3" data-section="1">
                 <div class="slide-card">
                     <div class="slide-card-title">🧠 Epistemic Uncertainty: The Model's Ignorance</div>
                     <div class="slide-card-content">
@@ -158,56 +206,8 @@
                 </div>
             </div>
             
-           
-            
-            <!-- ============================================
-                  TYPES OF UNCERTAINTY (Slides 2-1 to 2-5)
-                 ============================================ -->
-            
-            <!-- Slide 2-1: Introduction - Sources of Uncertainty -->
-            <div class="slide" id="slide-2-1" data-section="1">
-                <div class="slide-card">
-                    <div class="slide-card-title">The Big Distinction: Where Does Uncertainty Come From?</div>
-                    <div class="slide-card-content">
-                        The spread we're talking about - where exactly does it come from?<br>
-                        It is the <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> and <em>where/how</em> it arises gives us two names:<br><br>
-                        
-                        <div class="table-wrapper">
-                            <table class="uncertainty-table">
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Source</th>
-                                    <th>Nature</th>
-                                    <th>Remediation</th>
-                                    <th>LLM Indicators</th>
-                                </tr>
-                                <tr>
-                                    <td><strong><span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span></strong></td>
-                                    <td>Data ambiguity, linguistic variety</td>
-                                    <td>Irreducible</td>
-                                    <td>Input clarification, constraints</td>
-                                    <td>High entropy in phrasing; prompt sensitivity</td>
-                                </tr>
-                                <tr>
-                                    <td><strong><span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></td>
-                                    <td>Knowledge gaps, model blind spots</td>
-                                    <td>Reducible</td>
-                                    <td>RAG, fine-tuning, ensembling</td>
-                                    <td>Hallucination; inconsistency; sycophancy</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <br>
-                        <div class="insight-box">
-                            <div class="insight-title">The Formula</div>
-                            <p><strong><span class="term c-total" data-popup="total-uncertainty">Total</span> = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> + <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 2-2: Variance Decomposition Equation -->
-            <div class="slide" id="slide-2-2" data-section="1">
+            <!-- Slide 2-4: Variance Decomposition Equation -->
+            <div class="slide" id="slide-2-4" data-section="1">
                 <h2>Equation 1: Variance Decomposition (Law of Total Variance)</h2>
                 
                 <div class="equation-box">
@@ -248,8 +248,8 @@
                 </div>
             </div>
             
-            <!-- Slide 2-3: Information-Theoretic Equation -->
-            <div class="slide" id="slide-2-3" data-section="1">
+            <!-- Slide 2-5: Information-Theoretic Equation -->
+            <div class="slide" id="slide-2-5" data-section="1">
                 <h2>Equation 2: Information-Theoretic Decomposition</h2>
                 
                 <div class="equation-box">
@@ -291,8 +291,8 @@
                 </div>
             </div>
             
-            <!-- Slide 2-4: When to Use Which -->
-            <div class="slide" id="slide-2-4" data-section="1">
+            <!-- Slide 2-6: When to Use Which -->
+            <div class="slide" id="slide-2-6" data-section="1">
                 <div class="slide-card">
                     <div class="slide-card-title">When to Use Which Equation?</div>
                     <div class="slide-card-content">
@@ -325,15 +325,15 @@
                         </div>
                         
                         <strong>Example 1: Adding Context in Prompt</strong><br>
-                        • Changes the <span class="term c-x" data-popup="input">input</span> → reduces ambiguity → should be <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>?<br>
-                        • BUT: Fills knowledge gaps in LLM → minimizes <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>?<br>
+                        • Changes the input → reduces ambiguity → should be Aleatoric?<br>
+                        • BUT: Fills knowledge gaps in LLM → minimizes Epistemic?<br>
                         • Different papers use different classifications!<br><br>
                         
                         <strong>Example 2: Sampling Techniques (temp, top-k, etc.)</strong><br>
-                        • Don't change <span class="term c-theta" data-popup="theta">model weights</span> - raw token probs stay same<br>
+                        • Don't change model weights - raw token probs stay same<br>
                         • Just filtering/reshaping the distribution<br>
-                        • By definition: not <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> (no knowledge change)<br>
-                        • But also not removing input ambiguity → not <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> either?<br><br>
+                        • By definition: not epistemic (no knowledge change)<br>
+                        • But also not removing input ambiguity → not aleatoric either?<br><br>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Insight</div>
@@ -346,7 +346,7 @@
             <!-- Slide 3-2: Approach 1 - Varying Decoding (Semantic Entropy) -->
             <div class="slide" id="slide-3-2" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🎨 Approach 1: Varying Decoding (Semantic Entropy)</div>
+                    <div class="slide-card-title">Approach 1: Varying Decoding (Semantic Entropy)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
@@ -362,14 +362,14 @@
                         5. High semantic entropy → uncertain or hallucinating<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Paper</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://doi.org/10.1038/s41586-024-07421-0" target="_blank"><strong>"Detecting hallucinations in LLMs using semantic entropy"</strong></a><br>
                             Farquhar, Kossen, Kuhn, Gal - Nature 2024</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>: Multiple valid meanings → high entropy<br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>: Inconsistent knowledge → different meanings per sample
+                        • Aleatoric: Multiple valid meanings → high entropy<br>
+                        • Epistemic: Inconsistent knowledge → different meanings per sample
                     </div>
                 </div>
             </div>
@@ -377,7 +377,7 @@
             <!-- Slide 3-3: Approach 2 - Rephrased Prompts (BayesPE/SPUQ) -->
             <div class="slide" id="slide-3-3" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🔄 Approach 2: Rephrased Prompts (BayesPE)</div>
+                    <div class="slide-card-title">Approach 2: Rephrased Prompts (BayesPE)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
@@ -389,17 +389,17 @@
                         2. Query LLM with each rephrased prompt<br>
                         3. Weight prompts using Bayesian inference over small validation set<br>
                         4. Aggregate distributions → weighted ensemble prediction<br>
-                        5. High variance across rephrasings → <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> instability<br><br>
+                        5. High variance across rephrasings → epistemic instability<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Papers</div>
+                            <div class="insight-title">Key Papers</div>
                             <p><a href="https://aclanthology.org/2024.findings-acl.17/" target="_blank"><strong>"Bayesian Prompt Ensembles"</strong></a> - ACL 2024<br>
                             <a href="https://aclanthology.org/2024.eacl-main.107/" target="_blank"><strong>"SPUQ: Perturbation-Based UQ for LLMs"</strong></a> - EACL 2024</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> (minimize): Clarification resolves ambiguity<br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (detect): Sensitivity to phrasing reveals unstable knowledge
+                        • Aleatoric (minimize): Clarification resolves ambiguity<br>
+                        • Epistemic (detect): Sensitivity to phrasing reveals unstable knowledge
                     </div>
                 </div>
             </div>
@@ -407,28 +407,28 @@
             <!-- Slide 3-4: Approach 3 - N Models (Ensemble) -->
             <div class="slide" id="slide-3-4" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🤝 Approach 3: N Models (Ensemble)</div>
+                    <div class="slide-card-title">Approach 3: N Models (Ensemble)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Ask multiple separate <span class="term c-theta" data-popup="theta">models</span>, see if they agree. Disagreement = knowledge gaps.</p>
+                            <p>Ask multiple separate models, see if they agree. Disagreement = knowledge gaps.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Query N independent models/checkpoints with same <span class="term c-x" data-popup="input">prompt</span><br>
-                        2. Collect probability distributions from each <span class="term c-theta" data-popup="theta">model</span><br>
+                        1. Query N independent models/checkpoints with same prompt<br>
+                        2. Collect probability distributions from each model<br>
                         3. Measure disagreement using Jensen-Shannon Divergence (JSD)<br>
-                        4. High JSD → <span class="term c-theta" data-popup="theta">models</span> learned different things<br>
+                        4. High JSD → models learned different things<br>
                         5. Low JSD → consensus = reliable prediction<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Paper</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://aclanthology.org/2024.emnlp-main.84/" target="_blank"><strong>"MUSE: Multi-LLM Uncertainty via Subset Ensembles"</strong></a> - EMNLP 2024<br>
                             Uses JSD to identify well-calibrated LLM subsets</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (Gold Standard): Disagreement among independent agents isolates knowledge gaps from data noise
+                        • Epistemic (Gold Standard): Disagreement among independent agents isolates knowledge gaps from data noise
                     </div>
                 </div>
             </div>
@@ -436,30 +436,30 @@
             <!-- Slide 3-5: Approach 4 - Adding Context (RAG) -->
             <div class="slide" id="slide-3-5" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">📚 Approach 4: Adding Context (RAG)</div>
+                    <div class="slide-card-title">Approach 4: Adding Context (RAG)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Give <span class="term c-theta" data-popup="theta">model</span> external info, see if answer becomes more consistent. Reduced uncertainty = filled knowledge gap.</p>
+                            <p>Give model external info, see if answer becomes more consistent. Reduced uncertainty = filled knowledge gap.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Query <span class="term c-theta" data-popup="theta">model</span> WITHOUT context → baseline response & confidence<br>
+                        1. Query model WITHOUT context → baseline response & confidence<br>
                         2. Retrieve relevant context from knowledge base<br>
-                        3. Query <span class="term c-theta" data-popup="theta">model</span> WITH context → new response & confidence<br>
+                        3. Query model WITH context → new response & confidence<br>
                         4. Compare uncertainty before vs after<br>
                         5. Reduced uncertainty = was a knowledge gap (now filled)<br>
-                        6. Residual uncertainty = inherent ambiguity (<span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>)<br><br>
+                        6. Residual uncertainty = inherent ambiguity (aleatoric)<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Papers</div>
+                            <div class="insight-title">Key Papers</div>
                             <p><a href="https://arxiv.org/abs/2501.03713" target="_blank"><strong>"Uncertainty as Feature Gaps"</strong></a> - Bakman et al. 2025<br>
                             <a href="https://arxiv.org/abs/2410.02719" target="_blank"><strong>"UncertaintyRAG"</strong></a> - Li et al. 2024</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (minimize): Context fills parametric knowledge gaps<br>
-                        • Residual after RAG = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> (inherent to task)
+                        • Epistemic (minimize): Context fills parametric knowledge gaps<br>
+                        • Residual after RAG = Aleatoric (inherent to task)
                     </div>
                 </div>
             </div>
@@ -467,15 +467,15 @@
             <!-- Slide 3-6: Approach 5 - Token Probabilities (P(True)) -->
             <div class="slide" id="slide-3-6" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">📊 Approach 5: Token Probabilities / P(True)</div>
+                    <div class="slide-card-title">Approach 5: Token Probabilities / P(True)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Look at raw logits - how confident is <span class="term c-theta" data-popup="theta">model</span> about each <span class="term c-y" data-popup="output">token</span>? Low probability tokens = uncertain predictions.</p>
+                            <p>Look at raw logits - how confident is model about each token? Low probability tokens = uncertain predictions.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. For each generated <span class="term c-y" data-popup="output">token</span>, check its probability<br>
+                        1. For each generated token, check its probability<br>
                         2. Aggregate metrics:<br>
                         &nbsp;&nbsp;&nbsp;• <strong>Perplexity:</strong> exp(avg negative log-likelihood)<br>
                         &nbsp;&nbsp;&nbsp;• <strong>Min-Prob:</strong> Lowest token probability in sequence<br>
@@ -483,14 +483,14 @@
                         3. High perplexity / low min-prob → uncertain prediction<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Paper</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://arxiv.org/abs/2207.05221" target="_blank"><strong>"Language Models (Mostly) Know What They Know"</strong></a><br>
                             Kadavath et al. 2022 - Anthropic research on P(True)</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>: Per-token distribution reflects phrasing ambiguity<br>
-                        • P(True) attempts <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> detection (self-assessment)
+                        • Aleatoric: Per-token distribution reflects phrasing ambiguity<br>
+                        • P(True) attempts Epistemic detection (self-assessment)
                     </div>
                 </div>
             </div>
@@ -498,11 +498,11 @@
             <!-- Slide 3-7: Approach 6 - Verbalized Confidence -->
             <div class="slide" id="slide-3-7" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">💬 Approach 6: Verbalized Confidence</div>
+                    <div class="slide-card-title">Approach 6: Verbalized Confidence</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Just ask the <span class="term c-theta" data-popup="theta">model</span> "How confident are you?" - let it state a number (0-100%).</p>
+                            <p>Just ask the model "How confident are you?" - let it state a number (0-100%).</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
@@ -513,14 +513,14 @@
                         5. Calibration error = mismatch between stated and actual<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Papers</div>
+                            <div class="insight-title">Key Papers</div>
                             <p><a href="https://openreview.net/forum?id=gjeQKFxFpZ" target="_blank"><strong>"Can LLMs Express Their Uncertainty?"</strong></a> - ICLR 2024<br>
                             <a href="https://arxiv.org/abs/2405.02917" target="_blank"><strong>"Overconfidence is Key"</strong></a> - Groot & Valdenegro-Toro 2024</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • Attempts <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (self-assessment of knowledge)<br>
-                        • <strong>⚠️ Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")
+                        • Attempts Epistemic (self-assessment of knowledge)<br>
+                        • <strong>Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")
                     </div>
                 </div>
             </div>
@@ -528,29 +528,29 @@
             <!-- Slide 3-8: Approach 7 - Sycophancy Test -->
             <div class="slide" id="slide-3-8" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🎭 Approach 7: Sycophancy Test</div>
+                    <div class="slide-card-title">Approach 7: Sycophancy Test</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Bias <span class="term c-theta" data-popup="theta">model</span> toward wrong answer, see if it changes its mind. If it flips easily → no real knowledge.</p>
+                            <p>Bias model toward wrong answer, see if it changes its mind. If it flips easily → no real knowledge.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Get initial answer from <span class="term c-theta" data-popup="theta">model</span><br>
+                        1. Get initial answer from model<br>
                         2. Present opposing "hint" or suggestion<br>
                         &nbsp;&nbsp;&nbsp;• "Actually, I think the answer is X. Are you sure?"<br>
-                        3. Ask <span class="term c-theta" data-popup="theta">model</span> to reconsider<br>
-                        4. If <span class="term c-theta" data-popup="theta">model</span> flips to wrong answer → sycophantic (low conviction)<br>
-                        5. If <span class="term c-theta" data-popup="theta">model</span> holds firm → high <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> confidence<br><br>
+                        3. Ask model to reconsider<br>
+                        4. If model flips to wrong answer → sycophantic (low conviction)<br>
+                        5. If model holds firm → high epistemic confidence<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Paper</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://arxiv.org/abs/2410.13167" target="_blank"><strong>"Accounting for Sycophancy in LLM Uncertainty Estimation"</strong></a><br>
                             Sicilia et al. 2024 - Proposes SyRoUP (Sycophancy-Robust UQ)</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> (detect): High susceptibility = lack of true knowledge conviction
+                        • Epistemic (detect): High susceptibility = lack of true knowledge conviction
                     </div>
                 </div>
             </div>
@@ -558,29 +558,29 @@
             <!-- Slide 3-9: Approach 8 - Monte Carlo Dropout (Bonus) -->
             <div class="slide" id="slide-3-9" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">🎲 Approach 8: Monte Carlo Dropout (Advanced)</div>
+                    <div class="slide-card-title">Approach 8: Monte Carlo Dropout (Bonus)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Randomly "turn off" parts of <span class="term c-theta" data-popup="theta">model</span> multiple times, see if answers vary. Each dropout mask = different "thinned" network.</p>
+                            <p>Randomly "turn off" parts of model multiple times, see if answers vary. Each dropout mask = different "thinned" network.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
                         1. Keep dropout ACTIVE during inference (normally off)<br>
-                        2. Run same <span class="term c-x" data-popup="input">input</span> T times with different dropout masks<br>
-                        3. Each forward pass = different effective <span class="term c-theta" data-popup="theta">θ</span><br>
-                        4. Collect T different <span class="term c-y" data-popup="output">outputs</span><br>
-                        5. <span class="term c-var" data-popup="variance">Variance</span> across T passes ≈ <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic uncertainty</span><br><br>
+                        2. Run same input T times with different dropout masks<br>
+                        3. Each forward pass = different effective θ<br>
+                        4. Collect T different outputs<br>
+                        5. Variance across T passes ≈ epistemic uncertainty<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">📄 Key Paper</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://proceedings.mlr.press/v48/gal16.html" target="_blank"><strong>"Dropout as Bayesian Approximation: Representing Model Uncertainty in Deep Learning"</strong></a><br>
                             Gal & Ghahramani 2016 - Foundational paper linking dropout to Bayesian inference</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
-                        • <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>: Parameter uncertainty via pseudo-ensemble<br>
-                        • <strong>⚠️ Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)
+                        • Epistemic: Parameter uncertainty via pseudo-ensemble<br>
+                        • <strong>Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)
                     </div>
                 </div>
             </div>
@@ -1222,12 +1222,12 @@
                 {
                     id: 0,
                     title: " What is Uncertainty?",
-                    slides: ["slide-1-1", "slide-1-2", "slide-1-3", "slide-1-4", "slide-1-5", "slide-1-6"]
+                    slides: ["slide-1-1", "slide-1-2", "slide-1-3", "slide-1-4"]
                 },
                 {
                     id: 1,
                     title: " Types of Uncertainty (The Math)",
-                    slides: ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-4"]
+                    slides: ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-4", "slide-2-5", "slide-2-6"]
                 },
                 {
                     id: 2,

@@ -4,796 +4,347 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uncertainty Quantification in LLMs</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f8fafc;
-            line-height: 1.7;
-            color: #1e293b;
-        }
-        
-        h1 {
-            color: #0f172a;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 30px;
-        }
-        
-        h2 {
-            color: #334155;
-            margin-top: 35px;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-        
-        /* ============================================
-           UNIQUE COLOR SYSTEM - ONE COLOR PER CONCEPT
-           ============================================ */
-        
-        /* Core Variables */
-        .c-var { color: #b45309; } /* Variance - Amber-700 */
-        .c-y { color: #be185d; }   /* Output y - Pink-700 */
-        .c-x { color: #0e7490; }   /* Input x - Cyan-700 */
-        .c-theta { color: #047857; } /* Parameters θ - Emerald-700 */
-        .c-D { color: #4d7c0f; }   /* Data D - Lime-700 */
-        .c-p { color: #4338ca; }   /* Probability p - Indigo-700 */
-        .c-E { color: #0f766e; }   /* Expectation E - Teal-700 */
-        .c-H { color: #be123c; }   /* Entropy H - Rose-700 */
-        .c-I { color: #6d28d9; }   /* Mutual Info I - Violet-700 */
-        
-        /* FOUR distinct Epistemic/Aleatoric colors */
-        .c-epistemic-var { color: #1d4ed8; }      /* Epistemic (Variance) - Blue-700 */
-        .c-aleatoric-var { color: #c2410c; }      /* Aleatoric (Variance) - Orange-700 */
-        .c-epistemic-info { color: #7c3aed; }     /* Epistemic (Info Theory) - Violet-600 */
-        .c-aleatoric-info { color: #dc2626; }     /* Aleatoric (Info Theory) - Red-600 */
-        
-        /* Total Uncertainty */
-        .c-total { color: #6b21a8; }              /* Total - Purple-700 */
-        
-        /* Clickable term styling */
-        .term {
-            cursor: pointer;
-            font-weight: 600;
-            padding: 1px 4px;
-            border-radius: 3px;
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-        
-        .term:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
-        }
-        
-        /* Equation display in popups */
-        .popup-equation {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px 20px;
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 4px;
-        }
-        
-        /* Equation container */
-        .equation-box {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .equation {
-            font-size: 22px;
-            display: inline-flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            line-height: 2;
-        }
-        
-        .eq-part {
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-        
-        .eq-symbol {
-            font-size: 24px;
-            margin: 0 8px;
-            color: #64748b;
-        }
-        
-        /* Epistemic/Aleatoric clickable labels */
-        .eq-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-        
-        .eq-label:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-        
-        .eq-label-arrow {
-            font-size: 12px;
-            margin-top: 4px;
-        }
-        
-        .eq-label-text {
-            font-size: 13px;
-            font-weight: 600;
-        }
-        
-        /* Underline for equation parts */
-        .eq-underline-blue {
-            border-bottom: 3px solid #1d4ed8;
-            padding-bottom: 3px;
-        }
-        
-        .eq-underline-orange {
-            border-bottom: 3px solid #c2410c;
-            padding-bottom: 3px;
-        }
-        
-        .eq-underline-violet {
-            border-bottom: 3px solid #7c3aed;
-            padding-bottom: 3px;
-        }
-        
-        .eq-underline-red {
-            border-bottom: 3px solid #dc2626;
-            padding-bottom: 3px;
-        }
-        
-        /* Equation explanation sentence */
-        .eq-explain {
-            margin-top: 20px;
-            font-size: 15px;
-            color: #475569;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border-radius: 8px;
-            text-align: left;
-        }
-        
-        /* Quick reference grid */
-        .term-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        
-        .term-chip {
-            padding: 8px 16px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .term-chip:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-        }
-        
-        /* Insights section */
-        .insight-box {
-            background: white;
-            border-radius: 10px;
-            padding: 16px 20px;
-            margin: 12px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        
-        .insight-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #334155;
-        }
-        
-        /* ============================================
-           MODAL POPUP SYSTEM
-           ============================================ */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .modal-overlay.active {
-            display: flex;
-        }
-        
-        .modal {
-            background: white;
-            border-radius: 12px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            animation: modalSlide 0.2s ease-out;
-        }
-        
-        @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: white;
-            border-radius: 12px 12px 0 0;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #64748b;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        
-        .modal-close:hover {
-            background: #f1f5f9;
-        }
-        
-        .modal-body {
-            padding: 24px;
-        }
-        
-        .modal-section {
-            margin-bottom: 20px;
-        }
-        
-        .modal-section:last-child {
-            margin-bottom: 0;
-        }
-        
-        .modal-section-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .modal-section-content {
-            color: #334155;
-            line-height: 1.7;
-        }
-        
-        .modal-example {
-            background: #fffbeb;
-            border-left: 3px solid #f59e0b;
-            padding: 12px 16px;
-            border-radius: 0 6px 6px 0;
-            margin-top: 8px;
-        }
-        
-        .modal-formula {
-            background: #f1f5f9;
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            margin-top: 8px;
-        }
-        
-        /* Comparison table in popups */
-        .modal-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        
-        .modal-table th, .modal-table td {
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .modal-table th {
-            background: #f8fafc;
-            font-weight: 600;
-            color: #475569;
-        }
-        
-        /* ============================================
-           COLLAPSIBLE SECTIONS (for PPT reveal)
-           ============================================ */
-        .section-container {
-            margin: 25px 0;
-        }
-        
-        .section-header {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: #e2e8f0;
-            border-radius: 8px;
-            font-weight: 600;
-            color: #334155;
-            transition: background-color 0.2s;
-        }
-        
-        .section-header:hover {
-            background: #cbd5e1;
-        }
-        
-        .section-header .toggle-icon {
-            transition: transform 0.2s;
-        }
-        
-        .section-container.collapsed .section-header .toggle-icon {
-            transform: rotate(-90deg);
-        }
-        
-        .section-content {
-            padding: 16px 0;
-        }
-        
-        .section-container.collapsed .section-content {
-            display: none;
-        }
-        
-        /* QA Style boxes - collapsible */
-        .qa-item {
-            background: white;
-            border-radius: 10px;
-            margin: 12px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-        
-        .qa-header {
-            padding: 16px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            color: #4338ca;
-            transition: background-color 0.2s;
-        }
-        
-        .qa-header:hover {
-            background: #f1f5f9;
-        }
-        
-        .qa-header .qa-toggle {
-            transition: transform 0.2s;
-        }
-        
-        .qa-item.collapsed .qa-header .qa-toggle {
-            transform: rotate(-90deg);
-        }
-        
-        .qa-content {
-            padding: 0 20px 16px 20px;
-            color: #334155;
-            line-height: 1.7;
-        }
-        
-        .qa-item.collapsed .qa-content {
-            display: none;
-        }
-        
-        /* Legacy qa-box (non-collapsible fallback) */
-        .qa-box {
-            background: white;
-            border-radius: 10px;
-            padding: 16px 20px;
-            margin: 12px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        
-        .qa-question {
-            font-weight: 600;
-            color: #4338ca;
-            margin-bottom: 8px;
-        }
-        
-        .qa-answer {
-            color: #334155;
-            line-height: 1.7;
-        }
-        
-        /* Uncertainty table */
-        .uncertainty-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        
-        .uncertainty-table th, .uncertainty-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .uncertainty-table th {
-            background: #f1f5f9;
-            font-weight: 600;
-            color: #475569;
-        }
-        
-        .uncertainty-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        /* Entropy image styling */
-        .entropy-image {
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin: 16px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/style_1.css">
 </head>
 <body>
     <h1>Uncertainty Quantification in LLMs</h1>
-    <p class="subtitle">Understanding what your model doesn't know</p>
     
-    <!-- ============================================
-         SECTION 1: WHAT IS UNCERTAINTY
-         ============================================ -->
-    <div class="section-container collapsed" id="section-intro">
-        <div class="section-header" onclick="toggleSection('section-intro')">
-            <span class="toggle-icon">▼</span>
-            <span>Section 1: What is Uncertainty?</span>
-        </div>
-        <div class="section-content">
-            <div class="qa-item collapsed" id="qa1">
-                <div class="qa-header" onclick="toggleQA('qa1')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: What exactly is Uncertainty?</span>
-                </div>
-                <div class="qa-content">
-                    The amount of "I don't know which outcome will happen" that remains <em>even after</em> you've used all the information you have.<br><br>
-                    <strong>It's NOT:</strong> confusion, error, or randomness<br>
-                    <strong>It IS:</strong> <em>residual doubt</em> after reasoning
-                </div>
-            </div>
-            
-            <div class="qa-item collapsed" id="qa2">
-                <div class="qa-header" onclick="toggleQA('qa2')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: Can you give me something intuitive?</span>
-                </div>
-                <div class="qa-content">
-                    <table class="uncertainty-table">
-                        <tr><th>Situation</th><th>Our Internal Uncertainty</th></tr>
-                        <tr><td>"The sun will rise tomorrow"</td><td>Almost zero</td></tr>
-                        <tr><td>"Will it rain tomorrow?"</td><td>Moderate</td></tr>
-                        <tr><td>"Who will win a coin toss?"</td><td>High</td></tr>
-                        <tr><td>"What did Bheem eat for lunch on March 12, 45 BC?"</td><td>Extremely high</td></tr>
-                    </table>
-                </div>
-            </div>
-            
-            <div class="qa-item collapsed" id="qa3">
-                <div class="qa-header" onclick="toggleQA('qa3')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: How do we measure uncertainty?</span>
-                </div>
-                <div class="qa-content">
-                    <strong>1. Probability:</strong> "I think there's a 70% chance..." → A spread/distribution over outcomes<br><br>
-                    <strong>2. Confidence/doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
-                    <strong>3. Variability across answers:</strong> Model says "Pink" → "No, coral" → "Actually red" → Inconsistency across responses
-                </div>
-            </div>
-            
-            <div class="qa-item collapsed" id="qa4">
-                <div class="qa-header" onclick="toggleQA('qa4')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: And the scientific measurement?</span>
-                </div>
-                <div class="qa-content">
-                    <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br><br>
-                    <img src="images/entropy_graph_type.png" alt="Entropy visualization" class="entropy-image">
-                    <br>
-                    • <strong>Sharp distribution</strong> (peaked, concentrated) → Low entropy → Very certain<br>
-                    • <strong>Spread out distribution</strong> (flat) → High entropy → High uncertainty
-                </div>
-            </div>
-            
-            <div class="qa-item collapsed" id="qa5">
-                <div class="qa-header" onclick="toggleQA('qa5')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: So where does this uncertainty come from?</span>
-                </div>
-                <div class="qa-content">
-                    Total uncertainty splits into two sources:<br><br>
-                    <strong>1. Aleatoric (from the world):</strong> Input ambiguity, inherent noise in the task<br>
-                    → <em>Irreducible</em> — can't fix even with infinite data<br><br>
-                    <strong>2. Epistemic (from the model):</strong> Knowledge gaps, model blind spots<br>
-                    → <em>Reducible</em> — can fix with more training data, RAG, fine-tuning
-                </div>
-            </div>
-            
-            <table class="uncertainty-table">
-                <tr>
-                    <th>Type</th>
-                    <th>Source</th>
-                    <th>Nature</th>
-                    <th>Fix?</th>
-                </tr>
-                <tr>
-                    <td><strong>Aleatoric</strong></td>
-                    <td>Data ambiguity, linguistic variety</td>
-                    <td>Irreducible</td>
-                    <td>Clarify input, add constraints</td>
-                </tr>
-                <tr>
-                    <td><strong>Epistemic</strong></td>
-                    <td>Knowledge gaps, model blind spots</td>
-                    <td>Reducible</td>
-                    <td>RAG, fine-tuning, ensembling</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- ============================================
-         SECTION 2: TYPES (The Equations)
-         ============================================ -->
-    <div class="section-container collapsed" id="section-types">
-        <div class="section-header" onclick="toggleSection('section-types')">
-            <span class="toggle-icon">▼</span>
-            <span>Section 2: Types of Uncertainty (The Math)</span>
-        </div>
-        <div class="section-content">
+    <!-- Section Pills (clickable section indicators) -->
+    <div class="section-pills" id="section-pills"></div>
     
-    <!-- ============================================
-         EQUATION 1: VARIANCE DECOMPOSITION
-         ============================================ -->
-    <section>
-        <h2>Equation 1: Variance Decomposition (Law of Total Variance)</h2>
+    <!-- Main Presentation Container -->
+    <div class="presentation-container">
+        <!-- Section Navigation Bar (Top) -->
+        <div class="section-nav">
+            <button class="nav-btn nav-btn-secondary" id="prev-section-btn" onclick="prevSection()">
+                ← Prev Section
+            </button>
+            <div class="section-nav-title" id="section-title"> What is Uncertainty?</div>
+            <button class="nav-btn nav-btn-primary" id="next-section-btn" onclick="nextSection()">
+                Next Section →
+            </button>
+        </div>
         
-        <div class="equation-box">
-            <div class="equation">
-                <span class="eq-part">
-                    <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span>
-                </span>
-                
-                <span class="eq-symbol">=</span>
-                
-                <div class="eq-label" data-popup="epistemic-var">
-                    <span class="eq-part eq-underline-blue">
-                        <span class="term c-var" data-popup="variance">Var</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
-                    </span>
-                    <span class="eq-label-arrow c-epistemic-var">↑</span>
-                    <span class="eq-label-text c-epistemic-var">Epistemic</span>
-                </div>
-                
-                <span class="eq-symbol">+</span>
-                
-                <div class="eq-label" data-popup="aleatoric-var">
-                    <span class="eq-part eq-underline-orange">
-                        <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
-                    </span>
-                    <span class="eq-label-arrow c-aleatoric-var">↑</span>
-                    <span class="eq-label-text c-aleatoric-var">Aleatoric</span>
+        <!-- Slide Content Area -->
+        <div class="slide-content-area" id="slide-content-area">
+            
+            <!-- ============================================
+                  WHAT IS UNCERTAINTY (Slides 1-6)
+                 ============================================ -->
+            
+            <!-- Slide 1-1: What exactly is Uncertainty? -->
+            <div class="slide" id="slide-1-1" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">What exactly is Uncertainty?</div>
+                    <div class="slide-card-content">
+                        The amount of "I don't know which outcome will happen" that remains <em>even after</em> you've used all the information you have.<br><br>
+                        <strong>It's NOT:</strong> confusion, error, or randomness<br>
+                        <strong>It IS:</strong> <em>residual doubt</em> after reasoning
+                    </div>
                 </div>
             </div>
             
-            <div class="eq-explain">
-                <strong>In plain English:</strong> 
-                <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> = 
-                how much different model versions <em>disagree</em> on the average prediction 
-                (<span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>) + 
-                the average <em>spread</em> each model has within its own predictions 
-                (<span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>).
+            <!-- Slide 1-2: Intuitive examples -->
+            <div class="slide" id="slide-1-2" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">Can you give me something intuitive?</div>
+                    <div class="slide-card-content">
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr><th>Situation</th><th>Our Internal Uncertainty</th></tr>
+                                <tr><td>"The sun will rise tomorrow"</td><td>Almost zero</td></tr>
+                                <tr><td>"Will it rain tomorrow?"</td><td>Moderate</td></tr>
+                                <tr><td>"Who will win a coin toss?"</td><td>High</td></tr>
+                                <tr><td>"What did Bheem eat for lunch on March 12, 45 BC?"</td><td>Extremely high</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            <!-- Slide 1-3: How do we measure uncertainty? -->
+            <div class="slide" id="slide-1-3" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">How do we measure uncertainty?</div>
+                    <div class="slide-card-content">
+                        <strong>1. Probability:</strong> "I think there's a 70% chance..." → A spread/distribution over outcomes<br><br>
+                        <strong>2. Confidence/doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
+                        <strong>3. Variability across answers:</strong> Model says "Pink" → "No, coral" → "Actually red" → Inconsistency across responses
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 1-4: Scientific measurement (Entropy) -->
+            <div class="slide" id="slide-1-4" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">And the scientific measurement?</div>
+                    <div class="slide-card-content">
+                        <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br><br>
+                        <img src="images/entropy_graph_type.png" alt="Entropy visualization" class="slide-image">
+                        <br>
+                        • <strong>Sharp distribution</strong> (peaked, concentrated) → Low entropy → Very certain<br>
+                        • <strong>Spread out distribution</strong> (flat) → High entropy → High uncertainty
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 1-5: Where does uncertainty come from? -->
+            <div class="slide" id="slide-1-5" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">So where does this uncertainty come from?</div>
+                    <div class="slide-card-content">
+                        Total uncertainty splits into two sources:<br><br>
+                        <strong>1. Aleatoric (from the world):</strong> Input ambiguity, inherent noise in the task<br>
+                        → <em>Irreducible</em> - can't fix even with infinite data<br><br>
+                        <strong>2. Epistemic (from the model):</strong> Knowledge gaps, model blind spots<br>
+                        → <em>Reducible</em> - can fix with more training data, RAG, fine-tuning
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 1-6: Summary Table -->
+            <div class="slide" id="slide-1-6" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">📋 Summary: Types of Uncertainty</div>
+                    <div class="slide-card-content">
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Source</th>
+                                    <th>Nature</th>
+                                    <th>Fix?</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Aleatoric</strong></td>
+                                    <td>Data ambiguity, linguistic variety</td>
+                                    <td>Irreducible</td>
+                                    <td>Clarify input, add constraints</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Epistemic</strong></td>
+                                    <td>Knowledge gaps, model blind spots</td>
+                                    <td>Reducible</td>
+                                    <td>RAG, fine-tuning, ensembling</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ============================================
+                  TYPES OF UNCERTAINTY (Slides 2-1 to 2-3)
+                 ============================================ -->
+            
+            <!-- Slide 2-1: Variance Decomposition Equation -->
+            <div class="slide" id="slide-2-1" data-section="1">
+                <h2>Equation 1: Variance Decomposition (Law of Total Variance)</h2>
+                
+                <div class="equation-box">
+                    <div class="equation">
+                        <span class="eq-part">
+                            <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span>
+                        </span>
+                        
+                        <span class="eq-symbol">=</span>
+                        
+                        <div class="eq-label" data-popup="epistemic-var">
+                            <span class="eq-part eq-underline-blue">
+                                <span class="term c-var" data-popup="variance">Var</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
+                            </span>
+                            <span class="eq-label-arrow c-epistemic-var">↑</span>
+                            <span class="eq-label-text c-epistemic-var">Epistemic</span>
+                        </div>
+                        
+                        <span class="eq-symbol">+</span>
+                        
+                        <div class="eq-label" data-popup="aleatoric-var">
+                            <span class="eq-part eq-underline-orange">
+                                <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
+                            </span>
+                            <span class="eq-label-arrow c-aleatoric-var">↑</span>
+                            <span class="eq-label-text c-aleatoric-var">Aleatoric</span>
+                        </div>
+                    </div>
+                    
+                    <div class="eq-explain">
+                        <strong>In plain English:</strong> 
+                        <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> = 
+                        how much different model versions <em>disagree</em> on the average prediction 
+                        (<span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>) + 
+                        the average <em>spread</em> each model has within its own predictions 
+                        (<span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>).
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2-2: Information-Theoretic Equation -->
+            <div class="slide" id="slide-2-2" data-section="1">
+                <h2>Equation 2: Information-Theoretic Decomposition</h2>
+                
+                <div class="equation-box">
+                    <div class="equation">
+                        <span class="eq-part">
+                            <span class="term c-H" data-popup="entropy">H</span>
+                            <span style="color: #64748b; margin-left: 4px;">(Total)</span>
+                        </span>
+                        
+                        <span class="eq-symbol">=</span>
+                        
+                        <div class="eq-label" data-popup="epistemic-info">
+                            <span class="eq-part eq-underline-violet">
+                                <span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>)
+                            </span>
+                            <span class="eq-label-arrow c-epistemic-info">↑</span>
+                            <span class="eq-label-text c-epistemic-info">Epistemic</span>
+                        </div>
+                        
+                        <span class="eq-symbol">+</span>
+                        
+                        <div class="eq-label" data-popup="aleatoric-info">
+                            <span class="eq-part eq-underline-red">
+                                <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>))]
+                            </span>
+                            <span class="eq-label-arrow c-aleatoric-info">↑</span>
+                            <span class="eq-label-text c-aleatoric-info">Aleatoric</span>
+                        </div>
+                    </div>
+                    
+                    <div class="eq-explain">
+                        <strong>In plain English:</strong> 
+                        <span class="term c-H" data-popup="entropy">Total Entropy</span> = 
+                        how much knowing the true model parameters would reduce uncertainty about the output 
+                        (<span class="term c-epistemic-info" data-popup="epistemic-info">Epistemic</span>) + 
+                        the average entropy of each model's token distribution 
+                        (<span class="term c-aleatoric-info" data-popup="aleatoric-info">Aleatoric</span>).
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2-3: When to Use Which -->
+            <div class="slide" id="slide-2-3" data-section="1">
+                <div class="slide-card">
+                    <div class="slide-card-title">🤔 When to Use Which Equation?</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Variance Decomposition</div>
+                            <p>Best for regression tasks or when you care about continuous outputs (e.g., perplexity scores, confidence scores).</p>
+                        </div>
+                        <div class="insight-box">
+                            <div class="insight-title">Entropy Decomposition</div>
+                            <p>Best for classification/generation tasks with discrete tokens. More common in LLM analysis since we predict discrete tokens.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ============================================
+                  DETECTION & MITIGATION (Slides 3-1 to 3-3)
+                 ============================================ -->
+            
+            <!-- Slide 3-1: Core Idea -->
+            <div class="slide" id="slide-3-1" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">🎯 Core Idea: How do we detect uncertainty?</div>
+                    <div class="slide-card-content">
+                        We usually try to detect or minimize <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic uncertainty</span> at inference time because <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> is related to system/input ambiguity.<br><br>
+                        The core approaches:<br>
+                        <strong>1. Token-level:</strong> Looking at logit spread and verbalized confidence (P(True))<br>
+                        <strong>2. Model-level:</strong> Fine-tuning, RAG, ensembling<br>
+                        <strong>3. Multi-generation:</strong> If model has knowledge, it gives consistent answers regardless of how you ask
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-2: Methods Table -->
+            <div class="slide" id="slide-3-2" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">📊 Detection & Mitigation Methods</div>
+                    <div class="slide-card-content">
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr>
+                                    <th>Scenario</th>
+                                    <th>Primary Target</th>
+                                    <th>Mechanism</th>
+                                    <th>Key Insight</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Varying Decoding</strong><br>(temp, top-k, top-p)</td>
+                                    <td>Both</td>
+                                    <td>Stochastic sampling of semantic clusters</td>
+                                    <td>Semantic Entropy: High entropy over meanings reveals gaps</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rephrased Prompts</strong></td>
+                                    <td>Aleatoric (minimize)</td>
+                                    <td>Clarification & perturbation</td>
+                                    <td>BayesPE: Sensitivity to phrasing reveals instability</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>N Models (Ensemble)</strong></td>
+                                    <td>Epistemic (detect)</td>
+                                    <td>Inter-model disagreement</td>
+                                    <td>"Gold Standard" - disagreement isolates knowledge gaps</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Adding Context (RAG)</strong></td>
+                                    <td>Epistemic (minimize)</td>
+                                    <td>Parametric vs non-parametric grounding</td>
+                                    <td>Context fills knowledge gaps; residual = Aleatoric</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Token Probabilities</strong></td>
+                                    <td>Aleatoric (detect)</td>
+                                    <td>White-box log-likelihoods</td>
+                                    <td>P(True) / Min-Prob for OOD detection</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Verbalized Confidence</strong></td>
+                                    <td>Epistemic (attempt)</td>
+                                    <td>Metacognitive prompting</td>
+                                    <td>Prone to human-mimicry; needs CoT for calibration</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sycophancy Test</strong></td>
+                                    <td>Epistemic (detect)</td>
+                                    <td>Adversarial steering/hints</td>
+                                    <td>High susceptibility = lack of epistemic conviction</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3-3: Important Note -->
+            <div class="slide" id="slide-3-3" data-section="2">
+                <div class="slide-card">
+                    <div class="slide-card-title">⚠️ Important Note</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">The Ongoing Debate</div>
+                            <p>There's debate on what reduces Aleatoric vs Epistemic. For example:<br><br>
+                            • <strong>Adding context:</strong> Changes input (Aleatoric?) OR fills knowledge gaps (Epistemic?)<br>
+                            • <strong>Sampling techniques:</strong> Don't change weights but reshape uncertainty exposure</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
-    </section>
-    
-    <!-- ============================================
-         EQUATION 2: INFORMATION-THEORETIC
-         ============================================ -->
-    <section>
-        <h2>Equation 2: Information-Theoretic Decomposition</h2>
         
-        <div class="equation-box">
-            <div class="equation">
-                <span class="eq-part">
-                    <span class="term c-H" data-popup="entropy">H</span>
-                    <span style="color: #64748b; margin-left: 4px;">(Total)</span>
-                </span>
-                
-                <span class="eq-symbol">=</span>
-                
-                <div class="eq-label" data-popup="epistemic-info">
-                    <span class="eq-part eq-underline-violet">
-                        <span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>)
-                    </span>
-                    <span class="eq-label-arrow c-epistemic-info">↑</span>
-                    <span class="eq-label-text c-epistemic-info">Epistemic</span>
-                </div>
-                
-                <span class="eq-symbol">+</span>
-                
-                <div class="eq-label" data-popup="aleatoric-info">
-                    <span class="eq-part eq-underline-red">
-                        <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>))]
-                    </span>
-                    <span class="eq-label-arrow c-aleatoric-info">↑</span>
-                    <span class="eq-label-text c-aleatoric-info">Aleatoric</span>
-                </div>
-            </div>
-            
-            <div class="eq-explain">
-                <strong>In plain English:</strong> 
-                <span class="term c-H" data-popup="entropy">Total Entropy</span> = 
-                how much knowing the true model parameters would reduce uncertainty about the output 
-                (<span class="term c-epistemic-info" data-popup="epistemic-info">Epistemic</span>) + 
-                the average entropy of each model's token distribution 
-                (<span class="term c-aleatoric-info" data-popup="aleatoric-info">Aleatoric</span>).
-            </div>
-        </div>
-    </section>
-    
-    <!-- ============================================
-         KEY INSIGHTS
-         ============================================ -->
-    <section>
-        <h2>When to Use Which Equation?</h2>
-        <div class="insight-box">
-            <div class="insight-title">Variance Decomposition</div>
-            <p>Best for regression tasks or when you care about continuous outputs (e.g., perplexity scores, confidence scores).</p>
-        </div>
-        <div class="insight-box">
-            <div class="insight-title">Entropy Decomposition</div>
-            <p>Best for classification/generation tasks with discrete tokens. More common in LLM analysis since we predict discrete tokens.</p>
-        </div>
-    </section>
-        </div> <!-- Close Section 2 content -->
-    </div> <!-- Close Section 2 container -->
-
-    <!-- ============================================
-         SECTION 3: DETECTION & MITIGATION
-         ============================================ -->
-    <div class="section-container collapsed" id="section-methods">
-        <div class="section-header" onclick="toggleSection('section-methods')">
-            <span class="toggle-icon">▼</span>
-            <span>Section 3: Detection & Mitigation Methods</span>
-        </div>
-        <div class="section-content">
-            <div class="qa-item collapsed" id="qa6">
-                <div class="qa-header" onclick="toggleQA('qa6')">
-                    <span class="qa-toggle">▼</span>
-                    <span>Q: Core Idea: How do we detect uncertainty?</span>
-                </div>
-                <div class="qa-content">
-                    We usually try to detect or minimize <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic uncertainty</span> at inference time because <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span> is related to system/input ambiguity.<br><br>
-                    The core approaches:<br>
-                    <strong>1. Token-level:</strong> Looking at logit spread and verbalized confidence (P(True))<br>
-                    <strong>2. Model-level:</strong> Fine-tuning, RAG, ensembling<br>
-                    <strong>3. Multi-generation:</strong> If model has knowledge, it gives consistent answers regardless of how you ask
-                </div>
-            </div>
-            
-            <table class="uncertainty-table">
-                <tr>
-                    <th>Scenario</th>
-                    <th>Primary Target</th>
-                    <th>Mechanism</th>
-                    <th>Key Insight</th>
-                </tr>
-                <tr>
-                    <td><strong>Varying Decoding</strong><br>(temp, top-k, top-p)</td>
-                    <td>Both</td>
-                    <td>Stochastic sampling of semantic clusters</td>
-                    <td>Semantic Entropy: High entropy over meanings reveals gaps</td>
-                </tr>
-                <tr>
-                    <td><strong>Rephrased Prompts</strong></td>
-                    <td>Aleatoric (minimize)</td>
-                    <td>Clarification & perturbation</td>
-                    <td>BayesPE: Sensitivity to phrasing reveals instability</td>
-                </tr>
-                <tr>
-                    <td><strong>N Models (Ensemble)</strong></td>
-                    <td>Epistemic (detect)</td>
-                    <td>Inter-model disagreement</td>
-                    <td>"Gold Standard" — disagreement isolates knowledge gaps</td>
-                </tr>
-                <tr>
-                    <td><strong>Adding Context (RAG)</strong></td>
-                    <td>Epistemic (minimize)</td>
-                    <td>Parametric vs non-parametric grounding</td>
-                    <td>Context fills knowledge gaps; residual = Aleatoric</td>
-                </tr>
-                <tr>
-                    <td><strong>Token Probabilities</strong></td>
-                    <td>Aleatoric (detect)</td>
-                    <td>White-box log-likelihoods</td>
-                    <td>P(True) / Min-Prob for OOD detection</td>
-                </tr>
-                <tr>
-                    <td><strong>Verbalized Confidence</strong></td>
-                    <td>Epistemic (attempt)</td>
-                    <td>Metacognitive prompting</td>
-                    <td>Prone to human-mimicry; needs CoT for calibration</td>
-                </tr>
-                <tr>
-                    <td><strong>Sycophancy Test</strong></td>
-                    <td>Epistemic (detect)</td>
-                    <td>Adversarial steering/hints</td>
-                    <td>High susceptibility = lack of epistemic conviction</td>
-                </tr>
-            </table>
-            
-            <div class="insight-box">
-                <div class="insight-title">⚠️ Important Note</div>
-                <p>There's debate on what reduces Aleatoric vs Epistemic. For example:<br><br>
-                • <strong>Adding context:</strong> Changes input (Aleatoric?) OR fills knowledge gaps (Epistemic?)<br>
-                • <strong>Sampling techniques:</strong> Don't change weights but reshape uncertainty exposure</p>
-            </div>
+        <!-- Slide Navigation Bar (Bottom) -->
+        <div class="slide-nav">
+            <button class="nav-btn nav-btn-secondary" id="prev-slide-btn" onclick="prevSlide()">
+                ← Back
+            </button>
+            <div class="progress-dots" id="progress-dots"></div>
+            <div class="slide-nav-counter" id="slide-counter">1 / 6</div>
+            <button class="nav-btn nav-btn-primary" id="next-slide-btn" onclick="nextSlide()">
+                Next →
+            </button>
         </div>
     </div>
     
@@ -819,7 +370,7 @@
         const popupData = {
             // ----- Core Variables -----
             "variance": {
-                title: "Var — Variance",
+                title: "Var - Variance",
                 color: "#b45309",
                 sections: [
                     {
@@ -828,14 +379,14 @@
                         content: `How spread out the <span class="term c-y" data-popup="output">predictions</span> are. If all <span class="term c-theta" data-popup="theta">model versions</span> give similar answers, <span class="term c-var" data-popup="variance">variance</span> is low. If they're all over the place, <span class="term c-var" data-popup="variance">variance</span> is high.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
-                        content: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-x" data-popup="input">X</span>) = <span class="term c-E" data-popup="expectation">E</span>[(<span class="term c-x" data-popup="input">X</span> - μ)²] — the <span class="term c-E" data-popup="expectation">expected</span> squared deviation from the mean.`,
+                        icon: "",
+                        title: "",
+                        content: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-x" data-popup="input">X</span>) = <span class="term c-E" data-popup="expectation">E</span>[(<span class="term c-x" data-popup="input">X</span> - μ)²] - the <span class="term c-E" data-popup="expectation">expected</span> squared deviation from the mean.`,
                         formula: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-x" data-popup="input">X</span>) = <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>²] − <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>]²`
                     },
                     {
@@ -853,28 +404,28 @@
             },
             
             "output": {
-                title: "y — Output",
+                title: "y - Output",
                 color: "#be185d",
                 sections: [
                     {
                         icon: "💡",
                         title: "Intuitive Definition",
-                        content: `The thing the <span class="term c-theta" data-popup="theta">model</span> produces — what we're trying to predict.`
+                        content: `The thing the <span class="term c-theta" data-popup="theta">model</span> produces - what we're trying to predict.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The target random variable. In supervised learning, it's the label. In generation, it's the <span class="term c-y" data-popup="output">output</span> sequence.`
                     },
                     {
                         icon: "🤖",
                         title: "In LLMs",
-                        content: `<span class="term c-y" data-popup="output">y</span> is the <strong>next token</strong> (or full completion). It's not just a single word — it's a <span class="term c-p" data-popup="posterior">probability distribution</span> over the entire vocabulary. Shape: [vocab_size] ≈ [50,000+] <span class="term c-p" data-popup="posterior">probabilities</span> summing to 1.`
+                        content: `<span class="term c-y" data-popup="output">y</span> is the <strong>next token</strong> (or full completion). It's not just a single word - it's a <span class="term c-p" data-popup="posterior">probability distribution</span> over the entire vocabulary. Shape: [vocab_size] ≈ [50,000+] <span class="term c-p" data-popup="posterior">probabilities</span> summing to 1.`
                     },
                     {
                         icon: "📝",
@@ -886,22 +437,22 @@
             },
             
             "input": {
-                title: "x — Input",
+                title: "x - Input",
                 color: "#0e7490",
                 sections: [
                     {
                         icon: "💡",
                         title: "Intuitive Definition",
-                        content: `What the <span class="term c-theta" data-popup="theta">model</span> sees before making a <span class="term c-y" data-popup="output">prediction</span> — the context, the question, the prompt.`
+                        content: `What the <span class="term c-theta" data-popup="theta">model</span> sees before making a <span class="term c-y" data-popup="output">prediction</span> - the context, the question, the prompt.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The conditioning variable. All <span class="term c-y" data-popup="output">predictions</span> are made conditional on <span class="term c-x" data-popup="input">x</span>: <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>).`
                     },
                     {
@@ -919,22 +470,22 @@
             },
             
             "theta": {
-                title: "θ (theta) — Model Parameters",
+                title: "θ (theta) - Model Parameters",
                 color: "#047857",
                 sections: [
                     {
                         icon: "💡",
                         title: "Intuitive Definition",
-                        content: `The 'brain' of the <span class="term c-theta" data-popup="theta">model</span> — all the learned weights that determine how it responds. Different <span class="term c-theta" data-popup="theta">θ</span> = different <span class="term c-theta" data-popup="theta">model</span>.`
+                        content: `The 'brain' of the <span class="term c-theta" data-popup="theta">model</span> - all the learned weights that determine how it responds. Different <span class="term c-theta" data-popup="theta">θ</span> = different <span class="term c-theta" data-popup="theta">model</span>.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The set of all learnable <span class="term c-theta" data-popup="theta">parameters</span>. For neural networks: weights, biases, embeddings.`
                     },
                     {
@@ -952,7 +503,7 @@
             },
             
             "data": {
-                title: "D — Training Data",
+                title: "D - Training Data",
                 color: "#4d7c0f",
                 sections: [
                     {
@@ -961,13 +512,13 @@
                         content: `Everything the <span class="term c-theta" data-popup="theta">model</span> has seen during training. The 'textbooks' it learned from.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The observed dataset: <span class="term c-D" data-popup="data">D</span> = {(<span class="term c-x" data-popup="input">x₁</span>, <span class="term c-y" data-popup="output">y₁</span>), (<span class="term c-x" data-popup="input">x₂</span>, <span class="term c-y" data-popup="output">y₂</span>), ... (<span class="term c-x" data-popup="input">xₙ</span>, <span class="term c-y" data-popup="output">yₙ</span>)}. Used to estimate <span class="term c-theta" data-popup="theta">θ</span>.`
                     },
                     {
@@ -985,7 +536,7 @@
             },
             
             "posterior": {
-                title: "p(θ|D) — Posterior Distribution",
+                title: "p(θ|D) - Posterior Distribution",
                 color: "#4338ca",
                 sections: [
                     {
@@ -994,13 +545,13 @@
                         content: `Given the <span class="term c-D" data-popup="data">training data</span>, what are all the 'plausible' sets of <span class="term c-theta" data-popup="theta">model weights</span>? It's not just one <span class="term c-theta" data-popup="theta">θ</span>, but a <span class="term c-p" data-popup="posterior">distribution</span> over many possible <span class="term c-theta" data-popup="theta">θ</span> values.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The Bayesian posterior: <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>) ∝ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-D" data-popup="data">D</span>|<span class="term c-theta" data-popup="theta">θ</span>)<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>). Combines prior beliefs with <span class="term c-D" data-popup="data">data</span> likelihood.`,
                         formula: `<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>) = <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-D" data-popup="data">D</span>|<span class="term c-theta" data-popup="theta">θ</span>)<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>) / <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-D" data-popup="data">D</span>)`
                     },
@@ -1019,7 +570,7 @@
             },
             
             "expectation": {
-                title: "E — Expectation (Mean)",
+                title: "E - Expectation (Mean)",
                 color: "#0f766e",
                 sections: [
                     {
@@ -1028,13 +579,13 @@
                         content: `The <span class="term c-E" data-popup="expectation">average</span>. If you repeat something many times, <span class="term c-E" data-popup="expectation">E</span> gives you the typical/expected result.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `<span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>] = ∫ <span class="term c-x" data-popup="input">x</span>·<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>)dx for continuous, or Σ <span class="term c-x" data-popup="input">xᵢ</span>·<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">xᵢ</span>) for discrete.`,
                         formula: `<span class="term c-E" data-popup="expectation">E</span>[<span class="term c-x" data-popup="input">X</span>] = Σ <span class="term c-x" data-popup="input">xᵢ</span> · <span class="term c-p" data-popup="posterior">P</span>(<span class="term c-x" data-popup="input">xᵢ</span>)`
                     },
@@ -1053,7 +604,7 @@
             },
             
             "entropy": {
-                title: "H — Entropy",
+                title: "H - Entropy",
                 color: "#be123c",
                 sections: [
                     {
@@ -1062,13 +613,13 @@
                         content: `How 'spread out' a <span class="term c-p" data-popup="posterior">probability distribution</span> is. Sharp peak = low <span class="term c-H" data-popup="entropy">entropy</span> (confident). Flat <span class="term c-p" data-popup="posterior">distribution</span> = high <span class="term c-H" data-popup="entropy">entropy</span> (uncertain).<br><br>Think of it as the <span class="term c-E" data-popup="expectation">expected</span> (<span class="term c-E" data-popup="expectation">average</span>) surprise per <span class="term c-y" data-popup="output">token</span> in LLMs.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>) = −Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>)·log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>). Measures <span class="term c-E" data-popup="expectation">expected</span> surprise/information content.`,
                         formula: `<span class="term c-H" data-popup="entropy">H</span> = −Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>) log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-x" data-popup="input">x</span>)`
                     },
@@ -1087,7 +638,7 @@
             },
             
             "mutual-info": {
-                title: "I — Mutual Information",
+                title: "I - Mutual Information",
                 color: "#6d28d9",
                 sections: [
                     {
@@ -1096,13 +647,13 @@
                         content: `How much knowing one thing tells you about another. If <span class="term c-theta" data-popup="theta">model parameters θ</span> and <span class="term c-y" data-popup="output">output y</span> are highly linked, knowing <span class="term c-theta" data-popup="theta">θ</span> helps predict <span class="term c-y" data-popup="output">y</span>.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `<span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-x" data-popup="input">X</span>;<span class="term c-y" data-popup="output">Y</span>) = <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-x" data-popup="input">X</span>) − <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-x" data-popup="input">X</span>|<span class="term c-y" data-popup="output">Y</span>) = <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">Y</span>) − <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">Y</span>|<span class="term c-x" data-popup="input">X</span>). The reduction in uncertainty about <span class="term c-x" data-popup="input">X</span> when you know <span class="term c-y" data-popup="output">Y</span>.`,
                         formula: `<span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>; <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>) = <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-D" data-popup="data">D</span>) − <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)]`
                     },
@@ -1114,7 +665,7 @@
                     {
                         icon: "📝",
                         title: "Example",
-                        content: `<span class="term c-x" data-popup="input">Prompt</span>: 'Who won the 2024 election?'<br><br><span class="term c-theta" data-popup="theta">Model 1</span> (trained early 2024): uncertain, flat <span class="term c-p" data-popup="posterior">distribution</span><br><span class="term c-theta" data-popup="theta">Model 2</span> (trained late 2024): confident answer<br><span class="term c-theta" data-popup="theta">Model 3</span>: different confident answer<br><br>High <span class="term c-I" data-popup="mutual-info">mutual information</span> — the answer heavily depends on which <span class="term c-theta" data-popup="theta">θ</span> you sampled.`,
+                        content: `<span class="term c-x" data-popup="input">Prompt</span>: 'Who won the 2024 election?'<br><br><span class="term c-theta" data-popup="theta">Model 1</span> (trained early 2024): uncertain, flat <span class="term c-p" data-popup="posterior">distribution</span><br><span class="term c-theta" data-popup="theta">Model 2</span> (trained late 2024): confident answer<br><span class="term c-theta" data-popup="theta">Model 3</span>: different confident answer<br><br>High <span class="term c-I" data-popup="mutual-info">mutual information</span> - the answer heavily depends on which <span class="term c-theta" data-popup="theta">θ</span> you sampled.`,
                         isExample: true
                     }
                 ]
@@ -1136,18 +687,18 @@
                         icon: "💡",
                         title: "Intuitive Definition",
                         content: `How much do different <span class="term c-theta" data-popup="theta">model versions</span> <em>disagree</em> on what the <span class="term c-E" data-popup="expectation">average</span> answer should be?<br><br>
-                        Think of asking 5 different GPT checkpoints: "What's the capital of Atlantis?" If they each give a different confident answer (Model 1: "It's fictional", Model 2: "Unknown", Model 3: "Poseidonis"), that <span class="term c-var" data-popup="variance">disagreement</span> is epistemic uncertainty — the <span class="term c-theta" data-popup="theta">models</span> don't have reliable knowledge.`
+                        Think of asking 5 different GPT checkpoints: "What's the capital of Atlantis?" If they each give a different confident answer (Model 1: "It's fictional", Model 2: "Unknown", Model 3: "Poseidonis"), that <span class="term c-var" data-popup="variance">disagreement</span> is epistemic uncertainty - the <span class="term c-theta" data-popup="theta">models</span> don't have reliable knowledge.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The <span class="term c-var" data-popup="variance">variance</span> (spread/disagreement) computed across the <span class="term c-p" data-popup="posterior">posterior distribution</span> over <span class="term c-theta" data-popup="theta">model parameters θ</span>, of the <span class="term c-E" data-popup="expectation">expected value</span> of <span class="term c-y" data-popup="output">output y</span> given <span class="term c-x" data-popup="input">input x</span> and a specific <span class="term c-theta" data-popup="theta">θ</span>.<br><br>
-                        <strong>Key property:</strong> <em>Reducible</em> — can be decreased with more <span class="term c-D" data-popup="data">training data</span>, better architecture, or RAG.`
+                        <strong>Key property:</strong> <em>Reducible</em> - can be decreased with more <span class="term c-D" data-popup="data">training data</span>, better architecture, or RAG.`
                     },
                     {
                         icon: "📝",
@@ -1180,18 +731,18 @@
                         icon: "💡",
                         title: "Intuitive Definition",
                         content: `How spread-out is each <span class="term c-theta" data-popup="theta">model's</span> own prediction, <span class="term c-E" data-popup="expectation">on average</span>?<br><br>
-                        Think of the prompt: "Tell me a joke." Even a <em>perfect</em> <span class="term c-theta" data-popup="theta">model</span> would have a flat <span class="term c-y" data-popup="output">token distribution</span> — thousands of valid jokes exist! This internal <span class="term c-var" data-popup="variance">spread</span> is unavoidable because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous, not because the <span class="term c-theta" data-popup="theta">model</span> lacks knowledge.`
+                        Think of the prompt: "Tell me a joke." Even a <em>perfect</em> <span class="term c-theta" data-popup="theta">model</span> would have a flat <span class="term c-y" data-popup="output">token distribution</span> - thousands of valid jokes exist! This internal <span class="term c-var" data-popup="variance">spread</span> is unavoidable because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous, not because the <span class="term c-theta" data-popup="theta">model</span> lacks knowledge.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The <span class="term c-E" data-popup="expectation">expected value</span> (average) computed across the <span class="term c-p" data-popup="posterior">posterior distribution</span> over <span class="term c-theta" data-popup="theta">model parameters θ</span>, of the <span class="term c-var" data-popup="variance">variance</span> of <span class="term c-y" data-popup="output">output y</span> given <span class="term c-x" data-popup="input">input x</span> and that specific <span class="term c-theta" data-popup="theta">θ</span>.<br><br>
-                        <strong>Key property:</strong> <em>Irreducible</em> — cannot be decreased even with infinite <span class="term c-D" data-popup="data">data</span> or a perfect <span class="term c-theta" data-popup="theta">model</span>. It's intrinsic to the task.`
+                        <strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite <span class="term c-D" data-popup="data">data</span> or a perfect <span class="term c-theta" data-popup="theta">model</span>. It's intrinsic to the task.`
                     },
                     {
                         icon: "📝",
@@ -1201,7 +752,7 @@
                         • Model 1: Var = 2.8 (many tokens equally likely)<br>
                         • Model 2: Var = 2.5<br>
                         • Model 3: Var = 2.7<br><br>
-                        <span class="term c-E" data-popup="expectation">Average</span> = 2.67 = <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric uncertainty</span>. All <span class="term c-theta" data-popup="theta">models</span> agree the task is inherently ambiguous — there's no single "correct" joke.`,
+                        <span class="term c-E" data-popup="expectation">Average</span> = 2.67 = <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric uncertainty</span>. All <span class="term c-theta" data-popup="theta">models</span> agree the task is inherently ambiguous - there's no single "correct" joke.`,
                         isExample: true
                     },
                     {
@@ -1228,19 +779,19 @@
                         icon: "💡",
                         title: "Intuitive Definition",
                         content: `How much would knowing the "true" <span class="term c-theta" data-popup="theta">model</span> reduce our uncertainty about the <span class="term c-y" data-popup="output">output</span>?<br><br>
-                        If different <span class="term c-theta" data-popup="theta">model versions</span> give <em>confidently different</em> answers, that's high <span class="term c-I" data-popup="mutual-info">mutual information</span>. Model A says "Paris" (99% confident), Model B says "London" (99% confident). They disagree — so the answer heavily depends on <em>which</em> <span class="term c-theta" data-popup="theta">θ</span> you ask.`
+                        If different <span class="term c-theta" data-popup="theta">model versions</span> give <em>confidently different</em> answers, that's high <span class="term c-I" data-popup="mutual-info">mutual information</span>. Model A says "Paris" (99% confident), Model B says "London" (99% confident). They disagree - so the answer heavily depends on <em>which</em> <span class="term c-theta" data-popup="theta">θ</span> you ask.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The <span class="term c-I" data-popup="mutual-info">mutual information</span> between <span class="term c-y" data-popup="output">output y</span> and <span class="term c-theta" data-popup="theta">model parameters θ</span>, conditioned on <span class="term c-x" data-popup="input">input x</span> and <span class="term c-D" data-popup="data">training data D</span>.<br><br>
                         Computed as: <span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-D" data-popup="data">D</span>) − <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)]<br><br>
-                        <strong>Key property:</strong> <em>Reducible</em> — measures knowledge gap that can be closed with more <span class="term c-D" data-popup="data">data</span>.`
+                        <strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more <span class="term c-D" data-popup="data">data</span>.`
                     },
                     {
                         icon: "📝",
@@ -1274,15 +825,15 @@
                         All <span class="term c-theta" data-popup="theta">models</span> might <em>agree</em> that multiple <span class="term c-y" data-popup="output">tokens</span> are valid. For "The weather today is ___", every <span class="term c-theta" data-popup="theta">model</span> assigns high <span class="term c-H" data-popup="entropy">entropy</span> because "sunny", "rainy", "nice" are all valid. This shared fuzziness is the inherent ambiguity of the <span class="term c-x" data-popup="input">task</span>.`
                     },
                     {
-                        icon: "➖",
-                        title: "OR",
+                        icon: "",
+                        title: "",
                         content: `<div style="text-align: center; color: #94a3b8; font-size: 14px;">━━━━━━ Scientific Definition ━━━━━━</div>`
                     },
                     {
-                        icon: "📐",
-                        title: "Scientific Definition",
+                        icon: "",
+                        title: "",
                         content: `The <span class="term c-E" data-popup="expectation">expected value</span> (average) computed across the <span class="term c-p" data-popup="posterior">posterior distribution</span> over <span class="term c-theta" data-popup="theta">model parameters θ</span>, of the <span class="term c-H" data-popup="entropy">entropy</span> of that <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-p" data-popup="posterior">probability distribution</span> over <span class="term c-y" data-popup="output">output y</span>.<br><br>
-                        <strong>Key property:</strong> <em>Irreducible</em> — even with infinite <span class="term c-D" data-popup="data">data</span>, this <span class="term c-H" data-popup="entropy">entropy</span> remains because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous.`
+                        <strong>Key property:</strong> <em>Irreducible</em> - even with infinite <span class="term c-D" data-popup="data">data</span>, this <span class="term c-H" data-popup="entropy">entropy</span> remains because the <span class="term c-x" data-popup="input">task itself</span> is ambiguous.`
                     },
                     {
                         icon: "📝",
@@ -1308,7 +859,7 @@
                         content: `The complete 'I don't know' of the model. Combines both 'I lack knowledge' (<span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span>) and 'The task is ambiguous' (<span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span>).`
                     },
                     {
-                        icon: "📐",
+                        icon: "",
                         title: "The Decomposition",
                         content: `<strong><span class="term c-total" data-popup="total-uncertainty">Total</span> = <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span> + <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span></strong><br><br>This is the Law of Total <span class="term c-var" data-popup="variance">Variance</span> / <span class="term c-H" data-popup="entropy">entropy</span> decomposition. We can separate the sources of uncertainty.`,
                         formula: `<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>) = <span class="term c-var" data-popup="variance">Var</span>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)] + <span class="term c-E" data-popup="expectation">E</span>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>,<span class="term c-theta" data-popup="theta">θ</span>)]`
@@ -1410,17 +961,232 @@
         modal.addEventListener('click', (e) => e.stopPropagation());
         
         // ============================================
-        // COLLAPSIBLE SECTIONS (for PPT reveal)
+        // SLIDE NAVIGATION SYSTEM
         // ============================================
-        function toggleSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            section.classList.toggle('collapsed');
+        
+        // Configuration - defines the structure of the presentation
+        const slideConfig = {
+            sections: [
+                {
+                    id: 0,
+                    title: " What is Uncertainty?",
+                    slides: ["slide-1-1", "slide-1-2", "slide-1-3", "slide-1-4", "slide-1-5", "slide-1-6"]
+                },
+                {
+                    id: 1,
+                    title: " Types of Uncertainty (The Math)",
+                    slides: ["slide-2-1", "slide-2-2", "slide-2-3"]
+                },
+                {
+                    id: 2,
+                    title: " Detection & Mitigation Methods",
+                    slides: ["slide-3-1", "slide-3-2", "slide-3-3"]
+                }
+            ]
+        };
+        
+        // Current state
+        let currentSectionIndex = 0;
+        let currentSlideIndex = 0;
+        
+        // Initialize the slide navigator
+        function initSlideNavigator() {
+            // Generate section pills
+            generateSectionPills();
+            
+            // Show first slide
+            goToSlide(0, 0);
+            
+            // Rebind popup handlers for all terms
+            bindPopupHandlers();
         }
         
-        function toggleQA(qaId) {
-            const qa = document.getElementById(qaId);
-            qa.classList.toggle('collapsed');
+        // Generate clickable section pills
+        function generateSectionPills() {
+            const pillsContainer = document.getElementById('section-pills');
+            pillsContainer.innerHTML = slideConfig.sections.map((section, index) => `
+                <div class="section-pill ${index === 0 ? 'active' : 'inactive'}" 
+                     data-section="${index}" 
+                     onclick="goToSection(${index})">
+                    ${section.title.replace('Section ', 'S').replace(': ', ': ')}
+                </div>
+            `).join('');
         }
+        
+        // Generate progress dots for current section
+        function generateProgressDots() {
+            const dotsContainer = document.getElementById('progress-dots');
+            const currentSection = slideConfig.sections[currentSectionIndex];
+            
+            dotsContainer.innerHTML = currentSection.slides.map((_, index) => `
+                <div class="progress-dot ${index === currentSlideIndex ? 'active' : ''} ${index < currentSlideIndex ? 'completed' : ''}"></div>
+            `).join('');
+        }
+        
+        // Auto-scroll the active section pill to center of container
+        function scrollActivePillToCenter() {
+            const container = document.getElementById('section-pills');
+            const activePill = container.querySelector('.section-pill.active');
+            if (activePill && container) {
+                const scrollLeft = activePill.offsetLeft - (container.offsetWidth / 2) + (activePill.offsetWidth / 2);
+                container.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+            }
+        }
+        
+        // Navigate to a specific slide
+        function goToSlide(sectionIndex, slideIndex) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Update state
+            currentSectionIndex = sectionIndex;
+            currentSlideIndex = slideIndex;
+            
+            // Get the target slide
+            const section = slideConfig.sections[sectionIndex];
+            const slideId = section.slides[slideIndex];
+            const slideElement = document.getElementById(slideId);
+            
+            if (slideElement) {
+                slideElement.classList.add('active');
+            }
+            
+            // Update UI
+            updateNavigationUI();
+            
+            // Rebind popup handlers for the visible slide
+            bindPopupHandlers();
+        }
+        
+        // Navigate to a specific section (goes to first slide of that section)
+        function goToSection(sectionIndex) {
+            if (sectionIndex >= 0 && sectionIndex < slideConfig.sections.length) {
+                goToSlide(sectionIndex, 0);
+            }
+        }
+        
+        // Next slide (with section boundary handling)
+        function nextSlide() {
+            const currentSection = slideConfig.sections[currentSectionIndex];
+            
+            if (currentSlideIndex < currentSection.slides.length - 1) {
+                // More slides in current section
+                goToSlide(currentSectionIndex, currentSlideIndex + 1);
+            } else if (currentSectionIndex < slideConfig.sections.length - 1) {
+                // Last slide of section, go to next section's first slide
+                goToSlide(currentSectionIndex + 1, 0);
+            }
+            // If last slide of last section, do nothing
+        }
+        
+        // Previous slide (with section boundary handling)
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                // More slides before in current section
+                goToSlide(currentSectionIndex, currentSlideIndex - 1);
+            } else if (currentSectionIndex > 0) {
+                // First slide of section, go to previous section's last slide
+                const prevSection = slideConfig.sections[currentSectionIndex - 1];
+                goToSlide(currentSectionIndex - 1, prevSection.slides.length - 1);
+            }
+            // If first slide of first section, do nothing
+        }
+        
+        // Next section (goes to first slide of next section)
+        function nextSection() {
+            if (currentSectionIndex < slideConfig.sections.length - 1) {
+                goToSlide(currentSectionIndex + 1, 0);
+            }
+        }
+        
+        // Previous section (goes to first slide of previous section)
+        function prevSection() {
+            if (currentSectionIndex > 0) {
+                goToSlide(currentSectionIndex - 1, 0);
+            }
+        }
+        
+        // Update all navigation UI elements
+        function updateNavigationUI() {
+            const currentSection = slideConfig.sections[currentSectionIndex];
+            
+            // Update section title
+            document.getElementById('section-title').textContent = currentSection.title;
+            
+            // Update slide counter
+            document.getElementById('slide-counter').textContent = 
+                `${currentSlideIndex + 1} / ${currentSection.slides.length}`;
+            
+            // Update section pills
+            document.querySelectorAll('.section-pill').forEach((pill, index) => {
+                pill.classList.remove('active', 'inactive');
+                pill.classList.add(index === currentSectionIndex ? 'active' : 'inactive');
+            });
+            
+            // Auto-scroll active pill to center
+            scrollActivePillToCenter();
+            
+            // Update progress dots
+            generateProgressDots();
+            
+            // Update button states
+            const prevSlideBtn = document.getElementById('prev-slide-btn');
+            const nextSlideBtn = document.getElementById('next-slide-btn');
+            const prevSectionBtn = document.getElementById('prev-section-btn');
+            const nextSectionBtn = document.getElementById('next-section-btn');
+            
+            // Prev slide: disabled only if first slide of first section
+            prevSlideBtn.disabled = (currentSectionIndex === 0 && currentSlideIndex === 0);
+            
+            // Next slide: disabled only if last slide of last section
+            const isLastSection = currentSectionIndex === slideConfig.sections.length - 1;
+            const isLastSlide = currentSlideIndex === currentSection.slides.length - 1;
+            nextSlideBtn.disabled = (isLastSection && isLastSlide);
+            
+            // Section buttons
+            prevSectionBtn.disabled = (currentSectionIndex === 0);
+            nextSectionBtn.disabled = (currentSectionIndex === slideConfig.sections.length - 1);
+        }
+        
+        // Bind popup handlers for all visible terms
+        function bindPopupHandlers() {
+            document.querySelectorAll('[data-popup]').forEach(el => {
+                // Remove existing listener to avoid duplicates
+                el.removeEventListener('click', handlePopupClick);
+                el.addEventListener('click', handlePopupClick);
+            });
+        }
+        
+        // Handle popup click
+        function handlePopupClick(e) {
+            e.stopPropagation();
+            showPopup(e.currentTarget.dataset.popup);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Only if modal is not open
+            if (!modalOverlay.classList.contains('active')) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    nextSection();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    prevSection();
+                }
+            }
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initSlideNavigator);
     </script>
 </body>
 </html>

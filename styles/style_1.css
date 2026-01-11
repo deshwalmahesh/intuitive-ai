@@ -1,0 +1,748 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: min(95vw, 1600px);
+    margin: 0 auto;
+    padding: 10px 20px;
+    background: #f8fafc;
+    line-height: 1.7;
+    color: #1e293b;
+}
+
+h1 {
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #334155;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+/* ============================================
+    UNIQUE COLOR SYSTEM - ONE COLOR PER CONCEPT
+    ============================================ */
+
+/* Core Variables */
+.c-var { color: #b45309; } /* Variance - Amber-700 */
+.c-y { color: #be185d; }   /* Output y - Pink-700 */
+.c-x { color: #0e7490; }   /* Input x - Cyan-700 */
+.c-theta { color: #047857; } /* Parameters θ - Emerald-700 */
+.c-D { color: #4d7c0f; }   /* Data D - Lime-700 */
+.c-p { color: #4338ca; }   /* Probability p - Indigo-700 */
+.c-E { color: #0f766e; }   /* Expectation E - Teal-700 */
+.c-H { color: #be123c; }   /* Entropy H - Rose-700 */
+.c-I { color: #6d28d9; }   /* Mutual Info I - Violet-700 */
+
+/* FOUR distinct Epistemic/Aleatoric colors */
+.c-epistemic-var { color: #1d4ed8; }      /* Epistemic (Variance) - Blue-700 */
+.c-aleatoric-var { color: #c2410c; }      /* Aleatoric (Variance) - Orange-700 */
+.c-epistemic-info { color: #7c3aed; }     /* Epistemic (Info Theory) - Violet-600 */
+.c-aleatoric-info { color: #dc2626; }     /* Aleatoric (Info Theory) - Red-600 */
+
+/* Total Uncertainty */
+.c-total { color: #6b21a8; }              /* Total - Purple-700 */
+
+/* Clickable term styling */
+.term {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.term:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Equation display in popups */
+.popup-equation {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+/* Equation container */
+.equation-box {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+    overflow-x: auto;
+}
+
+.equation {
+    font-size: 22px;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    line-height: 2;
+    min-width: max-content;
+}
+
+.eq-part {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.eq-symbol {
+    font-size: 24px;
+    margin: 0 8px;
+    color: #64748b;
+}
+
+/* Epistemic/Aleatoric clickable labels */
+.eq-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.eq-label:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.eq-label-arrow {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.eq-label-text {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Underline for equation parts */
+.eq-underline-blue {
+    border-bottom: 3px solid #1d4ed8;
+    padding-bottom: 3px;
+}
+
+.eq-underline-orange {
+    border-bottom: 3px solid #c2410c;
+    padding-bottom: 3px;
+}
+
+.eq-underline-violet {
+    border-bottom: 3px solid #7c3aed;
+    padding-bottom: 3px;
+}
+
+.eq-underline-red {
+    border-bottom: 3px solid #dc2626;
+    padding-bottom: 3px;
+}
+
+/* Equation explanation sentence */
+.eq-explain {
+    margin-top: 20px;
+    font-size: 15px;
+    color: #475569;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    text-align: left;
+}
+
+/* Quick reference grid */
+.term-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.term-chip {
+    padding: 8px 16px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.term-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+/* Insights section */
+.insight-box {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.insight-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #334155;
+}
+
+/* ============================================
+    MODAL POPUP SYSTEM
+    ============================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    max-width: 85vw;
+    width: 85vw;
+    max-height: 85vh;
+    overflow: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    animation: modalSlide 0.2s ease-out;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748b;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.modal-close:hover {
+    background: #f1f5f9;
+}
+
+.modal-body {
+    padding: 24px;
+    overflow: auto;
+    max-height: calc(85vh - 80px);
+}
+
+.modal-section {
+    margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-section-content {
+    color: #334155;
+    line-height: 1.7;
+}
+
+.modal-example {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 8px;
+}
+
+.modal-formula {
+    background: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    margin-top: 8px;
+}
+
+/* Comparison table in popups */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.modal-table th, .modal-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* ============================================
+    COLLAPSIBLE SECTIONS (for PPT reveal)
+    ============================================ */
+.section-container {
+    margin: 25px 0;
+}
+
+.section-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #e2e8f0;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #334155;
+    transition: background-color 0.2s;
+}
+
+.section-header:hover {
+    background: #cbd5e1;
+}
+
+.section-header .toggle-icon {
+    transition: transform 0.2s;
+}
+
+.section-container.collapsed .section-header .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    padding: 16px 0;
+}
+
+.section-container.collapsed .section-content {
+    display: none;
+}
+
+/* QA Style boxes - collapsible */
+.qa-item {
+    background: white;
+    border-radius: 10px;
+    margin: 12px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.qa-header {
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #4338ca;
+    transition: background-color 0.2s;
+}
+
+.qa-header:hover {
+    background: #f1f5f9;
+}
+
+.qa-header .qa-toggle {
+    transition: transform 0.2s;
+}
+
+.qa-item.collapsed .qa-header .qa-toggle {
+    transform: rotate(-90deg);
+}
+
+.qa-content {
+    padding: 0 20px 16px 20px;
+    color: #334155;
+    line-height: 1.7;
+}
+
+.qa-item.collapsed .qa-content {
+    display: none;
+}
+
+/* Legacy qa-box (non-collapsible fallback) */
+.qa-box {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.qa-question {
+    font-weight: 600;
+    color: #4338ca;
+    margin-bottom: 8px;
+}
+
+.qa-answer {
+    color: #334155;
+    line-height: 1.7;
+}
+
+/* Uncertainty table */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 16px 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.uncertainty-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: normal; /* Ensure text wraps */
+}
+
+.uncertainty-table th, .uncertainty-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.uncertainty-table th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap; /* Keep headers single line if possible */
+}
+
+.uncertainty-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Reusable Slide Image */
+.slide-image {
+    display: block;
+    margin: 20px auto;
+    max-width: 85%; /* Don't be full width */
+    max-height: 40vh; /* Don't be too tall */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+
+/* ============================================
+    SLIDE NAVIGATION SYSTEM (PPT-Style)
+    ============================================ */
+
+/* Main presentation container */
+.presentation-container {
+    position: relative;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Section navigation bar (top) */
+.section-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    padding: 16px 24px;
+    border-radius: 12px 12px 0 0;
+    color: #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+    min-height: 70px;
+}
+
+.section-nav-title {
+    font-size: 18px;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+}
+
+.section-nav-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* Slide content area */
+.slide-content-area {
+    background: white;
+    padding: 32px;
+    flex: 1;
+    min-height: calc(100vh - 320px);
+    max-height: calc(100vh - 320px);
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    overflow: auto;
+}
+
+/* Individual slide (hidden by default) */
+.slide {
+    display: none;
+    animation: slideIn 0.3s ease-out;
+}
+
+.slide.active {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide navigation bar (bottom) */
+.slide-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    padding: 16px 24px;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    flex-shrink: 0;
+    min-height: 60px;
+}
+
+.slide-nav-counter {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.slide-nav-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* Navigation buttons */
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn-primary {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+}
+
+.nav-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+}
+
+.nav-btn-secondary {
+    background: white;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.nav-btn-secondary:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Progress dots */
+.progress-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.2s ease;
+}
+
+.progress-dot.active {
+    background: #4f46e5;
+    transform: scale(1.2);
+}
+
+.progress-dot.completed {
+    background: #22c55e;
+}
+
+/* Section indicator pills */
+.section-pills {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+    white-space: nowrap;
+}
+
+.section-pill {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    flex-shrink: 0;
+}
+
+.section-pill.inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.section-pill.inactive:hover {
+    background: #e2e8f0;
+}
+
+.section-pill.active {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    color: white;
+}
+
+/* Hide old collapsible styles - keep existing HTML working */
+.section-container.slide-mode .section-header {
+    display: none;
+}
+
+.section-container.slide-mode .section-content {
+    display: block !important;
+}
+
+.section-container.slide-mode.collapsed .section-content {
+    display: block !important;
+}
+
+/* Slide card styling */
+.slide-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+}
+
+.slide-card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slide-card-content {
+    color: #475569;
+    line-height: 1.8;
+    overflow: auto;
+}

@@ -370,6 +370,15 @@
                         <strong>What it Captures:</strong><br>
                         • Aleatoric: Multiple valid meanings → high entropy<br>
                         • Epistemic: Inconsistent knowledge → different meanings per sample
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt:</strong> "What is the capital of France?"<br>
+                            Gen 1: "Paris"<br>
+                            Gen 2: "The capital city is separate from the country..." (Hallucination)<br>
+                            Gen 3: "Paris, France"<br>
+                            <strong>Semantic Entropy:</strong> High (inconsistent meanings). If all said "Paris" in different words, entropy would be low.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -377,29 +386,36 @@
             <!-- Slide 3-3: Approach 2 - Rephrased Prompts (BayesPE/SPUQ) -->
             <div class="slide" id="slide-3-3" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">Approach 2: Rephrased Prompts (BayesPE)</div>
+                    <div class="slide-card-title">Approach 2: Rephrased Prompts</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
-                            <p>Ask the same question in N different ways, see if answers stay consistent. Sensitivity to phrasing = instability.</p>
+                            <p>Ask the same thing in 5 different ways. If the answer changes, the model is guessing.</p>
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Generate K semantically equivalent prompt rephrasings<br>
-                        2. Query LLM with each rephrased prompt<br>
-                        3. Weight prompts using Bayesian inference over small validation set<br>
-                        4. Aggregate distributions → weighted ensemble prediction<br>
-                        5. High variance across rephrasings → epistemic instability<br><br>
+                        1. Generate N variations of input prompt (paraphrasing)<br>
+                        2. Get response for each variation<br>
+                        3. Calculate consistency/variance across responses<br>
+                        4. High variance = High uncertainty (Sensitive to phrasing)<br>
+                        5. Low variance = Robust knowledge<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">Key Papers</div>
-                            <p><a href="https://aclanthology.org/2024.findings-acl.17/" target="_blank"><strong>"Bayesian Prompt Ensembles"</strong></a> - ACL 2024<br>
-                            <a href="https://aclanthology.org/2024.eacl-main.107/" target="_blank"><strong>"SPUQ: Perturbation-Based UQ for LLMs"</strong></a> - EACL 2024</p>
+                            <div class="insight-title">Key Paper</div>
+                            <p><a href="https://aclanthology.org/2024.eacl-main.26/" target="_blank"><strong>"SPUQ: Perturbation-Based Uncertainty Quantification for Large Language Models"</strong></a> - EACL 2024<br>
+                            Uses simple perturbations (temperature, prompt) to measure calibration.</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
                         • Aleatoric (minimize): Clarification resolves ambiguity<br>
                         • Epistemic (detect): Sensitivity to phrasing reveals unstable knowledge
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt 1:</strong> "Is 1009 a prime number?" -> "Yes"<br>
+                            <strong>Prompt 2:</strong> "Check if 1009 has factors." -> "Yes, 3..."<br>
+                            <strong>Result:</strong> Inconsistency = High Uncertainty.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -423,8 +439,8 @@
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://aclanthology.org/2024.emnlp-main.84/" target="_blank"><strong>"MUSE: Multi-LLM Uncertainty via Subset Ensembles"</strong></a> - EMNLP 2024<br>
-                            Uses JSD to identify well-calibrated LLM subsets</p>
+                            <p><a href="https://aclanthology.org/2024.emnlp-main.84/" target="_blank"><strong>"Simple Yet Effective: An Information-Theoretic Approach to Multi-LLM Uncertainty Quantification"</strong></a> - EMNLP 2024<br>
+                            Method Name: <strong>MUSE</strong> (Multi-LLM Uncertainty via Subset Ensembles)</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
@@ -444,22 +460,29 @@
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Query model WITHOUT context → baseline response & confidence<br>
-                        2. Retrieve relevant context from knowledge base<br>
-                        3. Query model WITH context → new response & confidence<br>
-                        4. Compare uncertainty before vs after<br>
-                        5. Reduced uncertainty = was a knowledge gap (now filled)<br>
-                        6. Residual uncertainty = inherent ambiguity (aleatoric)<br><br>
+                        1. Query model WITHOUT context (Parametric knowledge only)<br>
+                        2. Query model WITH retrieved context (Non-parametric)<br>
+                        3. <strong>Context Reliance Metric:</strong> Compare the difference<br>
+                        4. Huge confidence jump -> "Epistemic Gap" filled by context<br>
+                        5. No change -> Uncertainty is likely Aleatoric (ambiguous query)<br><br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">Key Papers</div>
+                            <div class="insight-title">Key Paper</div>
                             <p><a href="https://arxiv.org/abs/2501.03713" target="_blank"><strong>"Uncertainty as Feature Gaps"</strong></a> - Bakman et al. 2025<br>
-                            <a href="https://arxiv.org/abs/2410.02719" target="_blank"><strong>"UncertaintyRAG"</strong></a> - Li et al. 2024</p>
+                            Defines "Context Reliance" as a key feature for epistemic uncertainty.</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
                         • Epistemic (minimize): Context fills parametric knowledge gaps<br>
                         • Residual after RAG = Aleatoric (inherent to task)
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt:</strong> "Who won the 1998 World Cup?"<br>
+                            <strong>No Context:</strong> "Brazil" (Low conf) -> Epistemic gap.<br>
+                            <strong>With Context:</strong> "France defeated Brazil..." -> "France" (High conf).<br>
+                            Uncertainty dropped -> The initial uncertainty was Epistemic.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -491,6 +514,14 @@
                         <strong>What it Captures:</strong><br>
                         • Aleatoric: Per-token distribution reflects phrasing ambiguity<br>
                         • P(True) attempts Epistemic detection (self-assessment)
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Q:</strong> "What is the capital of Mars?"<br>
+                            <strong>A:</strong> "There is no capital on Mars."<br>
+                            <strong>Model Check:</strong> "Is this answer True?" -> P(True) = 0.95 (High).<br>
+                            If model hallucinates "Phobos City", P(True) might be lower (0.40) if calibrated.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -521,6 +552,14 @@
                         <strong>What it Captures:</strong><br>
                         • Attempts Epistemic (self-assessment of knowledge)<br>
                         • <strong>Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Prompt:</strong> "Who is the CEO of Google? Answer and state confidence."<br>
+                            <strong>Response:</strong> "Sundar Pichai. Confidence: 99%."<br>
+                            <strong>Prompt:</strong> "Who is the CEO of <FakeCompany>? state confidence."<br>
+                            <strong>Response:</strong> "John Doe. Confidence: 90%." (Overconfident hallucination)</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -536,21 +575,28 @@
                         </div>
                         
                         <strong>How It Works (Pseudocode):</strong><br>
-                        1. Get initial answer from model<br>
-                        2. Present opposing "hint" or suggestion<br>
-                        &nbsp;&nbsp;&nbsp;• "Actually, I think the answer is X. Are you sure?"<br>
-                        3. Ask model to reconsider<br>
-                        4. If model flips to wrong answer → sycophantic (low conviction)<br>
-                        5. If model holds firm → high epistemic confidence<br><br>
+                        1. Model gives Answer A<br>
+                        2. <strong>The Test:</strong> User challenges it ("Are you sure? I think it's B")<br>
+                        3. Check if Model flips to B (Sycophancy)<br>
+                        4. <strong>Intuition:</strong> Flipping = Low conviction (High Uncertainty)<br>
+                        5. <strong>Formal Fix:</strong> Condition probability on user agreement (SyRoUP)<br><br>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://arxiv.org/abs/2410.13167" target="_blank"><strong>"Accounting for Sycophancy in LLM Uncertainty Estimation"</strong></a><br>
-                            Sicilia et al. 2024 - Proposes SyRoUP (Sycophancy-Robust UQ)</p>
+                            <p><a href="https://arxiv.org/abs/2410.23743" target="_blank"><strong>"Accounting for Sycophancy in LLM Uncertainty Estimation"</strong></a> - Sicilia et al. 2024<br>
+                            Uses "SyRoUP" to calibrate uncertainty against sycophancy.</p>
                         </div>
                         
                         <strong>What it Captures:</strong><br>
                         • Epistemic (detect): High susceptibility = lack of true knowledge conviction
+
+                        <div class="insight-box">
+                            <div class="insight-title">LLM Example</div>
+                            <p><strong>Q:</strong> "Is 17 prime?" -> <strong>A:</strong> "Yes."<br>
+                            <strong>User:</strong> "I think it's divisible by 3. Are you sure?"<br>
+                            <strong>A:</strong> "Apologies, you are right. 17 is divisible by 3."<br>
+                            <strong>Result:</strong> Sycophantic flip = Low epistemic certainty (did not truly 'know').</p>
+                        </div>
                     </div>
                 </div>
             </div>

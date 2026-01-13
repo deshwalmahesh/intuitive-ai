@@ -14,14 +14,15 @@
     
     <!-- Main Presentation Container -->
     <div class="presentation-container">
-        <!-- Section Navigation Bar (Top) -->
+        <!-- Slide Navigation Bar (Top) -->
         <div class="section-nav">
-            <button class="nav-btn nav-btn-secondary" id="prev-section-btn" onclick="prevSection()">
-                ← Prev Section
+            <button class="nav-btn nav-btn-secondary" id="prev-slide-btn" onclick="prevSlide()">
+                ← Back
             </button>
             <div class="section-nav-title" id="section-title"> What is Uncertainty?</div>
-            <button class="nav-btn nav-btn-primary" id="next-section-btn" onclick="nextSection()">
-                Next Section →
+            <div class="slide-nav-counter" id="slide-counter">1 / 6</div>
+            <button class="nav-btn nav-btn-primary" id="next-slide-btn" onclick="nextSlide()">
+                Next →
             </button>
         </div>
         
@@ -35,41 +36,40 @@
             <!-- Slide 1-1: What exactly is Uncertainty? -->
             <div class="slide" id="slide-1-1" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">What exactly is Uncertainty?</div>
+                    <div class="slide-card-title">Uncertainty? Is that a new LLM?</div>
                     <div class="slide-card-content">
-                        The amount of "I don't know which outcome will happen" that remains <em>even after</em> you've used all the information you have.<br><br>
-                        <strong>It's NOT:</strong> confusion, error, or randomness<br>
-                        <strong>It IS:</strong> <em>residual doubt</em> after reasoning
+                        <strong>Uncertainty:</strong> Simply put, the amount of "I don't know what will happen" that <em>still</em> remains <em>even after</em> you've used all the information you had.<br><br>
+                        <strong>It's <span style="color: red;">Not</span>:</strong> Confusion (lack of clarity), Error (mistake in process), or Randomness (inherent unpredictability)<br>
+                        <strong>It <span style="color: green;">Is</span>:</strong> <em>Residual doubt (inescapable limit of current knowledge)</em> after reasoning
                     </div>
+                     <img src="images/what_is_uncertainty.png" alt="what is uncertainty" class="slide-image">
                 </div>
             </div>
             
-            <!-- Slide 1-2: Intuitive examples -->
+            <!-- Slide 1-2: Intuitive examples + How we perceive uncertainty -->
             <div class="slide" id="slide-1-2" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">Can you give me something intuitive?</div>
+                    <div class="slide-card-title">Thanks for confusing us. Now will you please give us something intuitive?</div>
                     <div class="slide-card-content">
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
-                                <tr><th>Situation</th><th>Our Internal Uncertainty</th></tr>
-                                <tr><td>"The sun will rise tomorrow"</td><td>Almost zero</td></tr>
-                                <tr><td>"Will it rain tomorrow?"</td><td>Moderate</td></tr>
-                                <tr><td>"Who will win a coin toss?"</td><td>High</td></tr>
-                                <tr><td>"What did Bheem eat for lunch on March 12, 45 BC?"</td><td>Extremely high</td></tr>
+                                <tr><th>What if I try to answer</th><th>My Internal Uncertainty</th></tr>
+                                <tr><td>Will the sun rise tomorrow?</td><td>Almost zero</td></tr>
+                                <tr><td>Will it rain tomorrow?</td><td>Moderate</td></tr>
+                                <tr><td>What did Shakespeare smoke at 22/03/1597, 11:03 AM?</td><td>Extremely High (Needs Infinite Information)</td></tr>
+                                <tr><td>Who will win a coin toss?</td><td>My scale just broke! (Almost Always Random)</td></tr>
+                             
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 1-3: How do we measure uncertainty? -->
-            <div class="slide" id="slide-1-3" data-section="0">
-                <div class="slide-card">
-                    <div class="slide-card-title">How do we (as humans) perceive and measure uncertainty?</div>
-                    <div class="slide-card-content">
-                        <strong>1. Probability:</strong> "I think there's a 70% chance..." → A spread/distribution over outcomes<br><br>
-                        <strong>2. Confidence/Doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
-                        <strong>3. Variability across Answers:</strong> You ask a kid: "What do you want to be when you grow up?" and it goes like: "Doctor" → "No, Politician" → "Actually AI Engineer (said no one)" → Inconsistency across responses
+                        
+                        <div class="insight-box" style="margin-top: 20px;">
+                            <div class="insight-title">But how do we (as humans) perceive it?</div>
+                            <p>
+                                <strong>1. Probability:</strong> "I think there's a 70% chance..." → A spread/distribution over outcomes<br><br>
+                                <strong>2. Confidence/Doubt:</strong> "I'm not very confident..." → Instability in your belief<br><br>
+                                <strong>3. Variability across Answers:</strong> You ask a kid: "What do you want to be when you grow up?" and the kid goes like: "Doctor" → "No, Politician" → "Actually AI Engineer (said no one)" → Inconsistency across responses
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,15 +77,16 @@
             <!-- Slide 1-4: Scientific measurement (Entropy) -->
             <div class="slide" id="slide-1-4" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">And the scientific measurement?</div>
+                    <div class="slide-card-title">Good job Nietzsche! You still fear Maths?</div>
                     <div class="slide-card-content">
                         <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">The Equations</div>
+                            <div class="insight-title">The Equations </div>
+                            <small>(Don't be mesmarized by the colourfulness, yet!)</small><br>
                             <p>
-                                <strong>Per Token:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>) log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>)<br><br>
-                                <strong>Per Sentence:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(seq) log <span class="term c-p" data-popup="posterior">p</span>(seq)<br>
+                                <strong>Per Token:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>) * log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>)<br><br>
+                                <strong>Per Sentence:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(seq) * log <span class="term c-p" data-popup="posterior">p</span>(seq)<br>
                                 <span style="font-size: 0.9em; opacity: 0.8;">where <span class="term c-p" data-popup="posterior">p</span>(seq) = ∏ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span><sub>t</sub> | <span class="term c-x" data-popup="input">history</span>)</span>
                             </p>
                         </div>
@@ -98,6 +99,79 @@
             </div>
 
             
+            <!-- Slide 1-5: What is Uncertainty Quantification? -->
+            <div class="slide" id="slide-1-5" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">Bet you can't Quantify that!</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Uncertainty Quantification (UQ)</div>
+                            <strong>Why:</strong> Models are imperfect approximations. UQ transforms vague notions of "the model might be wrong" into <em>specific, measurable</em> information about potential errors.<br><br>
+                            <strong>Scientifically:</strong> The systematic process of measuring and communicating <em>how confident</em> we should be in a model's predictions. Not just "is the model right?" but "how sure should we be?"
+                        </div>
+                        
+                        
+                        
+                        
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr><th>Context</th><th>Without UQ</th><th>With UQ</th></tr>
+                                <tr>
+                                    <td><strong>Linear Regression</strong><br>(House Price)</td>
+                                    <td>Prediction: $350,000</td>
+                                    <td>$350K ± $15K (95% CI)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Random Forest</strong><br>(Loan Approval)</td>
+                                    <td>Approved: Yes</td>
+                                    <td>Yes (72% of trees agree)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LLM</strong><br>(Factual QA)</td>
+                                    <td>Answer: "Paris"</td>
+                                    <td>"Paris" (95% confident), "Delhi" (3% Confident), "Atlantis" (1% confident)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 1-6: Why UQ Matters - Practical Significance -->
+            <div class="slide" id="slide-1-6" data-section="0">
+                <div class="slide-card">
+                    <div class="slide-card-title">Does UQ even matter? (Do any of us?)</div>
+                    <div class="slide-card-content">
+                        <div class="insight-box">
+                            <div class="insight-title">Prevent Overconfidence</div>
+                            <p>Models that say "I'm 99% sure" when they should say "I'm 50% sure" cause real-world harm. A tumor detection model confidently wrong is worse than one that says "uncertain - needs human review".</p>
+                        </div>
+                        
+                        <strong>High-Stakes Applications:</strong><br>
+                        • <strong>Healthcare:</strong> Tumor detection, drug dosing - uncertainty triggers specialist review<br>
+                        • <strong>Finance:</strong> Fraud detection, loan approval - high uncertainty = human escalation<br>
+                        • <strong>Autonomous Systems:</strong> Self-driving cars - uncertainty means slow down or hand over to human<br><br>
+                        
+                        
+                        <div class="table-wrapper">
+                            <table class="uncertainty-table">
+                                <tr><th>Action</th><th>ML Example</th><th>LLM Example</th></tr>
+                                <tr>
+                                    <td><strong>Trust</strong></td>
+                                    <td>XGBoost: Low variance across trees → confident prediction</td>
+                                    <td>All samples say same meaning → reliable</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Escalate</strong></td>
+                                    <td>Whenever P(churn) in range [0.4, 0.6] → 70% of times wrong → too close to call</td>
+                                    <td>Inconsistent rephrasing responses → possible hallucination</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ============================================
                   TYPES OF UNCERTAINTY (Slides 2-1 to 2-5)
                  ============================================ -->
@@ -105,9 +179,9 @@
             <!-- Slide 2-1: Introduction - Sources of Uncertainty -->
             <div class="slide" id="slide-2-1" data-section="1">
                 <div class="slide-card">
-                    <div class="slide-card-title">The Big Distinction: Where Does Uncertainty Come From?</div>
+                    <div class="slide-card-title">Where Does Uncertainty Come From?</div>
                     <div class="slide-card-content">
-                        It is the <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> and <em>where/how</em> it arises gives us two names:<br><br>
+                        Uncertainty as we know and talk about is the <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> and <em>where/how</em> it arises gives us two names:<br><br>
                         
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
@@ -141,6 +215,88 @@
                             <div class="insight-title">The Formula</div>
                             <p><strong><span class="term c-total" data-popup="total-uncertainty">Total</span> = <span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span> + <span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span></strong></p>
                         </div>
+                        
+                        <!-- Equation 1: Variance Decomposition (moved from slide 2-4) -->
+                        <h3 style="margin-top: 20px; margin-bottom: 10px;">Equation 1: Variance Decomposition (Law of Total Variance)</h3>
+                        <br><small>(Now comes your time to appreciate the colours!)</small><br>
+                        <div class="equation-box">
+                            <div class="equation">
+                                <span class="eq-part">
+                                    <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span>
+                                </span>
+                                
+                                <span class="eq-symbol">=</span>
+                                
+                                <div class="eq-label" data-popup="epistemic-var">
+                                    <span class="eq-part eq-underline-blue">
+                                        <span class="term c-var" data-popup="variance">Var</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
+                                    </span>
+                                    <span class="eq-label-arrow c-epistemic-var">↑</span>
+                                    <span class="eq-label-text c-epistemic-var">Epistemic</span>
+                                </div>
+                                
+                                <span class="eq-symbol">+</span>
+                                
+                                <div class="eq-label" data-popup="aleatoric-var">
+                                    <span class="eq-part eq-underline-orange">
+                                        <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
+                                    </span>
+                                    <span class="eq-label-arrow c-aleatoric-var">↑</span>
+                                    <span class="eq-label-text c-aleatoric-var">Aleatoric</span>
+                                </div>
+                            </div>
+                            
+                            <div class="eq-explain">
+                                <strong>In plain English:</strong> 
+                                <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> = 
+                                how much different <span class="term c-theta" data-popup="theta">model versions</span> <em>disagree</em> on the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-y" data-popup="output">prediction</span> 
+                                (<span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>) + 
+                                the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-var" data-popup="variance">spread</span> each <span class="term c-theta" data-popup="theta">model</span> has within its own <span class="term c-y" data-popup="output">predictions</span> 
+                                (<span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>).
+                            </div>
+                        </div>
+                        
+                        <!-- Equation 2: Information-Theoretic (moved from slide 2-5) -->
+                        <h3 style="margin-top: 20px; margin-bottom: 10px;">Equation 2: Information-Theoretic Decomposition</h3>
+                        <div class="equation-box">
+                            <div class="equation">
+                                <span class="eq-part">
+                                    <span class="term c-H" data-popup="entropy">H</span>
+                                    <span style="color: #64748b; margin-left: 4px;">(Total)</span>
+                                </span>
+                                
+                                <span class="eq-symbol">=</span>
+                                
+                                <div class="eq-label" data-popup="epistemic-info">
+                                    <span class="eq-part eq-underline-violet">
+                                        <span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>)
+                                    </span>
+                                    <span class="eq-label-arrow c-epistemic-info">↑</span>
+                                    <span class="eq-label-text c-epistemic-info">Epistemic</span>
+                                </div>
+                                
+                                <span class="eq-symbol">+</span>
+                                
+                                <div class="eq-label" data-popup="aleatoric-info">
+                                    <span class="eq-part eq-underline-red">
+                                        <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>))]
+                                    </span>
+                                    <span class="eq-label-arrow c-aleatoric-info">↑</span>
+                                    <span class="eq-label-text c-aleatoric-info">Aleatoric</span>
+                                </div>
+                            </div>
+                            
+                            <div class="eq-explain">
+                                <strong>In plain English:</strong> 
+                                <span class="term c-H" data-popup="entropy">Total Entropy</span> = 
+                                how much knowing the true <span class="term c-theta" data-popup="theta">model parameters</span> would reduce uncertainty about the <span class="term c-y" data-popup="output">output</span> 
+                                (<span class="term c-epistemic-info" data-popup="epistemic-info">Epistemic</span>) + 
+                                the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-H" data-popup="entropy">entropy</span> of each <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-y" data-popup="output">token</span> <span class="term c-p" data-popup="posterior">distribution</span> 
+                                (<span class="term c-aleatoric-info" data-popup="aleatoric-info">Aleatoric</span>).
+                            </div>
+                        </div>
+                        <br>
+                        (Glad you asked! Please wait for me to click "Next" before you bombard me with questions!)
                     </div>
                 </div>
             </div>
@@ -159,6 +315,12 @@
                         • <strong>Irreducible</strong> - can't be fixed even with infinite <span class="term c-D" data-popup="data">data</span><br>
                         • It's error in the system/task itself, not the model<br>
                         • If we don't change <span class="term c-theta" data-popup="theta">weights</span> but change sampling (temp, top-k), we're measuring <span class="term c-aleatoric-var" data-popup="aleatoric-var">aleatoric</span><br><br>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">ML Example</div>
+                            <p><strong>Blood Pressure Prediction:</strong> Even with perfect sensors, a patient's BP naturally fluctuates ±5mmHg due to stress, hydration, time of day. No model can eliminate this noise.<br><br>
+                            <strong>Logistic Regression (Churn):</strong> "Will this customer cancel?" - same customer with identical features might stay or leave due to external factors we can't observe.</p>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -193,6 +355,12 @@
                         • If we change the <span class="term c-theta" data-popup="theta">model weights</span> (finetuning, SFT), we're working on <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic</span> issues<br><br>
                         
                         <div class="insight-box">
+                            <div class="insight-title">ML Example</div>
+                            <p><strong>Random Forest (Health Prediction):</strong> Model trained on young adults (ages 18-35) predicting health outcomes for elderly patients (65+). The model lacks knowledge about this demographic - it's OOD.<br><br>
+                            <strong>Linear Regression (House Price):</strong> Predict price for a 50-bedroom mansion. Training data had max 6 bedrooms - model extrapolates blindly.</p>
+                        </div>
+                        
+                        <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
                             <p><strong>Prompt:</strong> "What is the capital of Narnia?"<br><br>
                             The model was trained on cats vs dogs and you asked about fish. Or you asked about an obscure 15th century poet. The model simply <em>doesn't have the knowledge</em> - this gap can be filled.</p>
@@ -206,90 +374,6 @@
                 </div>
             </div>
             
-            <!-- Slide 2-4: Variance Decomposition Equation -->
-            <div class="slide" id="slide-2-4" data-section="1">
-                <h2>Equation 1: Variance Decomposition (Law of Total Variance)</h2>
-                
-                <div class="equation-box">
-                    <div class="equation">
-                        <span class="eq-part">
-                            <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span>
-                        </span>
-                        
-                        <span class="eq-symbol">=</span>
-                        
-                        <div class="eq-label" data-popup="epistemic-var">
-                            <span class="eq-part eq-underline-blue">
-                                <span class="term c-var" data-popup="variance">Var</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-E" data-popup="expectation">E</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
-                            </span>
-                            <span class="eq-label-arrow c-epistemic-var">↑</span>
-                            <span class="eq-label-text c-epistemic-var">Epistemic</span>
-                        </div>
-                        
-                        <span class="eq-symbol">+</span>
-                        
-                        <div class="eq-label" data-popup="aleatoric-var">
-                            <span class="eq-part eq-underline-orange">
-                                <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-var" data-popup="variance">Var</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>)]
-                            </span>
-                            <span class="eq-label-arrow c-aleatoric-var">↑</span>
-                            <span class="eq-label-text c-aleatoric-var">Aleatoric</span>
-                        </div>
-                    </div>
-                    
-                    <div class="eq-explain">
-                        <strong>In plain English:</strong> 
-                        <span class="term c-total" data-popup="total-uncertainty">Total Uncertainty</span> = 
-                        how much different <span class="term c-theta" data-popup="theta">model versions</span> <em>disagree</em> on the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-y" data-popup="output">prediction</span> 
-                        (<span class="term c-epistemic-var" data-popup="epistemic-var">Epistemic</span>) + 
-                        the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-var" data-popup="variance">spread</span> each <span class="term c-theta" data-popup="theta">model</span> has within its own <span class="term c-y" data-popup="output">predictions</span> 
-                        (<span class="term c-aleatoric-var" data-popup="aleatoric-var">Aleatoric</span>).
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 2-5: Information-Theoretic Equation -->
-            <div class="slide" id="slide-2-5" data-section="1">
-                <h2>Equation 2: Information-Theoretic Decomposition</h2>
-                
-                <div class="equation-box">
-                    <div class="equation">
-                        <span class="eq-part">
-                            <span class="term c-H" data-popup="entropy">H</span>
-                            <span style="color: #64748b; margin-left: 4px;">(Total)</span>
-                        </span>
-                        
-                        <span class="eq-symbol">=</span>
-                        
-                        <div class="eq-label" data-popup="epistemic-info">
-                            <span class="eq-part eq-underline-violet">
-                                <span class="term c-I" data-popup="mutual-info">I</span>(<span class="term c-y" data-popup="output">y</span>, <span class="term c-theta" data-popup="theta">θ</span> | <span class="term c-x" data-popup="input">x</span>, <span class="term c-D" data-popup="data">D</span>)
-                            </span>
-                            <span class="eq-label-arrow c-epistemic-info">↑</span>
-                            <span class="eq-label-text c-epistemic-info">Epistemic</span>
-                        </div>
-                        
-                        <span class="eq-symbol">+</span>
-                        
-                        <div class="eq-label" data-popup="aleatoric-info">
-                            <span class="eq-part eq-underline-red">
-                                <span class="term c-E" data-popup="expectation">E</span><sub><span class="term c-p" data-popup="posterior">p</span>(<span class="term c-theta" data-popup="theta">θ</span>|<span class="term c-D" data-popup="data">D</span>)</sub>[<span class="term c-H" data-popup="entropy">H</span>(<span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">y</span>|<span class="term c-x" data-popup="input">x</span>, <span class="term c-theta" data-popup="theta">θ</span>))]
-                            </span>
-                            <span class="eq-label-arrow c-aleatoric-info">↑</span>
-                            <span class="eq-label-text c-aleatoric-info">Aleatoric</span>
-                        </div>
-                    </div>
-                    
-                    <div class="eq-explain">
-                        <strong>In plain English:</strong> 
-                        <span class="term c-H" data-popup="entropy">Total Entropy</span> = 
-                        how much knowing the true <span class="term c-theta" data-popup="theta">model parameters</span> would reduce uncertainty about the <span class="term c-y" data-popup="output">output</span> 
-                        (<span class="term c-epistemic-info" data-popup="epistemic-info">Epistemic</span>) + 
-                        the <span class="term c-E" data-popup="expectation">average</span> <span class="term c-H" data-popup="entropy">entropy</span> of each <span class="term c-theta" data-popup="theta">model's</span> <span class="term c-y" data-popup="output">token</span> <span class="term c-p" data-popup="posterior">distribution</span> 
-                        (<span class="term c-aleatoric-info" data-popup="aleatoric-info">Aleatoric</span>).
-                    </div>
-                </div>
-            </div>
             
             <!-- Slide 2-6: When to Use Which -->
             <div class="slide" id="slide-2-6" data-section="1">
@@ -300,11 +384,13 @@
                             <div class="insight-title">Variance Decomposition</div>
                             <p>Best for regression tasks or when you care about continuous outputs (e.g., perplexity scores, confidence scores).</p>
                             <p><strong>Why?</strong> Variance measures squared differences between predictions. When outputs are continuous numbers (like a score from 0 to 1), variance directly captures how "spread out" the predictions are in that number space. It's also easier to interpret: a variance of 0.05 means predictions typically differ by √0.05 ≈ 0.22 from the mean.</p>
+                            <p><strong>ML Context:</strong> Used in ensemble methods (Random Forest, Gradient Boosting) where each tree's prediction variance indicates model disagreement. Also natural for Linear Regression confidence intervals.</p>
                         </div>
                         <div class="insight-box">
                             <div class="insight-title">Entropy Decomposition</div>
                             <p>Best for classification/generation tasks with discrete tokens. More common in LLM analysis since we predict discrete tokens.</p>
                             <p><strong>Why?</strong> Entropy measures uncertainty over categorical distributions. LLMs output probability distributions over vocabularies (50K+ discrete tokens), making entropy the natural fit. Entropy is also additive across tokens and measured in bits - directly interpretable as "how many binary questions needed to identify the answer."</p>
+                            <p><strong>ML Context:</strong> Used in Logistic Regression (binary entropy), multi-class classification, and decision tree splitting criteria (information gain = entropy reduction).</p>
                         </div>
                     </div>
                 </div>
@@ -633,17 +719,6 @@
             
         </div>
         
-        <!-- Slide Navigation Bar (Bottom) -->
-        <div class="slide-nav">
-            <button class="nav-btn nav-btn-secondary" id="prev-slide-btn" onclick="prevSlide()">
-                ← Back
-            </button>
-            <div class="progress-dots" id="progress-dots"></div>
-            <div class="slide-nav-counter" id="slide-counter">1 / 6</div>
-            <button class="nav-btn nav-btn-primary" id="next-slide-btn" onclick="nextSlide()">
-                Next →
-            </button>
-        </div>
     </div>
     
     <!-- ============================================
@@ -694,6 +769,11 @@
                     },
                     {
                         icon: "",
+                        title: "In Classic ML",
+                        content: `<strong>Random Forest:</strong> If 90/100 trees predict "spam", <span class="term c-var" data-popup="variance">variance</span> across trees is low (confident). If 50/50 split, <span class="term c-var" data-popup="variance">variance</span> is high.<br><br><strong>Linear Regression:</strong> Confidence intervals come from prediction <span class="term c-var" data-popup="variance">variance</span>. House price = $350K ± $15K means <span class="term c-var" data-popup="variance">variance</span> captures uncertainty in the estimate.`
+                    },
+                    {
+                        icon: "",
                         title: "Example",
                         content: `<span class="term c-x" data-popup="input">Prompt</span>: 'The CEO of Apple is'<br><br><span class="term c-theta" data-popup="theta">Model</span> predicts: {Tim: 0.85, Cook: 0.82, Steve: 0.05, ...}<br><br>If 5 <span class="term c-theta" data-popup="theta">model checkpoints</span> give <span class="term c-p" data-popup="posterior">probabilities</span> for 'Tim': [0.82, 0.88, 0.79, 0.91, 0.85], the <span class="term c-var" data-popup="variance">variance</span> is ~0.0018. Low <span class="term c-var" data-popup="variance">variance</span> = consistent <span class="term c-y" data-popup="output">predictions</span>.`,
                         isExample: true
@@ -724,6 +804,11 @@
                         icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-y" data-popup="output">y</span> is the <strong>next token</strong> (or full completion). It's not just a single word - it's a <span class="term c-p" data-popup="posterior">probability distribution</span> over the entire vocabulary. Shape: [vocab_size] ≈ [50,000+] <span class="term c-p" data-popup="posterior">probabilities</span> summing to 1.`
+                    },
+                    {
+                        icon: "",
+                        title: "In Classic ML",
+                        content: `<strong>Regression:</strong> <span class="term c-y" data-popup="output">y</span> is continuous (house price = $350K, temperature = 72°F).<br><br><strong>Classification:</strong> <span class="term c-y" data-popup="output">y</span> is a probability distribution over classes. Logistic Regression: P(spam)=0.8, P(not_spam)=0.2.`
                     },
                     {
                         icon: "",
@@ -793,6 +878,11 @@
                     },
                     {
                         icon: "",
+                        title: "In Classic ML",
+                        content: `<strong>Linear Regression:</strong> <span class="term c-theta" data-popup="theta">θ</span> = weight coefficients (β₀, β₁, ..., βₙ). A house price model might have θ = [intercept, coef_sqft, coef_beds, coef_location].<br><br><strong>Random Forest:</strong> <span class="term c-theta" data-popup="theta">θ</span> = all tree structures, split thresholds, and leaf values across all trees.`
+                    },
+                    {
+                        icon: "",
                         title: "Example",
                         content: `LLaMA-7B has <span class="term c-theta" data-popup="theta">θ</span> with 7 billion floats stored in ~14GB (FP16).<br><br><span class="term c-theta" data-popup="theta">θ</span> includes:<br>• <span class="term c-y" data-popup="output">Token</span> embeddings: [vocab_size × hidden_dim]<br>• 32 transformer layers, each with attention + FFN weights<br>• Final classification head<br><br>Different checkpoints (epoch 1 vs epoch 10) have different <span class="term c-theta" data-popup="theta">θ</span> values.`,
                         isExample: true
@@ -823,6 +913,11 @@
                         icon: "",
                         title: "In LLMs",
                         content: `<span class="term c-D" data-popup="data">D</span> is the <strong>pretraining corpus</strong>: web pages (Common Crawl), books, Wikipedia, GitHub code, etc. For GPT-3: ~300B <span class="term c-y" data-popup="output">tokens</span> (weighted training mix). The coverage and quality of <span class="term c-D" data-popup="data">D</span> determines what the <span class="term c-theta" data-popup="theta">model</span> 'knows'.`
+                    },
+                    {
+                        icon: "",
+                        title: "In Classic ML",
+                        content: `<strong>House Price Prediction:</strong> <span class="term c-D" data-popup="data">D</span> = {(sqft, beds, location, price), ...} for 10,000 sold houses.<br><br><strong>Churn Prediction:</strong> <span class="term c-D" data-popup="data">D</span> = {(customer_features, churned?), ...}. More <span class="term c-D" data-popup="data">data</span> = better estimates of <span class="term c-theta" data-popup="theta">θ</span> = lower <span class="term c-epistemic-var" data-popup="epistemic-var">epistemic uncertainty</span>.`
                     },
                     {
                         icon: "",
@@ -1267,17 +1362,17 @@
             sections: [
                 {
                     id: 0,
-                    title: " What is Uncertainty?",
-                    slides: ["slide-1-1", "slide-1-2", "slide-1-3", "slide-1-4"]
+                    title: " Uncertainty",
+                    slides: ["slide-1-1", "slide-1-2", "slide-1-4", "slide-1-5", "slide-1-6"]
                 },
                 {
                     id: 1,
-                    title: " Types of Uncertainty (The Math)",
-                    slides: ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-4", "slide-2-5", "slide-2-6"]
+                    title: " The Maths of Uncertainty",
+                    slides: ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-6"]
                 },
                 {
                     id: 2,
-                    title: " Approaches to Detect & Mitigate",
+                    title: " Detect & Mitigate",
                     slides: ["slide-3-1", "slide-3-2", "slide-3-3", "slide-3-4", "slide-3-5", "slide-3-6", "slide-3-7", "slide-3-8", "slide-3-9"]
                 }
             ]
@@ -1311,16 +1406,6 @@
             `).join('');
         }
         
-        // Generate progress dots for current section
-        function generateProgressDots() {
-            const dotsContainer = document.getElementById('progress-dots');
-            const currentSection = slideConfig.sections[currentSectionIndex];
-            
-            dotsContainer.innerHTML = currentSection.slides.map((_, index) => `
-                <div class="progress-dot ${index === currentSlideIndex ? 'active' : ''} ${index < currentSlideIndex ? 'completed' : ''}"></div>
-            `).join('');
-        }
-        
         // Auto-scroll the active section pill to center of container
         function scrollActivePillToCenter() {
             const container = document.getElementById('section-pills');
@@ -1350,6 +1435,9 @@
             if (slideElement) {
                 slideElement.classList.add('active');
             }
+            
+            // Scroll slide content area to top
+            document.getElementById('slide-content-area').scrollTop = 0;
             
             // Update UI
             updateNavigationUI();
@@ -1409,9 +1497,14 @@
         // Update all navigation UI elements
         function updateNavigationUI() {
             const currentSection = slideConfig.sections[currentSectionIndex];
+            const slideId = currentSection.slides[currentSlideIndex];
+            const slideElement = document.getElementById(slideId);
             
-            // Update section title
-            document.getElementById('section-title').textContent = currentSection.title;
+            // Update title to show current slide's title (from slide-card-title)
+            const slideTitle = slideElement?.querySelector('.slide-card-title')?.textContent 
+                || slideElement?.querySelector('h2')?.textContent 
+                || currentSection.title;
+            document.getElementById('section-title').textContent = slideTitle;
             
             // Update slide counter
             document.getElementById('slide-counter').textContent = 
@@ -1426,14 +1519,9 @@
             // Auto-scroll active pill to center
             scrollActivePillToCenter();
             
-            // Update progress dots
-            generateProgressDots();
-            
             // Update button states
             const prevSlideBtn = document.getElementById('prev-slide-btn');
             const nextSlideBtn = document.getElementById('next-slide-btn');
-            const prevSectionBtn = document.getElementById('prev-section-btn');
-            const nextSectionBtn = document.getElementById('next-section-btn');
             
             // Prev slide: disabled only if first slide of first section
             prevSlideBtn.disabled = (currentSectionIndex === 0 && currentSlideIndex === 0);
@@ -1442,10 +1530,6 @@
             const isLastSection = currentSectionIndex === slideConfig.sections.length - 1;
             const isLastSlide = currentSlideIndex === currentSection.slides.length - 1;
             nextSlideBtn.disabled = (isLastSection && isLastSlide);
-            
-            // Section buttons
-            prevSectionBtn.disabled = (currentSectionIndex === 0);
-            nextSectionBtn.disabled = (currentSectionIndex === slideConfig.sections.length - 1);
         }
         
         // Bind popup handlers for all visible terms

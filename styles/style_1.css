@@ -579,29 +579,15 @@ h2 {
     }
 }
 
-/* Slide navigation bar (bottom) */
-.slide-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    padding: 16px 24px;
-    border-radius: 0 0 12px 12px;
-    border: 1px solid #e2e8f0;
-    border-top: none;
-    flex-shrink: 0;
-    min-height: 60px;
-}
-
+/* Slide counter */
 .slide-nav-counter {
     font-size: 14px;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.slide-nav-buttons {
-    display: flex;
-    gap: 12px;
+    color: #e0e7ff;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-right: 16px;
 }
 
 /* Navigation buttons */
@@ -648,30 +634,6 @@ h2 {
     box-shadow: none !important;
 }
 
-/* Progress dots */
-.progress-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    align-items: center;
-}
-
-.progress-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #cbd5e1;
-    transition: all 0.2s ease;
-}
-
-.progress-dot.active {
-    background: #4f46e5;
-    transform: scale(1.2);
-}
-
-.progress-dot.completed {
-    background: #22c55e;
-}
 
 /* Section indicator pills */
 .section-pills {
@@ -732,13 +694,7 @@ h2 {
 }
 
 .slide-card-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: none; /* Title now shown in top nav bar */
 }
 
 .slide-card-content {

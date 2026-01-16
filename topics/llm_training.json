@@ -35,9 +35,14 @@
     "reward": "#f59e0b",
     "policy": "#4f46e5",
     "value": "#0d9488",
-    "kl": "#9333ea",
+    "kl": "#be185d",
     "advantage": "#2563eb",
-    "reference": "#64748b"
+    "reference": "#64748b",
+    "vocabulary": "#65a30d",
+    "softmax": "#ea580c",
+    "logits": "#0284c7",
+    "model": "#059669",
+    "summation": "#78350f"
   },
 
   "terms": {
@@ -52,7 +57,12 @@
     "value": { "display": "V", "colorKey": "value", "popupKey": "value" },
     "kl": { "display": "KL", "colorKey": "kl", "popupKey": "kl" },
     "advantage": { "display": "A", "colorKey": "advantage", "popupKey": "advantage" },
-    "reference": { "display": "π_ref", "colorKey": "reference", "popupKey": "reference" }
+    "reference": { "display": "π_ref", "colorKey": "reference", "popupKey": "reference" },
+    "vocabulary": { "display": "vocab", "colorKey": "vocabulary", "popupKey": "vocabulary" },
+    "softmax": { "display": "softmax", "colorKey": "softmax", "popupKey": "softmax" },
+    "logits": { "display": "logits", "colorKey": "logits", "popupKey": "logits" },
+    "model": { "display": "model", "colorKey": "model", "popupKey": "model" },
+    "summation": { "display": "Σ", "colorKey": "summation", "popupKey": "summation" }
   },
 
   "slides": [
@@ -99,11 +109,11 @@
             {
               "type": "labeled-expression",
               "underline": "blue",
-              "label": "Sum over sequence",
-              "labelColor": "probability",
-              "popupKey": "probability",
+              "label": "Sum over all tokens",
+              "labelColor": "summation",
+              "popupKey": "summation",
               "content": [
-                {"type": "raw", "text": "Σ"},
+                {"type": "term", "key": "summation", "text": "Σ"},
                 {"type": "subscript", "content": [{"type": "raw", "text": "i"}]}
               ]
             },
@@ -112,8 +122,8 @@
               "type": "labeled-expression",
               "underline": "orange",
               "label": "Model probability",
-              "labelColor": "weights",
-              "popupKey": "weights",
+              "labelColor": "probability",
+              "popupKey": "probability",
               "content": [
                 {"type": "term", "key": "probability", "text": "P"},
                 {"type": "subscript", "content": [{"type": "term", "key": "weights", "text": "θ"}]},
@@ -419,20 +429,20 @@
       "title": "L - Loss Function",
       "color": "#dc2626",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "A number that tells us how wrong the model is. Lower {term:loss:loss} = better predictions. Training tries to minimize this." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Think of {term:loss:loss} as a 'wrongness score'. Like a teacher grading a test - 0 means perfect, higher means more mistakes. The model's goal is to get this as close to 0 as possible." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "In LLMs, typically cross-entropy: {term:loss:L} = −Σ log {term:probability:P}(correct {term:token:token}). Measures negative log-likelihood of ground truth." },
-        { "type": "example", "title": "Example", "content": "If model predicts 'Paris' with 90% confidence and it's correct:<br>{term:loss:L} = −log(0.9) ≈ 0.105 (low, good!)<br><br>If model predicts 'Paris' with 10% confidence:<br>{term:loss:L} = −log(0.1) ≈ 2.3 (high, bad!)" }
+        { "type": "scientific", "title": "", "content": "Cross-entropy {term:loss:loss} measures the negative log-likelihood of the correct {term:token:token}. Formula: {term:loss:L} = −Σ log {term:probability:P}(correct {term:token:token} | context). Lower values indicate the model assigns higher {term:probability:probability} to correct answers." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> Model sees 'The capital of France is ___'<br><strong>Step 2:</strong> Model predicts {term:probability:probabilities} for every word in vocabulary<br><strong>Step 3:</strong> Model assigns 90% to 'Paris' (the correct answer)<br><strong>Step 4:</strong> Calculate {term:loss:L} = −log(0.9) ≈ 0.105<br><strong>Step 5:</strong> Low {term:loss:loss}! Model was confident and correct.<br><br><strong>Bad case:</strong> If model only gave 10% to 'Paris':<br>{term:loss:L} = −log(0.1) ≈ 2.3 (high = needs improvement)" }
       ]
     },
     "gradient": {
       "title": "∇ - Gradient",
       "color": "#16a34a",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "The direction to nudge {term:weights:weights} to reduce {term:loss:loss}. Like a compass pointing downhill." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Imagine you're blindfolded on a hill trying to reach the bottom (lowest {term:loss:loss}). The {term:gradient:gradient} tells you which direction is steepest downhill. It's your 'compass' for improving the model." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:gradient:∇}L = vector of partial derivatives of {term:loss:loss} w.r.t. each {term:weights:weight}. Points in direction of steepest increase." },
-        { "type": "example", "title": "Example", "content": "If {term:gradient:∇}L = [0.1, -0.2, 0.05], we update weights:<br>{term:weights:θ_new} = {term:weights:θ} - lr × {term:gradient:∇}L<br>= {term:weights:θ} - 0.001 × [0.1, -0.2, 0.05]" }
+        { "type": "scientific", "title": "", "content": "{term:gradient:∇}{term:loss:L} is a vector of partial derivatives of the {term:loss:loss} function with respect to each {term:weights:weight} parameter. It points in the direction of steepest increase, so we move opposite to it." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> Current {term:weights:weights} θ = [2.0, 3.0, 1.5]<br><strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br><strong>Step 3:</strong> Calculate {term:gradient:gradient}: {term:gradient:∇}L = [0.1, -0.2, 0.05]<br><strong>Step 4:</strong> Apply learning rate (lr = 0.001):<br>θ_new = θ − lr × {term:gradient:∇}L<br>θ_new = [2.0, 3.0, 1.5] − [0.0001, -0.0002, 0.00005]<br><strong>Step 5:</strong> New {term:weights:weights} = [1.9999, 3.0002, 1.49995]<br><strong>Result:</strong> {term:loss:Loss} should be slightly lower now!" }
       ]
     },
     "weights": {
@@ -449,69 +459,70 @@
       "title": "D - Training Data",
       "color": "#854d0e",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "The text the model learns from. Quality and diversity of {term:data:data} directly impacts model capabilities." },
-        { "type": "llm", "title": "In Pre-training", "content": "Trillions of {term:token:tokens} from web, books, code. Common Crawl, Wikipedia, Stack Overflow, GitHub." },
-        { "type": "llm", "title": "In SFT", "content": "Curated (instruction, response) pairs. 10K-1M examples, human-written or AI-generated." }
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Training {term:data:data} is the 'textbooks' the model learns from. Just like a student studying - better books lead to better knowledge. Garbage in = garbage out." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:data:D} = {x₁, x₂, ..., xₙ} is the corpus of text sequences. Each xᵢ is tokenized into {term:token:tokens}. The model learns the statistical distribution P(xᵢ) to minimize {term:loss:loss} over {term:data:D}." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Pre-training {term:data:data}:</strong><br>Step 1: Crawl the web (Common Crawl: 250B pages)<br>Step 2: Add quality sources (Wikipedia, books, GitHub code)<br>Step 3: Filter out low-quality/harmful content<br>Step 4: Tokenize into ~2 trillion {term:token:tokens}<br><br><strong>SFT {term:data:data}:</strong><br>Step 1: Human writes instruction: 'Explain quantum physics simply'<br>Step 2: Human writes ideal response: 'Imagine particles as...'<br>Step 3: Collect 50K-1M such pairs<br>Step 4: Model learns to imitate these responses" }
       ]
     },
     "token": {
       "title": "t - Token",
       "color": "#db2777",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "A chunk of text - could be a word, part of a word, or a character. LLMs process text as sequences of {term:token:tokens}." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "A {term:token:token} is a chunk of text that the {term:model:model} actually 'sees'. Words get broken into pieces that exist in the {term:vocabulary:vocabulary}. The {term:model:model} doesn't work with text directly - it works with numeric IDs!" },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "Output of tokenizer (BPE, SentencePiece). Vocabulary typically 32K-100K {term:token:tokens}." },
-        { "type": "example", "title": "Example", "content": "'Hello, world!' → ['Hello', ',', ' world', '!'] (4 {term:token:tokens})<br>'Unbelievable' → ['Un', 'believ', 'able'] (3 {term:token:tokens})" }
+        { "type": "scientific", "title": "", "content": "{term:token:Tokens} are produced by a tokenizer (BPE, SentencePiece, WordPiece). Each {term:token:token} maps to an integer ID in range [0, {term:vocabulary:vocab_size}). The {term:vocabulary:vocabulary} is fixed during training, typically 32K-100K entries." },
+        { "type": "example", "title": "Visual Example: Word → Token → ID", "content": "<strong>Input text:</strong> 'Hello, world!'<br><br><strong>Step 1 - Tokenization:</strong><br>'Hello' → ['Hello'] → [{term:token:15496}]<br>',' → [','] → [{term:token:11}]<br>' world' → [' world'] → [{term:token:995}]<br>'!' → ['!'] → [{term:token:0}]<br><br><strong>Step 2 - What {term:model:model} sees:</strong><br>[15496, 11, 995, 0] ← Just numbers!<br><br><strong>Subword example:</strong><br>'Unbelievable' → ['Un', 'believ', 'able'] → [{term:token:1525}, {term:token:6975}, {term:token:540}]" }
       ]
     },
     "probability": {
-      "title": "P - Probability",
+      "title": "P - Probability Distribution",
       "color": "#0891b2",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "How confident the model is about a {term:token:token}. Ranges from 0 (impossible) to 1 (certain), sums to 1 over vocabulary." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "A {term:probability:probability distribution} is the {term:model:model}'s 'confidence spread' over ALL possible next {term:token:tokens}. Think of it as betting chips - the {term:model:model} distributes 100% across every word in the {term:vocabulary:vocabulary}. Higher % = more confident that's the next word." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:probability:P}({term:token:t}|context) = softmax(logits)[{term:token:t}]. Distribution over vocabulary at each position." },
-        { "type": "example", "title": "Example", "content": "'The capital of France is' →<br>{term:probability:P}('Paris') = 0.92<br>{term:probability:P}('Lyon') = 0.03<br>{term:probability:P}('Berlin') = 0.01<br>..." }
+        { "type": "scientific", "title": "", "content": "{term:probability:P}({term:token:t}|context) = {term:softmax:softmax}({term:logits:logits})[{term:token:t}]. The {term:model:model} outputs raw {term:logits:logits} (one per {term:vocabulary:vocab} entry), then {term:softmax:softmax} converts them to a valid {term:probability:probability} distribution that sums to 1.", "formula": "{term:probability:P}({term:token:t}_i | context) = exp({term:logits:logits}_i) / {term:summation:Σ}_j exp({term:logits:logits}_j)" },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits} for all 50K {term:vocabulary:vocab} entries<br><strong>Step 2:</strong> Apply {term:softmax:softmax} to convert to {term:probability:probabilities}<br><strong>Step 3:</strong> Result:<br>  • {term:probability:P}('Paris') = 0.92<br>  • {term:probability:P}('Lyon') = 0.03<br>  • {term:probability:P}('Berlin') = 0.01<br>  • ...49,996 other {term:token:tokens} share remaining 0.04<br><br>{term:summation:Σ} of all {term:probability:probabilities} = 1.0 (always!)" }
       ]
     },
     "reward": {
       "title": "R - Reward",
       "color": "#f59e0b",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "A score that says how 'good' a response is. Comes from a reward model trained on human preferences." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Think of {term:reward:reward} as a 'quality score' or 'star rating' for responses. Like rating restaurant reviews - 5 stars for helpful, accurate answers; 1 star for unhelpful or wrong ones. The model learns to get more stars!" },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:reward:R}: (prompt, response) → ℝ. Higher = more preferred. Trained to predict which response humans prefer." },
-        { "type": "example", "title": "Example", "content": "Prompt: 'Explain gravity'<br><br>Response A (detailed, accurate): {term:reward:R} = 0.85<br>Response B (brief, vague): {term:reward:R} = 0.32<br><br>RL training maximizes expected {term:reward:R}." }
+        { "type": "scientific", "title": "", "content": "{term:reward:R}: (prompt, response) → ℝ is a scalar function trained on human preference data. Given pairs (response_A, response_B) where humans prefer A, the {term:reward:reward} model learns: {term:reward:R}(A) > {term:reward:R}(B). Training uses Bradley-Terry model with cross-entropy {term:loss:loss}." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> User asks: 'Explain gravity to a 5-year-old'<br><strong>Step 2:</strong> Model generates two responses:<br>  • Response A: 'Gravity is like invisible glue that pulls things down...'<br>  • Response B: 'Gravity is the curvature of spacetime caused by mass...'<br><strong>Step 3:</strong> {term:reward:Reward} model scores both:<br>  • {term:reward:R}(A) = 0.85 (appropriate for audience)<br>  • {term:reward:R}(B) = 0.32 (too complex)<br><strong>Step 4:</strong> Model {term:policy:policy} is updated via {term:gradient:gradients} to generate more A-like responses<br><strong>Result:</strong> Model learns to tailor responses to the audience!" }
       ]
     },
     "policy": {
       "title": "π - Policy",
       "color": "#4f46e5",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "The LLM itself, viewed as a function that takes prompts and produces responses. In RL terms, the 'agent' that chooses actions ({term:token:tokens})." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:policy:policy} IS the LLM - it's the 'decision maker'. Like a chef deciding what ingredients to add next, the {term:policy:policy} decides what {term:token:token} to generate next. It's the model's 'personality' or 'strategy' for responding." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:policy:π}(response|prompt) = Π {term:probability:P}({term:token:t_i}|prompt, {term:token:t_<i}). The full distribution over responses." },
-        { "type": "example", "title": "Example", "content": "{term:policy:π_θ}('Hello!' | 'Hi') = 0.05<br>{term:policy:π_θ}('Hi there!' | 'Hi') = 0.12<br><br>RL training changes {term:weights:θ} to increase {term:probability:probability} of high-{term:reward:reward} responses." }
+        { "type": "scientific", "title": "", "content": "{term:policy:π_θ}(response|prompt) = ∏ᵢ {term:probability:P}({term:token:tᵢ}|prompt, {term:token:t}<i) where {term:weights:θ} are the model parameters. The {term:policy:policy} defines a distribution over all possible responses." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> User says 'Hi'<br><strong>Step 2:</strong> {term:policy:Policy π} considers possible responses:<br>  • 'Hello!' → {term:probability:P} = 0.05<br>  • 'Hi there!' → {term:probability:P} = 0.12<br>  • 'Hey!' → {term:probability:P} = 0.08<br><strong>Step 3:</strong> During RLHF, we discover 'Hi there!' gets higher {term:reward:reward}<br><strong>Step 4:</strong> Update {term:weights:θ} via {term:gradient:gradient} to increase {term:probability:P}('Hi there!')<br><strong>Step 5:</strong> After training, new {term:policy:policy} might give:<br>  • 'Hi there!' → {term:probability:P} = 0.25 (increased!)<br><strong>Result:</strong> {term:policy:Policy} now favors higher-{term:reward:reward} responses!" }
       ]
     },
     "value": {
       "title": "V - Value Function",
       "color": "#0d9488",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "Predicts how much total {term:reward:reward} we expect from a given state. Used as a baseline to reduce variance in RL." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:value:value} function is like a 'fortune teller' for {term:reward:rewards}. Given where we are in generating a response, it predicts: 'How good will the final response probably be?' It helps the model know if it's on the right track mid-generation." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:value:V}(s) = 𝔼[Σ {term:reward:R}_t | s_0 = s]. Expected return starting from state s." },
-        { "type": "llm", "title": "In RLHF", "content": "Often a separate model (critic) that predicts {term:reward:reward} for partial responses. Not needed in GRPO!" }
+        { "type": "scientific", "title": "", "content": "{term:value:V}(s) = 𝔼[Σ {term:reward:R}_t | s_0 = s] is the expected cumulative {term:reward:reward} from state s. In RLHF, a separate 'critic' network estimates {term:value:V} to compute {term:advantage:advantages}: {term:advantage:A} = {term:reward:R} - {term:value:V}." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> Model is mid-response: 'The answer is...'<br><strong>Step 2:</strong> {term:value:Value} function predicts: 'Based on this start, expected final {term:reward:reward} ≈ 0.6'<br><strong>Step 3:</strong> Model completes: 'The answer is 42'<br><strong>Step 4:</strong> Actual {term:reward:reward} = 0.8<br><strong>Step 5:</strong> {term:advantage:Advantage} = 0.8 - 0.6 = +0.2 (better than expected!)<br><strong>Step 6:</strong> This positive {term:advantage:advantage} encourages similar responses<br><br><strong>Note:</strong> GRPO eliminates the {term:value:value} function by using group statistics instead!" }
       ]
     },
     "kl": {
       "title": "KL - KL Divergence",
-      "color": "#9333ea",
+      "color": "#be185d",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "Measures how different two {term:probability:probability} distributions are. Used to keep the RL {term:policy:policy} close to the SFT model." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "{term:kl:KL divergence} measures 'how different' two {term:probability:probability} distributions are. Think of it as a 'drift detector' - it alerts us when the RL-trained model strays too far from the original SFT model. It's like keeping a student on track so they don't learn bad habits while trying to get good grades." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:kl:KL}(P||Q) = Σ P(x) log(P(x)/Q(x)). Always ≥ 0, equals 0 only if P = Q.", "formula": "{term:kl:KL}({term:policy:π} || {term:reference:π_ref}) = 𝔼_{term:policy:π}[log {term:policy:π}(a|s) - log {term:reference:π_ref}(a|s)]" },
-        { "type": "example", "title": "Why it matters", "content": "Without {term:kl:KL} penalty, RL might find 'reward hacking' - responses that get high {term:reward:reward} but are nonsensical. {term:kl:KL} keeps model grounded in SFT behavior." }
+        { "type": "scientific", "title": "", "content": "{term:kl:KL}(P||Q) = Σₓ P(x) log(P(x)/Q(x)). Properties: Always ≥ 0, equals 0 iff P = Q, asymmetric. In RLHF: {term:kl:KL}({term:policy:π} || {term:reference:π_ref}) penalizes deviation from the SFT baseline." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> {term:reference:Reference} model ({term:reference:π_ref}) probabilities for 'How are you?':<br>  • 'I'm good' → 0.4, 'Fine' → 0.3, 'Great!' → 0.2, 'AMAZING!!!' → 0.1<br><strong>Step 2:</strong> After RL, new {term:policy:policy} ({term:policy:π}) might become:<br>  • 'I'm good' → 0.1, 'AMAZING!!!' → 0.8 (reward hacking!)<br><strong>Step 3:</strong> Calculate {term:kl:KL} divergence:<br>  {term:kl:KL} = 0.1×log(0.1/0.4) + 0.8×log(0.8/0.1) = very high!<br><strong>Step 4:</strong> High {term:kl:KL} penalty reduces total objective<br><strong>Step 5:</strong> Model is pushed back toward natural responses<br><strong>Result:</strong> Prevents 'reward hacking' while still improving!" }
       ]
     },
     "advantage": {
@@ -528,10 +539,60 @@
       "title": "π_ref - Reference Policy",
       "color": "#64748b",
       "sections": [
-        { "type": "intuitive", "title": "Intuitive Definition", "content": "The SFT model we started with, frozen. Used as an anchor to prevent the RL {term:policy:policy} from going crazy." },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:reference:reference policy} is your 'safety copy' - the well-behaved SFT model frozen in time. It's like having a responsible adult supervising a teenager (the RL {term:policy:policy}) who's trying new things. Keeps the model from going off the rails." },
         { "type": "divider" },
-        { "type": "scientific", "title": "", "content": "{term:reference:π_ref} = copy of {term:policy:π} before RL training. {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) penalizes drift." },
-        { "type": "example", "title": "Why it matters", "content": "If {term:policy:π} says 'Great answer!' to everything (gets high {term:reward:reward}), {term:kl:KL} penalty kicks in because {term:reference:π_ref} wouldn't do that." }
+        { "type": "scientific", "title": "", "content": "{term:reference:π_ref} is a frozen copy of the {term:policy:policy} {term:weights:weights} before RL training begins. The {term:kl:KL} penalty term {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) constrains how far the learned {term:policy:policy} can deviate." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> Start with SFT model → Save copy as {term:reference:π_ref} (frozen)<br><strong>Step 2:</strong> Initialize RL {term:policy:policy} {term:policy:π} = copy of SFT model (trainable)<br><strong>Step 3:</strong> During RL, model learns responding 'ABSOLUTELY FANTASTIC!!!' gets high {term:reward:reward}<br><strong>Step 4:</strong> But {term:reference:π_ref} would say 'I'm doing well, thank you'<br><strong>Step 5:</strong> {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) = HIGH (big difference)<br><strong>Step 6:</strong> High {term:kl:KL} penalty reduces the objective, discouraging this<br><strong>Result:</strong> Model improves but stays grounded in normal language!" }
+      ]
+    },
+    "vocabulary": {
+      "title": "Vocabulary (Vocab)",
+      "color": "#65a30d",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:vocabulary:vocabulary} is the {term:model:model}'s complete dictionary - every word piece it knows. Think of it as a numbered list where each entry has an ID. If a word isn't in the {term:vocabulary:vocab}, it gets split into smaller pieces that ARE." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:vocabulary:V} = {{term:token:t₀}, {term:token:t₁}, ..., {term:token:t_n}} where |V| is typically 32K-100K. Each {term:token:token} maps to a unique integer ID. The {term:model:model} outputs {term:logits:logits} with shape [|V|], one score per {term:vocabulary:vocab} entry." },
+        { "type": "example", "title": "What Vocabulary Looks Like", "content": "<strong>Sample entries (GPT-style):</strong><br>ID 0: '!'<br>ID 11: ','<br>ID 262: ' the'<br>ID 995: ' world'<br>ID 15496: 'Hello'<br><br><strong>Size matters:</strong><br>• GPT-2: 50,257 entries<br>• LLaMA: 32,000 entries<br>• GPT-4: ~100K entries" }
+      ]
+    },
+    "softmax": {
+      "title": "Softmax Function",
+      "color": "#ea580c",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "{term:softmax:Softmax} converts raw scores ({term:logits:logits}) into {term:probability:probabilities}. It's like converting test scores into percentages - bigger scores get bigger percentages, and they all add up to 100%." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:softmax:softmax}(z)_i = exp(z_i) / {term:summation:Σ}_j exp(z_j). Properties: (1) Output ∈ (0,1), (2) {term:summation:Σ} outputs = 1, (3) Preserves order of inputs, (4) Amplifies differences between values.", "formula": "{term:probability:P}({term:token:t}_i) = exp({term:logits:logit}_i) / {term:summation:Σ}_j exp({term:logits:logit}_j)" },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits}: [2.0, 1.0, 0.1]<br><strong>Step 2:</strong> Compute exp: [7.39, 2.72, 1.11]<br><strong>Step 3:</strong> Sum: 7.39 + 2.72 + 1.11 = 11.22<br><strong>Step 4:</strong> Divide each by sum:<br>  • {term:probability:P}_0 = 7.39/11.22 = 0.66<br>  • {term:probability:P}_1 = 2.72/11.22 = 0.24<br>  • {term:probability:P}_2 = 1.11/11.22 = 0.10<br><strong>Result:</strong> [0.66, 0.24, 0.10] - sums to 1.0!" }
+      ]
+    },
+    "logits": {
+      "title": "Logits (Raw Scores)",
+      "color": "#0284c7",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "{term:logits:Logits} are the raw 'scores' the neural network produces before converting to {term:probability:probabilities}. They can be any number (positive, negative, huge). Think of them as the {term:model:model}'s 'pre-grades' before being curved." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:logits:Logits} ∈ ℝ^|V| are the output of the final linear layer before {term:softmax:softmax}. Shape: [batch_size, seq_len, {term:vocabulary:vocab_size}]. Higher {term:logits:logit} = {term:model:model} more favors that {term:token:token}." },
+        { "type": "example", "title": "Step-by-Step Example", "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> Text → {term:token:token} IDs → embeddings<br><strong>Step 2:</strong> Pass through transformer layers<br><strong>Step 3:</strong> Final layer outputs {term:logits:logits} for each {term:vocabulary:vocab} entry:<br>  • 'Paris' (ID 6342): {term:logits:logit} = 4.2 (high!)<br>  • 'London' (ID 4712): {term:logits:logit} = 1.1<br>  • 'the' (ID 262): {term:logits:logit} = -2.3<br><strong>Step 4:</strong> Apply {term:softmax:softmax} to get {term:probability:probabilities}" }
+      ]
+    },
+    "model": {
+      "title": "Model (Neural Network)",
+      "color": "#059669",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:model:model} is the entire 'brain' - the neural network that takes input and produces output. It's the combination of architecture (how layers connect) + {term:weights:weights} (learned numbers). Same architecture + different {term:weights:weights} = different {term:model:model}." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "A {term:model:model} f_{term:weights:θ}: X → Y is a parameterized function where {term:weights:θ} are learned during training. For LLMs: input = {term:token:token} sequence, output = {term:logits:logits} over {term:vocabulary:vocabulary}. Architecture defines the function class; training finds optimal {term:weights:θ}." },
+        { "type": "example", "title": "What's Inside a Model", "content": "<strong>LLaMA-7B architecture:</strong><br>• Embedding: {term:vocabulary:vocab} → 4096-dim vectors<br>• 32 transformer layers, each with:<br>  - Self-attention (Q, K, V projections)<br>  - MLP (feed-forward network)<br>  - Layer normalization<br>• Final linear: 4096 → {term:vocabulary:vocab_size}<br><br><strong>Total:</strong> 7 billion {term:weights:parameters} = the learned 'knowledge'" }
+      ]
+    },
+    "summation": {
+      "title": "Σ - Summation",
+      "color": "#78350f",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:summation:Σ} symbol means 'add everything up'. When you see {term:summation:Σ}_i, it means 'for each value of i, compute what's inside, then add all results together'. It's shorthand for a loop that adds." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:summation:Σ}_{i=a}^{b} f(i) = f(a) + f(a+1) + ... + f(b). In {term:loss:loss} functions, we sum over all {term:token:tokens} in a sequence. In {term:softmax:softmax}, we sum over all {term:vocabulary:vocab} entries.", "formula": "{term:summation:Σ}_{i=1}^{n} x_i = x_1 + x_2 + ... + x_n" },
+        { "type": "example", "title": "Examples in LLM Training", "content": "<strong>In Cross-Entropy {term:loss:Loss}:</strong><br>{term:loss:L} = -{term:summation:Σ}_{i=1}^{T} log P(t_i)<br>= -log P(t_1) - log P(t_2) - ... - log P(t_T)<br>Sum {term:loss:loss} over all T {term:token:tokens}<br><br><strong>In {term:softmax:Softmax}:</strong><br>{term:summation:Σ}_j exp(z_j) = exp(z_1) + exp(z_2) + ...<br>Sum over all {term:vocabulary:vocab} entries" }
       ]
     }
   }

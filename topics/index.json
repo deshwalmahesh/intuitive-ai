@@ -1,0 +1,16 @@
+{
+  "topics": [
+    {
+      "id": "uncertainty_quantification",
+      "title": "Uncertainty Quantification in LLMs",
+      "description": "Entropy, Epistemic vs Aleatoric, Hallucination Detection",
+      "path": "topics/uncertainty_quantification.json"
+    },
+    {
+      "id": "llm_training",
+      "title": "LLM Training: From Pre-training to RLHF",
+      "description": "Pre-training, SFT, RL, PPO, GRPO",
+      "path": "topics/llm_training.json"
+    }
+  ]
+}

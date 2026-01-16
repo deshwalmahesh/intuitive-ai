@@ -37,12 +37,13 @@
             <div class="slide" id="slide-1-1" data-section="0">
                 <div class="slide-card">
                     <div class="slide-card-title">Uncertainty? Is that a new LLM?</div>
+                    <img src="images/what_is_uncertainty.png" alt="what is uncertainty" class="slide-image" style="max-height: 500px;">
                     <div class="slide-card-content">
                         <strong>Uncertainty:</strong> Simply put, the amount of "I don't know what will happen" that <em>still</em> remains <em>even after</em> you've used all the information you had.<br><br>
-                        <strong>It's <span style="color: red;">Not</span>:</strong> Confusion (lack of clarity), Error (mistake in process), or Randomness (inherent unpredictability)<br>
-                        <strong>It <span style="color: green;">Is</span>:</strong> <em>Residual doubt (inescapable limit of current knowledge)</em> after reasoning
+                        <strong>It's <span style="color: red;">Not</span>:</strong> Confusion (lack of clarity), Error (mistake in process), or Randomness (how outcomes are generated)<br>
+                        <strong>It <span style="color: green;">Is</span>:</strong> <em>Residual doubt (limit of current knowledge & system)</em> after reasoning
                     </div>
-                     <img src="images/what_is_uncertainty.png" alt="what is uncertainty" class="slide-image">
+                    
                 </div>
             </div>
             
@@ -53,11 +54,11 @@
                     <div class="slide-card-content">
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
-                                <tr><th>What if I try to answer</th><th>My Internal Uncertainty</th></tr>
+                                <tr><th>If I try to answer</th><th>My Internal Uncertainty will be</th></tr>
                                 <tr><td>Will the sun rise tomorrow?</td><td>Almost zero</td></tr>
                                 <tr><td>Will it rain tomorrow?</td><td>Moderate</td></tr>
-                                <tr><td>What did Shakespeare smoke at 22/03/1597, 11:03 AM?</td><td>Extremely High (Needs Infinite Information)</td></tr>
-                                <tr><td>Who will win a coin toss?</td><td>My scale just broke! (Almost Always Random)</td></tr>
+                                <tr><td>What will Messi eat for breakfast on 22/03/2057, 11:03 AM?</td><td>High</td></tr>
+                                <tr><td>What is the exact position and velocity of every air molecule right now?</td><td>My scale just broke!</td></tr>
                              
                             </table>
                         </div>
@@ -79,43 +80,86 @@
                 <div class="slide-card">
                     <div class="slide-card-title">Good job Nietzsche! You still fear Maths?</div>
                     <div class="slide-card-content">
-                        <strong>ENTROPY:</strong> The expected (average) surprise per token in LLMs. Measures how spread-out or unpredictable a probability distribution is.<br>
                         
                         <div class="insight-box">
-                            <div class="insight-title">The Equations </div>
-                            <small>(Don't be mesmarized by the colourfulness, yet!)</small><br>
+                            <div class="insight-title">Measuring uncertainty using Maths: <em style="color: green;">Entropy</em></div>
                             <p>
-                                <strong>Per Token:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>) * log <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span>)<br><br>
-                                <strong>Per Sentence:</strong> <span class="term c-H" data-popup="entropy">H</span> = -Σ <span class="term c-p" data-popup="posterior">p</span>(seq) * log <span class="term c-p" data-popup="posterior">p</span>(seq)<br>
-                                <span style="font-size: 0.9em; opacity: 0.8;">where <span class="term c-p" data-popup="posterior">p</span>(seq) = ∏ <span class="term c-p" data-popup="posterior">p</span>(<span class="term c-y" data-popup="output">token</span><sub>t</sub> | <span class="term c-x" data-popup="input">history</span>)</span>
+                                <strong>Think of it as:</strong> The average number of <em>"Perfectly Curated"</em> Yes/No questions you'd need to ask to get the actual answer.<br><br>
+                                • <strong>Fair coin:</strong> "Is it heads?" → 1 question = <strong>1 bit</strong> of entropy<br>
+                                • <strong>Fair 8-sided die:</strong> "Is it > 4?" → "Is it > 6?" → "Is it 7?" → <strong>3 questions = 3 bits</strong><br>
+                                • <strong>Loaded die (always 6):</strong> No questions needed → <strong>0 bits</strong> (no uncertainty!)
                             </p>
                         </div>
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">Formal Definition</div>
+                            <p>
+                                <strong>Entropy:</strong> The <em>expected (average) surprise</em> across all possible outcomes, weighted by their probability. Measures how spread-out or unpredictable a probability distribution is.<br><br>
+                                <strong>Formula (for tokens as events):</strong> H = -Σ p(token) × log p(token)
+                            </p>
+                        </div>
+                        
                         • <strong>Sharp distribution</strong> (peaked, concentrated) → Low entropy → Very certain<br>
                         • <strong>Spread out distribution</strong> (flat) → High entropy → Very uncertain
+                        
                         <img src="images/entropy_graph_type.png" alt="Entropy visualization" class="slide-image">
+                        
+                        <div class="insight-box" style="margin-top: 15px;">
+                            <div class="insight-title">Let's look at uncertainty for these events:</div>
+                            <div class="table-wrapper">
+                                <table class="uncertainty-table">
+                                    <tr><th>Event</th><th>≈ Entropy</th><th>Why?</th></tr>
+                                    <tr>
+                                        <td>Fair coin toss</td>
+                                        <td>1 bit</td>
+                                        <td>Only 2 equally-likely outcomes → 1 binary question to identify</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Lottery draw</td>
+                                        <td>~20-30 bits</td>
+                                        <td>Millions of equally-likely number combinations → log₂(millions) questions</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Deck shuffle</td>
+                                        <td>~226 bits</td>
+                                        <td>52! ≈ 8×10⁶⁷ possible orderings → each shuffle is essentially unique in the universe</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chess game</td>
+                                        <td>~400 bits</td>
+                                        <td>~10¹²⁰ legal game paths (Shannon number) → more possibilities than atoms in universe</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Earth's atmosphere</td>
+                                        <td>Mind-bogglingly larger</td>
+                                        <td>~10⁴⁴ molecules × (position, velocity, spin) each → every microstate equally inaccessible to predict</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.85;">
+                                <strong>Pattern:</strong> Entropy grows with the <em>number of equally-possible states</em>. More possibilities = more questions needed = higher uncertainty.
+                            </p>
+                        </div>
             
                     </div>
                 </div>
             </div>
 
             
-            <!-- Slide 1-5: What is Uncertainty Quantification? -->
+            <!-- Slide 1-5: Uncertainty Quantification - What & Why -->
             <div class="slide" id="slide-1-5" data-section="0">
                 <div class="slide-card">
-                    <div class="slide-card-title">Bet you can't Quantify that!</div>
+                    <div class="slide-card-title">Does UQ even matter? (Well, do you?)</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
-                            <div class="insight-title">Uncertainty Quantification (UQ)</div>
+                            <div class="insight-title">What does it even mean to quantify the uncertanity in ML?</div>
                             <strong>Why:</strong> Models are imperfect approximations. UQ transforms vague notions of "the model might be wrong" into <em>specific, measurable</em> information about potential errors.<br><br>
                             <strong>Scientifically:</strong> The systematic process of measuring and communicating <em>how confident</em> we should be in a model's predictions. Not just "is the model right?" but "how sure should we be?"
                         </div>
                         
-                        
-                        
-                        
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
-                                <tr><th>Context</th><th>Without UQ</th><th>With UQ</th></tr>
+                                <tr><th>Context</th><th>How does it look like w/o UQ</th><th>How does it look like w/ UQ</th></tr>
                                 <tr>
                                     <td><strong>Linear Regression</strong><br>(House Price)</td>
                                     <td>Prediction: $350,000</td>
@@ -129,42 +173,40 @@
                                 <tr>
                                     <td><strong>LLM</strong><br>(Factual QA)</td>
                                     <td>Answer: "Paris"</td>
-                                    <td>"Paris" (95% confident), "Delhi" (3% Confident), "Atlantis" (1% confident)</td>
+                                    <td>"Paris" (95% confident), "Delhi" (3%), "Atlantis" (1%)</td>
                                 </tr>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Slide 1-6: Why UQ Matters - Practical Significance -->
-            <div class="slide" id="slide-1-6" data-section="0">
-                <div class="slide-card">
-                    <div class="slide-card-title">Does UQ even matter? (Do any of us?)</div>
-                    <div class="slide-card-content">
-                        <div class="insight-box">
-                            <div class="insight-title">Prevent Overconfidence</div>
-                            <p>Models that say "I'm 99% sure" when they should say "I'm 50% sure" cause real-world harm. A tumor detection model confidently wrong is worse than one that says "uncertain - needs human review".</p>
+                        
+                        <div class="insight-box" style="margin-top: 15px;">
+                            <div class="insight-title">Why does UQ even matter?</div>
+                            <ul>
+                                <li>Models that say "I'm 99% sure" when they should say "I'm 50% sure"; cause real-world harm.</li>
+                                <li>A tumor detection model confidently wrong is worse than one that says "uncertain - needs human review".</li>
+                            </ul>
                         </div>
                         
-                        <strong>High-Stakes Applications:</strong><br>
-                        • <strong>Healthcare:</strong> Tumor detection, drug dosing - uncertainty triggers specialist review<br>
-                        • <strong>Finance:</strong> Fraud detection, loan approval - high uncertainty = human escalation<br>
-                        • <strong>Autonomous Systems:</strong> Self-driving cars - uncertainty means slow down or hand over to human<br><br>
-                        
+                        <div class="insight-box" style="margin-top: 15px;">
+                            <div class="insight-title">Practical Significance</div>
+                            <ul>
+                                <li><strong>Healthcare:</strong> Tumor detection, drug dosing → uncertainty triggers specialist review</li>
+                                <li><strong>Finance:</strong> Fraud detection, loan approval → high uncertainty = human escalation</li>
+                                <li><strong>Autonomous Systems:</strong> Self-driving cars → uncertainty means slow down or hand over to human</li>
+                            </ul>
+                        </div>
                         
                         <div class="table-wrapper">
                             <table class="uncertainty-table">
                                 <tr><th>Action</th><th>ML Example</th><th>LLM Example</th></tr>
                                 <tr>
                                     <td><strong>Trust</strong></td>
-                                    <td>XGBoost: Low variance across trees → confident prediction</td>
+                                    <td>XGBoost: Low variance across trees → confident</td>
                                     <td>All samples say same meaning → reliable</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Escalate</strong></td>
-                                    <td>Whenever P(churn) in range [0.4, 0.6] → 70% of times wrong → too close to call</td>
-                                    <td>Inconsistent rephrasing responses → possible hallucination</td>
+                                    <td>P(churn) ∈ [0.4, 0.6] → too close to call</td>
+                                    <td>Inconsistent rephrasing → possible hallucination</td>
                                 </tr>
                             </table>
                         </div>
@@ -308,7 +350,8 @@
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">What is it?</div>
-                            <p>Uncertainty from ambiguity in the <span class="term c-x" data-popup="input">input</span> itself. A patient's BP can't be 100% same every time. And even a <em>perfect</em> model would be uncertain because the question has multiple valid answers.</p>
+                            <p>Exactly as is comes from the Latin word: <em>alea</em>, meaning "dice" or "game of chance"</p>
+                            <p>It is the uncertainty from ambiguity in the <span class="term c-x" data-popup="input">input</span> itself. A patient's BP can't be 100% same every time. And even a <em>perfect</em> model would be uncertain because the question has multiple valid answers.</p>
                         </div>
                         
                         <strong>Key Properties:</strong><br>
@@ -346,6 +389,7 @@
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">What is it?</div>
+                            <p>Comes from the Greek word <em>episteme</em> which means "knowledge" (True knowledge and not just opinion)</p>
                             <p>Uncertainty from the <span class="term c-theta" data-popup="theta">model</span> not knowing something. It's the "I haven't learned this" or "I haven't seen this before" type of doubt.</p>
                         </div>
                         
@@ -407,23 +451,23 @@
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">What reduces Aleatoric vs Epistemic?</div>
-                            <p>There's high debate in the research community on classification:</p>
+                            <p>There's high debate in the research community on seperating Aleatoric vs Epistemic uncertainty in LLMs:</p>
                         </div>
                         
-                        <strong>Example 1: Adding Context in Prompt</strong><br>
-                        • Changes the input → reduces ambiguity → should be Aleatoric?<br>
-                        • BUT: Fills knowledge gaps in LLM → minimizes Epistemic?<br>
-                        • Different papers use different classifications!<br><br>
-                        
-                        <strong>Example 2: Sampling Techniques (temp, top-k, etc.)</strong><br>
-                        • Don't change model weights - raw token probs stay same<br>
-                        • Just filtering/reshaping the distribution<br>
-                        • By definition: not epistemic (no knowledge change)<br>
-                        • But also not removing input ambiguity → not aleatoric either?<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">Example 1: Adding Context in Prompt</div>
+                            <p>It changes the input → reduces ambiguity → should be Aleatoric. But it also fills the knowledge gaps in LLM → minimizes Epistemic</p>
+                        </div>
                         
                         <div class="insight-box">
-                            <div class="insight-title">Key Insight</div>
-                            <p>Temperature, top-k, etc. just <strong>"reshape how much uncertainty you expose"</strong> - they don't fundamentally change the source.</p>
+                            <div class="insight-title">Example 2: Sampling Techniques (temp, top-k, etc.)</div>
+                            <p>It doesn't change model weights → raw token probs stay same (reshape how much uncertainty you expose)  → not exactly epistemic because no Model knowledge change but it's also not removing input ambiguity from input → not aleatoric either</p>
+                        </div>
+
+                        
+                        <div class="insight-box">
+                            <div class="insight-title">Use of Uncertainty Quantification in LLMs</div>
+                            <p>Mostly, Hallucination Detection. Once you detect the moel is uncertain, you can take action depending on your usecase.</p>
                         </div>
                     </div>
                 </div>
@@ -439,23 +483,31 @@
                             <p>Sample N outputs using different temp/top-k/top-p, group by <em>meaning</em> (not words), measure spread over meanings.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Generate N responses using stochastic sampling (high temp)<br>
-                        2. Cluster responses by semantic equivalence using bidirectional NLI<br>
-                        &nbsp;&nbsp;&nbsp;• If A entails B AND B entails A → same meaning cluster<br>
-                        3. Calculate probability of each meaning cluster<br>
-                        4. Compute entropy over meaning clusters (not tokens!)<br>
-                        5. High semantic entropy → uncertain or hallucinating<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Generate N responses using stochastic sampling (high temp)</li>
+                                <li>Cluster responses by semantic equivalence using bidirectional NLI
+                                    <ul><li>If A entails B AND B entails A → same meaning cluster</li></ul>
+                                </li>
+                                <li>Calculate probability of each meaning cluster</li>
+                                <li>Compute entropy over meaning clusters (not tokens!)</li>
+                                <li>High semantic entropy → uncertain or hallucinating</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://doi.org/10.1038/s41586-024-07421-0" target="_blank"><strong>"Detecting hallucinations in LLMs using semantic entropy"</strong></a><br>
-                            Farquhar, Kossen, Kuhn, Gal - Nature 2024</p>
+                            <p><a href="https://doi.org/10.1038/s41586-024-07421-0" target="_blank"><strong>Detecting hallucinations in LLMs using semantic entropy</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Aleatoric: Multiple valid meanings → high entropy<br>
-                        • Epistemic: Inconsistent knowledge → different meanings per sample
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Aleatoric:</strong> Multiple valid meanings → high entropy</li>
+                                <li><strong>Epistemic:</strong> Inconsistent knowledge → different meanings per sample</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -479,22 +531,29 @@
                             <p>Ask the same thing in 5 different ways. If the answer changes, the model is guessing.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Generate N variations of input prompt (paraphrasing)<br>
-                        2. Get response for each variation<br>
-                        3. Calculate consistency/variance across responses<br>
-                        4. High variance = High uncertainty (Sensitive to phrasing)<br>
-                        5. Low variance = Robust knowledge<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Generate N variations of input prompt (paraphrasing)</li>
+                                <li>Get response for each variation</li>
+                                <li>Calculate consistency/variance across responses</li>
+                                <li>High variance = High uncertainty (Sensitive to phrasing)</li>
+                                <li>Low variance = Robust knowledge</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://aclanthology.org/2024.eacl-main.26/" target="_blank"><strong>"SPUQ: Perturbation-Based Uncertainty Quantification for Large Language Models"</strong></a> - EACL 2024<br>
-                            Uses simple perturbations (temperature, prompt) to measure calibration.</p>
+                            <p><a href="https://arxiv.org/abs/2403.02509" target="_blank"><strong>SPUQ: Perturbation-Based Uncertainty Quantification for Large Language Models</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Aleatoric (minimize): Clarification resolves ambiguity<br>
-                        • Epistemic (detect): Sensitivity to phrasing reveals unstable knowledge
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Aleatoric (minimize):</strong> Clarification resolves ambiguity</li>
+                                <li><strong>Epistemic (detect):</strong> Sensitivity to phrasing reveals unstable knowledge</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -516,21 +575,28 @@
                             <p>Ask multiple separate models, see if they agree. Disagreement = knowledge gaps.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Query N independent models/checkpoints with same prompt<br>
-                        2. Collect probability distributions from each model<br>
-                        3. Measure disagreement using Jensen-Shannon Divergence (JSD)<br>
-                        4. High JSD → models learned different things<br>
-                        5. Low JSD → consensus = reliable prediction<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Query N independent models/checkpoints with same prompt</li>
+                                <li>Collect probability distributions from each model</li>
+                                <li>Measure disagreement using Jensen-Shannon Divergence (JSD)</li>
+                                <li>High JSD → models learned different things</li>
+                                <li>Low JSD → consensus = reliable prediction</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://aclanthology.org/2024.emnlp-main.84/" target="_blank"><strong>"Simple Yet Effective: An Information-Theoretic Approach to Multi-LLM Uncertainty Quantification"</strong></a> - EMNLP 2024<br>
-                            Method Name: <strong>MUSE</strong> (Multi-LLM Uncertainty via Subset Ensembles)</p>
+                            <p><a href="https://aclanthology.org/2025.emnlp-main.1551/" target="_blank"><strong>Simple Yet Effective: An Information-Theoretic Approach to Multi-LLM Uncertainty Quantification</strong></a><br>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Epistemic (Gold Standard): Disagreement among independent agents isolates knowledge gaps from data noise
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Epistemic (Gold Standard):</strong> Disagreement among independent agents isolates knowledge gaps from data noise</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -545,22 +611,29 @@
                             <p>Give model external info, see if answer becomes more consistent. Reduced uncertainty = filled knowledge gap.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Query model WITHOUT context (Parametric knowledge only)<br>
-                        2. Query model WITH retrieved context (Non-parametric)<br>
-                        3. <strong>Context Reliance Metric:</strong> Compare the difference<br>
-                        4. Huge confidence jump -> "Epistemic Gap" filled by context<br>
-                        5. No change -> Uncertainty is likely Aleatoric (ambiguous query)<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Query model WITHOUT context (Parametric knowledge only)</li>
+                                <li>Query model WITH retrieved context (Non-parametric)</li>
+                                <li><strong>Context Reliance Metric:</strong> Compare the difference</li>
+                                <li>Huge confidence jump → "Epistemic Gap" filled by context</li>
+                                <li>No change → Uncertainty is likely Aleatoric (ambiguous query)</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://arxiv.org/abs/2501.03713" target="_blank"><strong>"Uncertainty as Feature Gaps"</strong></a> - Bakman et al. 2025<br>
-                            Defines "Context Reliance" as a key feature for epistemic uncertainty.</p>
+                            <p><a href="https://arxiv.org/abs/2510.02671" target="_blank"><strong>Uncertainty as Feature Gaps</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Epistemic (minimize): Context fills parametric knowledge gaps<br>
-                        • Residual after RAG = Aleatoric (inherent to task)
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Epistemic (minimize):</strong> Context fills parametric knowledge gaps</li>
+                                <li>Residual after RAG = Aleatoric (inherent to task)</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -583,23 +656,33 @@
                             <p>Look at raw logits - how confident is model about each token? Low probability tokens = uncertain predictions.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. For each generated token, check its probability<br>
-                        2. Aggregate metrics:<br>
-                        &nbsp;&nbsp;&nbsp;• <strong>Perplexity:</strong> exp(avg negative log-likelihood)<br>
-                        &nbsp;&nbsp;&nbsp;• <strong>Min-Prob:</strong> Lowest token probability in sequence<br>
-                        &nbsp;&nbsp;&nbsp;• <strong>P(True):</strong> Ask model "Is this answer true?" → check prob of "True"<br>
-                        3. High perplexity / low min-prob → uncertain prediction<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>For each generated token, check its probability</li>
+                                <li>Aggregate metrics:
+                                    <ul>
+                                        <li><strong>Perplexity:</strong> exp(avg negative log-likelihood)</li>
+                                        <li><strong>Min-Prob:</strong> Lowest token probability in sequence</li>
+                                        <li><strong>P(True):</strong> Ask model "Is this answer true?" → check prob of "True"</li>
+                                    </ul>
+                                </li>
+                                <li>High perplexity / low min-prob → uncertain prediction</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://arxiv.org/abs/2207.05221" target="_blank"><strong>"Language Models (Mostly) Know What They Know"</strong></a><br>
-                            Kadavath et al. 2022 - Anthropic research on P(True)</p>
+                            <p><a href="https://arxiv.org/abs/2207.05221" target="_blank"><strong>Language Models (Mostly) Know What They Know</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Aleatoric: Per-token distribution reflects phrasing ambiguity<br>
-                        • P(True) attempts Epistemic detection (self-assessment)
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Aleatoric:</strong> Per-token distribution reflects phrasing ambiguity</li>
+                                <li>P(True) attempts Epistemic detection (self-assessment)</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -622,22 +705,30 @@
                             <p>Just ask the model "How confident are you?" - let it state a number (0-100%).</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Prompt: "Answer this question and rate your confidence (0-100%)"<br>
-                        2. Optionally: Use Chain-of-Thought first (improves calibration)<br>
-                        3. Extract stated confidence score from response<br>
-                        4. Compare stated confidence vs actual accuracy<br>
-                        5. Calibration error = mismatch between stated and actual<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Prompt: "Answer this question and rate your confidence (0-100%)"</li>
+                                <li>Optionally: Use Chain-of-Thought first (improves calibration)</li>
+                                <li>Extract stated confidence score from response</li>
+                                <li>Compare stated confidence vs actual accuracy</li>
+                                <li>Calibration error = mismatch between stated and actual</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Papers</div>
-                            <p><a href="https://openreview.net/forum?id=gjeQKFxFpZ" target="_blank"><strong>"Can LLMs Express Their Uncertainty?"</strong></a> - ICLR 2024<br>
-                            <a href="https://arxiv.org/abs/2405.02917" target="_blank"><strong>"Overconfidence is Key"</strong></a> - Groot & Valdenegro-Toro 2024</p>
+                            <p><a href="https://openreview.net/forum?id=gjeQKFxFpZ" target="_blank"><strong>Can LLMs Express Their Uncertainty?</strong></a><br>
+                            <a href="https://arxiv.org/abs/2405.02917" target="_blank"><strong>Overconfidence is Key</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Attempts Epistemic (self-assessment of knowledge)<br>
-                        • <strong>Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li>Attempts Epistemic (self-assessment of knowledge)</li>
+                                <li><strong>Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy ("human mimicry")</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -660,21 +751,28 @@
                             <p>Bias model toward wrong answer, see if it changes its mind. If it flips easily → no real knowledge.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Model gives Answer A<br>
-                        2. <strong>The Test:</strong> User challenges it ("Are you sure? I think it's B")<br>
-                        3. Check if Model flips to B (Sycophancy)<br>
-                        4. <strong>Intuition:</strong> Flipping = Low conviction (High Uncertainty)<br>
-                        5. <strong>Formal Fix:</strong> Condition probability on user agreement (SyRoUP)<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Model gives Answer A</li>
+                                <li><strong>The Test:</strong> User challenges it ("Are you sure? I think it's B")</li>
+                                <li>Check if Model flips to B (Sycophancy)</li>
+                                <li><strong>Intuition:</strong> Flipping = Low conviction (High Uncertainty)</li>
+                                <li><strong>Formal Fix:</strong> Condition probability on user agreement (SyRoUP)</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://arxiv.org/abs/2410.23743" target="_blank"><strong>"Accounting for Sycophancy in LLM Uncertainty Estimation"</strong></a> - Sicilia et al. 2024<br>
-                            Uses "SyRoUP" to calibrate uncertainty against sycophancy.</p>
+                            <p><a href="https://arxiv.org/abs/2410.14746" target="_blank"><strong>Accounting for Sycophancy in Language Model Uncertainty Estimation</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Epistemic (detect): High susceptibility = lack of true knowledge conviction
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Epistemic (detect):</strong> High susceptibility = lack of true knowledge conviction</li>
+                            </ul>
+                        </div>
 
                         <div class="insight-box">
                             <div class="insight-title">LLM Example</div>
@@ -690,29 +788,36 @@
             <!-- Slide 3-9: Approach 8 - Monte Carlo Dropout (Bonus) -->
             <div class="slide" id="slide-3-9" data-section="2">
                 <div class="slide-card">
-                    <div class="slide-card-title">Approach 8: Monte Carlo Dropout (Bonus)</div>
+                    <div class="slide-card-title">Approach 8: Monte Carlo Dropout</div>
                     <div class="slide-card-content">
                         <div class="insight-box">
                             <div class="insight-title">Simple Explanation</div>
                             <p>Randomly "turn off" parts of model multiple times, see if answers vary. Each dropout mask = different "thinned" network.</p>
                         </div>
                         
-                        <strong>How It Works (Pseudocode):</strong><br>
-                        1. Keep dropout ACTIVE during inference (normally off)<br>
-                        2. Run same input T times with different dropout masks<br>
-                        3. Each forward pass = different effective θ<br>
-                        4. Collect T different outputs<br>
-                        5. Variance across T passes ≈ epistemic uncertainty<br><br>
+                        <div class="insight-box">
+                            <div class="insight-title">How It Works (Pseudocode)</div>
+                            <ol>
+                                <li>Keep dropout ACTIVE during inference (normally off)</li>
+                                <li>Run same input T times with different dropout masks</li>
+                                <li>Each forward pass = different effective θ</li>
+                                <li>Collect T different outputs</li>
+                                <li>Variance across T passes ≈ epistemic uncertainty</li>
+                            </ol>
+                        </div>
                         
                         <div class="insight-box">
                             <div class="insight-title">Key Paper</div>
-                            <p><a href="https://proceedings.mlr.press/v48/gal16.html" target="_blank"><strong>"Dropout as Bayesian Approximation: Representing Model Uncertainty in Deep Learning"</strong></a><br>
-                            Gal & Ghahramani 2016 - Foundational paper linking dropout to Bayesian inference</p>
+                            <p><a href="https://proceedings.mlr.press/v48/gal16.html" target="_blank"><strong>Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</strong></a></p>
                         </div>
                         
-                        <strong>What it Captures:</strong><br>
-                        • Epistemic: Parameter uncertainty via pseudo-ensemble<br>
-                        • <strong>Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)
+                        <div class="insight-box">
+                            <div class="insight-title">What it Captures</div>
+                            <ul>
+                                <li><strong>Epistemic:</strong> Parameter uncertainty via pseudo-ensemble</li>
+                                <li><strong>Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1363,7 +1468,7 @@
                 {
                     id: 0,
                     title: " Uncertainty",
-                    slides: ["slide-1-1", "slide-1-2", "slide-1-4", "slide-1-5", "slide-1-6"]
+                    slides: ["slide-1-1", "slide-1-2", "slide-1-4", "slide-1-5"]
                 },
                 {
                     id: 1,

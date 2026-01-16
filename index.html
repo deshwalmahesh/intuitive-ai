@@ -161,6 +161,10 @@
       // Load and render a topic from its path
       async function loadTopic(topicPath) {
         try {
+          // 1. Load shared definitions first (single source of truth)
+          const shared = await Renderer.loadSharedDefinitions();
+          
+          // 2. Load topic-specific data
           const response = await fetch(topicPath);
           if (!response.ok) throw new Error("Topic not found: " + topicPath);
           const data = await response.json();
@@ -173,14 +177,16 @@
           document.getElementById("page-title").textContent = data.meta?.title || "Topic";
           document.title = data.meta?.title || "Scientific Blog";
 
-          // Initialize components
-          Renderer.init(data);
+          // 3. Initialize with merged definitions (shared + topic)
+          Renderer.init(data, shared);
           Renderer.renderAllSlides(document.getElementById("slide-content-area"));
-          Popup.init(data.popups);
+          
+          // 4. Popup uses merged popups from Renderer
+          Popup.init(Renderer.popups);
           Navigation.init(data.navigation);
         } catch (err) {
           console.error(err);
-          alert("Failed to load topic: " + topicId);
+          alert("Failed to load topic: " + err.message);
         }
       }
 

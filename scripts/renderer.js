@@ -9,16 +9,42 @@ const Renderer = {
     colorPalette: {},
     terms: {},
     popups: {},
+    sharedDefinitions: null,
+
+    /**
+     * Load shared definitions from centralized file
+     * This is the SINGLE SOURCE OF TRUTH for all common definitions
+     * @returns {Object} - Shared definitions (colorPalette, terms, popups)
+     */
+    async loadSharedDefinitions() {
+        if (this.sharedDefinitions) {
+            return this.sharedDefinitions;
+        }
+        
+        const response = await fetch('definitions/shared.json');
+        if (!response.ok) {
+            throw new Error('Failed to load shared definitions: ' + response.statusText);
+        }
+        this.sharedDefinitions = await response.json();
+        return this.sharedDefinitions;
+    },
 
     /**
      * Initialize renderer with topic data
+     * Merges shared definitions with topic-specific definitions
+     * Topic definitions OVERRIDE shared (for customization flexibility)
      * @param {Object} data - The parsed JSON topic data
+     * @param {Object} shared - Shared definitions (optional, for when already loaded)
      */
-    init(data) {
+    init(data, shared = null) {
         this.topicData = data;
-        this.colorPalette = data.colorPalette || {};
-        this.terms = data.terms || {};
-        this.popups = data.popups || {};
+        
+        // Merge: shared first, then topic overrides
+        const sharedDefs = shared || this.sharedDefinitions || { colorPalette: {}, terms: {}, popups: {} };
+        
+        this.colorPalette = { ...sharedDefs.colorPalette, ...(data.colorPalette || {}) };
+        this.terms = { ...sharedDefs.terms, ...(data.terms || {}) };
+        this.popups = { ...sharedDefs.popups, ...(data.popups || {}) };
         
         // Generate CSS color classes dynamically
         this.injectColorStyles();

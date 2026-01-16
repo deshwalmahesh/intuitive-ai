@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Blog</title>
+    <link rel="stylesheet" href="styles/style_1.css">
+    <style>
+        /* Topic Picker Styles */
+        .topic-picker {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .topic-picker h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+        }
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .topic-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .topic-card:hover {
+            transform: translateY(-3px);
+            border-color: #667eea;
+        }
+        .topic-card h2 { font-size: 1.1rem; color: #f1f5f9; margin-bottom: 8px; }
+        .topic-card p { color: #94a3b8; font-size: 0.85rem; }
+        
+        /* Viewer container */
+        .viewer-container { display: none; }
+        .viewer-container.active { display: block; }
+        .topic-picker.hidden { display: none; }
+        
+        /* Back button */
+        .back-to-topics {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: rgba(102, 126, 234, 0.2);
+            color: #818cf8;
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+        .back-to-topics:hover { background: rgba(102, 126, 234, 0.4); }
+    </style>
+</head>
+<body>
+    <!-- Topic Picker (shows initially) -->
+    <div class="topic-picker" id="topic-picker">
+        <h1>Scientific Blog Topics</h1>
+        <div class="topics-grid" id="topics-grid">
+            <!-- Loaded from topics/index.json -->
+        </div>
+    </div>
+    
+    <!-- Viewer (shows when topic selected) -->
+    <div class="viewer-container" id="viewer-container">
+        <button class="back-to-topics" id="back-btn">← All Topics</button>
+        
+        <h1 id="page-title">Loading...</h1>
+        <div class="section-pills" id="section-pills"></div>
+        
+        <div class="presentation-container">
+            <div class="section-nav">
+                <button class="nav-btn nav-btn-secondary" id="prev-slide-btn">← Back</button>
+                <div class="section-nav-title" id="section-title"></div>
+                <div class="slide-nav-counter" id="slide-counter">1 / 1</div>
+                <button class="nav-btn nav-btn-primary" id="next-slide-btn">Next →</button>
+            </div>
+            <div class="slide-content-area" id="slide-content-area"></div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Term</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script src="scripts/renderer.js"></script>
+    <script src="scripts/popup.js"></script>
+    <script src="scripts/navigation.js"></script>
+    <script>
+        // Topic index - list of all available topics
+        const TOPICS = [
+            { id: 'uncertainty_quantification', title: 'Uncertainty Quantification in LLMs', desc: 'Epistemic vs aleatoric uncertainty, entropy, detection methods' },
+            { id: 'llm_training', title: 'LLM Training: From Pre-training to RLHF', desc: 'Pre-training, SFT, PPO, GRPO' }
+        ];
+        
+        const topicPicker = document.getElementById('topic-picker');
+        const viewerContainer = document.getElementById('viewer-container');
+        const topicsGrid = document.getElementById('topics-grid');
+        const backBtn = document.getElementById('back-btn');
+        
+        // Render topic cards
+        function showTopicPicker() {
+            topicsGrid.innerHTML = TOPICS.map(t => `
+                <div class="topic-card" onclick="loadTopic('${t.id}')">
+                    <h2>${t.title}</h2>
+                    <p>${t.desc}</p>
+                </div>
+            `).join('');
+            
+            topicPicker.classList.remove('hidden');
+            viewerContainer.classList.remove('active');
+        }
+        
+        // Load and render a topic
+        async function loadTopic(topicId) {
+            try {
+                const response = await fetch(`topics/${topicId}.json`);
+                if (!response.ok) throw new Error('Topic not found');
+                const data = await response.json();
+                
+                // Hide picker, show viewer
+                topicPicker.classList.add('hidden');
+                viewerContainer.classList.add('active');
+                
+                // Set title
+                document.getElementById('page-title').textContent = data.meta?.title || 'Topic';
+                document.title = data.meta?.title || 'Scientific Blog';
+                
+                // Initialize components
+                Renderer.init(data);
+                Renderer.renderAllSlides(document.getElementById('slide-content-area'));
+                Popup.init(data.popups);
+                Navigation.init(data.navigation);
+                
+            } catch (err) {
+                console.error(err);
+                alert('Failed to load topic: ' + topicId);
+            }
+        }
+        
+        // Back button
+        backBtn.addEventListener('click', showTopicPicker);
+        
+        // Initialize
+        showTopicPicker();
+    </script>
+</body>
+</html>

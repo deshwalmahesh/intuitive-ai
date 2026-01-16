@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "title": "Your Topic Title",
+    "subtitle": "Optional subtitle",
+    "version": "1.0"
+  },
+
+  "navigation": {
+    "sections": [
+      {
+        "id": 0,
+        "title": " Section 1",
+        "slides": ["slide-1-1", "slide-1-2"]
+      },
+      {
+        "id": 1,
+        "title": " Section 2",
+        "slides": ["slide-2-1"]
+      }
+    ]
+  },
+
+  "colorPalette": {
+    "primary": "#4f46e5",
+    "secondary": "#16a34a",
+    "accent": "#d97706"
+  },
+
+  "terms": {
+    "example-term": {
+      "display": "Example",
+      "colorKey": "primary",
+      "popupKey": "example-term"
+    }
+  },
+
+  "slides": [
+    {
+      "id": "slide-1-1",
+      "sectionIndex": 0,
+      "title": "Welcome to Your Topic",
+      "content": [
+        {
+          "type": "html",
+          "content": "This is your first slide. Add content here."
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Concept",
+          "content": "Explain something important here. Use {term:example-term:clickable terms} to link to popups."
+        }
+      ]
+    },
+    {
+      "id": "slide-1-2",
+      "sectionIndex": 0,
+      "title": "Second Slide",
+      "content": [
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Column 1", "Column 2", "Column 3"],
+          "rows": [
+            ["Row 1 Cell 1", "Row 1 Cell 2", "Row 1 Cell 3"],
+            ["Row 2 Cell 1", "Row 2 Cell 2", "Row 2 Cell 3"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-2-1",
+      "sectionIndex": 1,
+      "title": "Section 2 Content",
+      "content": [
+        {
+          "type": "image",
+          "src": "images/your-image.png",
+          "alt": "Description of image"
+        },
+        {
+          "type": "html",
+          "content": "Content for section 2."
+        }
+      ]
+    }
+  ],
+
+  "popups": {
+    "example-term": {
+      "title": "Example Term",
+      "color": "#4f46e5",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "A simple explanation of this term."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Formal definition here.",
+          "formula": "Optional formula"
+        },
+        {
+          "type": "example",
+          "title": "Example",
+          "content": "A concrete example of this concept."
+        }
+      ]
+    }
+  }
+}

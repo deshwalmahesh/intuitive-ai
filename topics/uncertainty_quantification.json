@@ -1,0 +1,775 @@
+{
+  "meta": {
+    "title": "Uncertainty Quantification in LLMs",
+    "subtitle": "",
+    "version": "1.0"
+  },
+
+  "navigation": {
+    "sections": [
+      {
+        "id": 0,
+        "title": " Uncertainty",
+        "slides": ["slide-1-1", "slide-1-2", "slide-1-4", "slide-1-5"]
+      },
+      {
+        "id": 1,
+        "title": " The Maths of Uncertainty",
+        "slides": ["slide-2-1", "slide-2-2", "slide-2-3", "slide-2-6"]
+      },
+      {
+        "id": 2,
+        "title": " Detect & Mitigate",
+        "slides": ["slide-3-1", "slide-3-2", "slide-3-3", "slide-3-4", "slide-3-5", "slide-3-6", "slide-3-7", "slide-3-8", "slide-3-9"]
+      }
+    ]
+  },
+
+  "colorPalette": {
+    "variance": "#d97706",
+    "output": "#db2777",
+    "input": "#475569",
+    "theta": "#16a34a",
+    "data": "#854d0e",
+    "posterior": "#7c3aed",
+    "expectation": "#172554",
+    "entropy": "#0891b2",
+    "mutual-info": "#9333ea",
+    "epistemic-var": "#2563eb",
+    "aleatoric-var": "#dc2626",
+    "epistemic-info": "#4f46e5",
+    "aleatoric-info": "#e11d48",
+    "total": "#7e22ce"
+  },
+
+  "terms": {
+    "variance": { "display": "Var", "colorKey": "variance", "popupKey": "variance" },
+    "theta": { "display": "θ", "colorKey": "theta", "popupKey": "theta" },
+    "output": { "display": "y", "colorKey": "output", "popupKey": "output" },
+    "input": { "display": "x", "colorKey": "input", "popupKey": "input" },
+    "data": { "display": "D", "colorKey": "data", "popupKey": "data" },
+    "posterior": { "display": "p", "colorKey": "posterior", "popupKey": "posterior" },
+    "expectation": { "display": "E", "colorKey": "expectation", "popupKey": "expectation" },
+    "entropy": { "display": "H", "colorKey": "entropy", "popupKey": "entropy" },
+    "mutual-info": { "display": "I", "colorKey": "mutual-info", "popupKey": "mutual-info" },
+    "epistemic-var": { "display": "Epistemic", "colorKey": "epistemic-var", "popupKey": "epistemic-var" },
+    "aleatoric-var": { "display": "Aleatoric", "colorKey": "aleatoric-var", "popupKey": "aleatoric-var" },
+    "epistemic-info": { "display": "Epistemic", "colorKey": "epistemic-info", "popupKey": "epistemic-info" },
+    "aleatoric-info": { "display": "Aleatoric", "colorKey": "aleatoric-info", "popupKey": "aleatoric-info" },
+    "total-uncertainty": { "display": "Total", "colorKey": "total", "popupKey": "total-uncertainty" }
+  },
+
+  "slides": [
+    {
+      "id": "slide-1-1",
+      "sectionIndex": 0,
+      "title": "Uncertainty? Is that a new LLM?",
+      "content": [
+        {
+          "type": "image",
+          "src": "images/what_is_uncertainty.png",
+          "alt": "what is uncertainty",
+          "style": "max-height: 500px;"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Uncertainty:</strong> Simply put, the amount of \"I don't know what will happen\" that <em>still</em> remains <em>even after</em> you've used all the information you had.<br><br><strong>It's <span style=\"color: red;\">Not</span>:</strong> Confusion (lack of clarity), Error (mistake in process), or Randomness (how outcomes are generated)<br><strong>It <span style=\"color: green;\">Is</span>:</strong> <em>Residual doubt (limit of current knowledge & system)</em> after reasoning"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-2",
+      "sectionIndex": 0,
+      "title": "Thanks for confusing us. Now will you please give us something intuitive?",
+      "content": [
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["If I try to answer", "My Internal Uncertainty will be"],
+          "rows": [
+            ["Will the sun rise tomorrow?", "Almost zero"],
+            ["Will it rain tomorrow?", "Moderate"],
+            ["What will Messi eat for breakfast on 22/03/2057, 11:03 AM?", "High"],
+            ["What is the exact position and velocity of every air molecule right now?", "My scale just broke!"]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "But how do we (as humans) perceive it?",
+          "content": "<strong>1. Probability:</strong> \"I think there's a 70% chance...\" → A spread/distribution over outcomes<br><br><strong>2. Confidence/Doubt:</strong> \"I'm not very confident...\" → Instability in your belief<br><br><strong>3. Variability across Answers:</strong> You ask a kid: \"What do you want to be when you grow up?\" and the kid goes like: \"Doctor\" → \"No, Politician\" → \"Actually AI Engineer (said no one)\" → Inconsistency across responses",
+          "style": "margin-top: 20px;"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-4",
+      "sectionIndex": 0,
+      "title": "Good job Nietzsche! You still fear Maths?",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Measuring uncertainty using Maths: <em style=\"color: green;\">Entropy</em>",
+          "content": "<strong>Think of it as:</strong> The average number of <em>\"Perfectly Curated\"</em> Yes/No questions you'd need to ask to get the actual answer.<br><br>• <strong>Fair coin:</strong> \"Is it heads?\" → 1 question = <strong>1 bit</strong> of entropy<br>• <strong>Fair 8-sided die:</strong> \"Is it > 4?\" → \"Is it > 6?\" → \"Is it 7?\" → <strong>3 questions = 3 bits</strong><br>• <strong>Loaded die (always 6):</strong> No questions needed → <strong>0 bits</strong> (no uncertainty!)"
+        },
+        {
+          "type": "insight-box",
+          "title": "Formal Definition",
+          "content": "<strong>Entropy:</strong> The <em>expected (average) surprise</em> across all possible outcomes, weighted by their probability. Measures how spread-out or unpredictable a probability distribution is.<br><br><strong>Formula (for tokens as events):</strong> H = -Σ p(token) × log p(token)"
+        },
+        {
+          "type": "html",
+          "content": "• <strong>Sharp distribution</strong> (peaked, concentrated) → Low entropy → Very certain<br>• <strong>Spread out distribution</strong> (flat) → High entropy → Very uncertain"
+        },
+        {
+          "type": "image",
+          "src": "images/entropy_graph_type.png",
+          "alt": "Entropy visualization"
+        },
+        {
+          "type": "insight-box",
+          "title": "Let's look at uncertainty for these events:",
+          "style": "margin-top: 15px;"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Event", "≈ Entropy", "Why?"],
+          "rows": [
+            ["Fair coin toss", "1 bit", "Only 2 equally-likely outcomes → 1 binary question to identify"],
+            ["Lottery draw", "~20-30 bits", "Millions of equally-likely number combinations → log₂(millions) questions"],
+            ["Deck shuffle", "~226 bits", "52! ≈ 8×10⁶⁷ possible orderings → each shuffle is essentially unique in the universe"],
+            ["Chess game", "~400 bits", "~10¹²⁰ legal game paths (Shannon number) → more possibilities than atoms in universe"],
+            ["Earth's atmosphere", "Mind-bogglingly larger", "~10⁴⁴ molecules × (position, velocity, spin) each → every microstate equally inaccessible to predict"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-1-5",
+      "sectionIndex": 0,
+      "title": "Does UQ even matter? (Well, do you?)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What does it even mean to quantify the uncertainty in ML?",
+          "content": "<strong>Why:</strong> Models are imperfect approximations. UQ transforms vague notions of \"the model might be wrong\" into <em>specific, measurable</em> information about potential errors.<br><br><strong>Scientifically:</strong> The systematic process of measuring and communicating <em>how confident</em> we should be in a model's predictions. Not just \"is the model right?\" but \"how sure should we be?\""
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Context", "How does it look like w/o UQ", "How does it look like w/ UQ"],
+          "rows": [
+            ["<strong>Linear Regression</strong><br>(House Price)", "Prediction: $350,000", "$350K ± $15K (95% CI)"],
+            ["<strong>Random Forest</strong><br>(Loan Approval)", "Approved: Yes", "Yes (72% of trees agree)"],
+            ["<strong>LLM</strong><br>(Factual QA)", "Answer: \"Paris\"", "\"Paris\" (95% confident), \"Delhi\" (3%), \"Atlantis\" (1%)"]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Why does UQ even matter?",
+          "style": "margin-top: 15px;",
+          "content": "• Models that say \"I'm 99% sure\" when they should say \"I'm 50% sure\"; cause real-world harm.<br>• A tumor detection model confidently wrong is worse than one that says \"uncertain - needs human review\"."
+        },
+        {
+          "type": "insight-box",
+          "title": "Practical Significance",
+          "style": "margin-top: 15px;",
+          "content": "• <strong>Healthcare:</strong> Tumor detection, drug dosing → uncertainty triggers specialist review<br>• <strong>Finance:</strong> Fraud detection, loan approval → high uncertainty = human escalation<br>• <strong>Autonomous Systems:</strong> Self-driving cars → uncertainty means slow down or hand over to human"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-1",
+      "sectionIndex": 1,
+      "title": "Where Does Uncertainty Come From?",
+      "content": [
+        {
+          "type": "html",
+          "content": "Uncertainty as we know and talk about is the {term:total-uncertainty:Total Uncertainty} and <em>where/how</em> it arises gives us two names:<br><br>"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Type", "Source", "Nature", "LLM Indicators", "Remediation"],
+          "rows": [
+            ["<strong>{term:aleatoric-var:Aleatoric}</strong>", "Data ambiguity, linguistic variety", "Irreducible", "High entropy in phrasing; prompt sensitivity", "Input clarification, constraints"],
+            ["<strong>{term:epistemic-var:Epistemic}</strong>", "Knowledge gaps, model blind spots", "Reducible", "Hallucination; inconsistency; sycophancy", "RAG, fine-tuning, ensembling"]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "The Formula",
+          "content": "<strong>{term:total-uncertainty:Total} = {term:aleatoric-var:Aleatoric} + {term:epistemic-var:Epistemic}</strong>"
+        },
+        {
+          "type": "equation",
+          "id": "variance_decomposition",
+          "label": "Equation 1: Variance Decomposition (Law of Total Variance)",
+          "parts": [
+            { "type": "term", "key": "total-uncertainty", "text": "Total Uncertainty" },
+            { "type": "operator", "symbol": "=" },
+            {
+              "type": "labeled-expression",
+              "underline": "blue",
+              "label": "Epistemic",
+              "labelColor": "epistemic-var",
+              "popupKey": "epistemic-var",
+              "content": [
+                { "type": "term", "key": "variance", "text": "Var" },
+                {
+                  "type": "subscript",
+                  "content": [
+                    { "type": "term", "key": "posterior", "text": "p" },
+                    { "type": "raw", "text": "(" },
+                    { "type": "term", "key": "theta", "text": "θ" },
+                    { "type": "raw", "text": "|" },
+                    { "type": "term", "key": "data", "text": "D" },
+                    { "type": "raw", "text": ")" }
+                  ]
+                },
+                { "type": "raw", "text": "[" },
+                { "type": "term", "key": "expectation", "text": "E" },
+                { "type": "raw", "text": "(" },
+                { "type": "term", "key": "output", "text": "y" },
+                { "type": "raw", "text": "|" },
+                { "type": "term", "key": "input", "text": "x" },
+                { "type": "raw", "text": ", " },
+                { "type": "term", "key": "theta", "text": "θ" },
+                { "type": "raw", "text": ")]" }
+              ]
+            },
+            { "type": "operator", "symbol": "+" },
+            {
+              "type": "labeled-expression",
+              "underline": "orange",
+              "label": "Aleatoric",
+              "labelColor": "aleatoric-var",
+              "popupKey": "aleatoric-var",
+              "content": [
+                { "type": "term", "key": "expectation", "text": "E" },
+                {
+                  "type": "subscript",
+                  "content": [
+                    { "type": "term", "key": "posterior", "text": "p" },
+                    { "type": "raw", "text": "(" },
+                    { "type": "term", "key": "theta", "text": "θ" },
+                    { "type": "raw", "text": "|" },
+                    { "type": "term", "key": "data", "text": "D" },
+                    { "type": "raw", "text": ")" }
+                  ]
+                },
+                { "type": "raw", "text": "[" },
+                { "type": "term", "key": "variance", "text": "Var" },
+                { "type": "raw", "text": "(" },
+                { "type": "term", "key": "output", "text": "y" },
+                { "type": "raw", "text": "|" },
+                { "type": "term", "key": "input", "text": "x" },
+                { "type": "raw", "text": ", " },
+                { "type": "term", "key": "theta", "text": "θ" },
+                { "type": "raw", "text": ")]" }
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "{term:total-uncertainty:Total Uncertainty} = how much different {term:theta:model versions} <em>disagree</em> on the {term:expectation:average} {term:output:prediction} ({term:epistemic-var:Epistemic}) + the {term:expectation:average} {term:variance:spread} each {term:theta:model} has within its own {term:output:predictions} ({term:aleatoric-var:Aleatoric})."
+          }
+        }
+      ]
+    },
+    {
+      "id": "slide-2-2",
+      "sectionIndex": 1,
+      "title": "🎲 Aleatoric Uncertainty: The World's Ambiguity",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is it?",
+          "content": "Exactly as it comes from the Latin word: <em>alea</em>, meaning \"dice\" or \"game of chance\"<br><br>It is the uncertainty from ambiguity in the {term:input:input} itself. A patient's BP can't be 100% same every time. And even a <em>perfect</em> model would be uncertain because the question has multiple valid answers."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Properties:</strong><br>• <strong>Irreducible</strong> - can't be fixed even with infinite {term:data:data}<br>• It's error in the system/task itself, not the model<br>• If we don't change {term:theta:weights} but change sampling (temp, top-k), we're measuring {term:aleatoric-var:aleatoric}<br><br>"
+        },
+        {
+          "type": "insight-box",
+          "title": "ML Example",
+          "content": "<strong>Blood Pressure Prediction:</strong> Even with perfect sensors, a patient's BP naturally fluctuates ±5mmHg due to stress, hydration, time of day. No model can eliminate this noise.<br><br><strong>Logistic Regression (Churn):</strong> \"Will this customer cancel?\" - same customer with identical features might stay or leave due to external factors we can't observe."
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"What is my favourite colour?\"<br><br>Any answer could be correct without more context! This is ambiguous {term:input:input}, not a knowledge gap. Similarly: \"Tell me a joke\" has thousands of valid answers."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Two Types:</strong><br>• <strong>Homoscedastic:</strong> Error rate is constant (sensor gives same 0.1% error always)<br>• <strong>Heteroscedastic:</strong> Error rate varies with input (camera: 0.1% in daylight, 5% at night)<br><br><strong>Primary Indicators in LLMs:</strong><br>• High entropy in phrasing choices (many synonyms equally likely)<br>• Sensitivity to prompt ambiguity"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-3",
+      "sectionIndex": 1,
+      "title": "🧠 Epistemic Uncertainty: The Model's Ignorance",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is it?",
+          "content": "Comes from the Greek word <em>episteme</em> which means \"knowledge\" (True knowledge and not just opinion)<br><br>Uncertainty from the {term:theta:model} not knowing something. It's the \"I haven't learned this\" or \"I haven't seen this before\" type of doubt."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Properties:</strong><br>• <strong>Reducible</strong> - can be fixed with more {term:data:training data}, better architecture, or RAG<br>• Arises from OOD (out-of-distribution) samples or long-tail events<br>• If we change the {term:theta:model weights} (finetuning, SFT), we're working on {term:epistemic-var:epistemic} issues<br><br>"
+        },
+        {
+          "type": "insight-box",
+          "title": "ML Example",
+          "content": "<strong>Random Forest (Health Prediction):</strong> Model trained on young adults (ages 18-35) predicting health outcomes for elderly patients (65+). The model lacks knowledge about this demographic - it's OOD.<br><br><strong>Linear Regression (House Price):</strong> Predict price for a 50-bedroom mansion. Training data had max 6 bedrooms - model extrapolates blindly."
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"What is the capital of Narnia?\"<br><br>The model was trained on cats vs dogs and you asked about fish. Or you asked about an obscure 15th century poet. The model simply <em>doesn't have the knowledge</em> - this gap can be filled."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Primary Indicators in LLMs:</strong><br>• Hallucination (confident but wrong answers)<br>• Inconsistency across rephrasings of same question<br>• Sycophancy (changing answer when challenged)"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-6",
+      "sectionIndex": 1,
+      "title": "When to Use Which Equation?",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Variance Decomposition",
+          "content": "Best for regression tasks or when you care about continuous outputs (e.g., perplexity scores, confidence scores).<br><br><strong>Why?</strong> Variance measures squared differences between predictions. When outputs are continuous numbers (like a score from 0 to 1), variance directly captures how \"spread out\" the predictions are in that number space. It's also easier to interpret: a variance of 0.05 means predictions typically differ by √0.05 ≈ 0.22 from the mean.<br><br><strong>ML Context:</strong> Used in ensemble methods (Random Forest, Gradient Boosting) where each tree's prediction variance indicates model disagreement. Also natural for Linear Regression confidence intervals."
+        },
+        {
+          "type": "insight-box",
+          "title": "Entropy Decomposition",
+          "content": "Best for classification/generation tasks with discrete tokens. More common in LLM analysis since we predict discrete tokens.<br><br><strong>Why?</strong> Entropy measures uncertainty over categorical distributions. LLMs output probability distributions over vocabularies (50K+ discrete tokens), making entropy the natural fit. Entropy is also additive across tokens and measured in bits - directly interpretable as \"how many binary questions needed to identify the answer.\"<br><br><strong>ML Context:</strong> Used in Logistic Regression (binary entropy), multi-class classification, and decision tree splitting criteria (information gain = entropy reduction)."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-1",
+      "sectionIndex": 2,
+      "title": "⚠️ The Ongoing Debate",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What reduces Aleatoric vs Epistemic?",
+          "content": "There's high debate in the research community on separating Aleatoric vs Epistemic uncertainty in LLMs:"
+        },
+        {
+          "type": "insight-box",
+          "title": "Example 1: Adding Context in Prompt",
+          "content": "It changes the input → reduces ambiguity → should be Aleatoric. But it also fills the knowledge gaps in LLM → minimizes Epistemic"
+        },
+        {
+          "type": "insight-box",
+          "title": "Example 2: Sampling Techniques (temp, top-k, etc.)",
+          "content": "It doesn't change model weights → raw token probs stay same (reshape how much uncertainty you expose) → not exactly epistemic because no Model knowledge change but it's also not removing input ambiguity from input → not aleatoric either"
+        },
+        {
+          "type": "insight-box",
+          "title": "Use of Uncertainty Quantification in LLMs",
+          "content": "Mostly, Hallucination Detection. Once you detect the model is uncertain, you can take action depending on your usecase."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-2",
+      "sectionIndex": 2,
+      "title": "Approach 1: Varying Decoding (Semantic Entropy)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Sample N outputs using different temp/top-k/top-p, group by <em>meaning</em> (not words), measure spread over meanings."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Generate N responses using stochastic sampling (high temp)<br>2. Cluster responses by semantic equivalence using bidirectional NLI<br>&nbsp;&nbsp;&nbsp;• If A entails B AND B entails A → same meaning cluster<br>3. Calculate probability of each meaning cluster<br>4. Compute entropy over meaning clusters (not tokens!)<br>5. High semantic entropy → uncertain or hallucinating"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://doi.org/10.1038/s41586-024-07421-0\" target=\"_blank\"><strong>Detecting hallucinations in LLMs using semantic entropy</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Aleatoric:</strong> Multiple valid meanings → high entropy<br>• <strong>Epistemic:</strong> Inconsistent knowledge → different meanings per sample"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"What is the capital of France?\"<br>Gen 1: \"Paris\"<br>Gen 2: \"The capital city is separate from the country...\" (Hallucination)<br>Gen 3: \"Paris, France\"<br><strong>Semantic Entropy:</strong> High (inconsistent meanings). If all said \"Paris\" in different words, entropy would be low."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-3",
+      "sectionIndex": 2,
+      "title": "Approach 2: Rephrased Prompts",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Ask the same thing in 5 different ways. If the answer changes, the model is guessing."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Generate N variations of input prompt (paraphrasing)<br>2. Get response for each variation<br>3. Calculate consistency/variance across responses<br>4. High variance = High uncertainty (Sensitive to phrasing)<br>5. Low variance = Robust knowledge"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://arxiv.org/abs/2403.02509\" target=\"_blank\"><strong>SPUQ: Perturbation-Based Uncertainty Quantification for Large Language Models</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Aleatoric (minimize):</strong> Clarification resolves ambiguity<br>• <strong>Epistemic (detect):</strong> Sensitivity to phrasing reveals unstable knowledge"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt 1:</strong> \"Is 1009 a prime number?\" -> \"Yes\"<br><strong>Prompt 2:</strong> \"Check if 1009 has factors.\" -> \"Yes, 3...\"<br><strong>Result:</strong> Inconsistency = High Uncertainty."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-4",
+      "sectionIndex": 2,
+      "title": "Approach 3: N Models (Ensemble)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Ask multiple separate models, see if they agree. Disagreement = knowledge gaps."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Query N independent models/checkpoints with same prompt<br>2. Collect probability distributions from each model<br>3. Measure disagreement using Jensen-Shannon Divergence (JSD)<br>4. High JSD → models learned different things<br>5. Low JSD → consensus = reliable prediction"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://aclanthology.org/2025.emnlp-main.1551/\" target=\"_blank\"><strong>Simple Yet Effective: An Information-Theoretic Approach to Multi-LLM Uncertainty Quantification</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Epistemic (Gold Standard):</strong> Disagreement among independent agents isolates knowledge gaps from data noise"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-5",
+      "sectionIndex": 2,
+      "title": "Approach 4: Adding Context (RAG)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Give model external info, see if answer becomes more consistent. Reduced uncertainty = filled knowledge gap."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Query model WITHOUT context (Parametric knowledge only)<br>2. Query model WITH retrieved context (Non-parametric)<br>3. <strong>Context Reliance Metric:</strong> Compare the difference<br>4. Huge confidence jump → \"Epistemic Gap\" filled by context<br>5. No change → Uncertainty is likely Aleatoric (ambiguous query)"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://arxiv.org/abs/2510.02671\" target=\"_blank\"><strong>Uncertainty as Feature Gaps</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Epistemic (minimize):</strong> Context fills parametric knowledge gaps<br>• Residual after RAG = Aleatoric (inherent to task)"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"Who won the 1998 World Cup?\"<br><strong>No Context:</strong> \"Brazil\" (Low conf) -> Epistemic gap.<br><strong>With Context:</strong> \"France defeated Brazil...\" -> \"France\" (High conf).<br>Uncertainty dropped -> The initial uncertainty was Epistemic."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-6",
+      "sectionIndex": 2,
+      "title": "Approach 5: Token Probabilities / P(True)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Look at raw logits - how confident is model about each token? Low probability tokens = uncertain predictions."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. For each generated token, check its probability<br>2. Aggregate metrics:<br>&nbsp;&nbsp;&nbsp;• <strong>Perplexity:</strong> exp(avg negative log-likelihood)<br>&nbsp;&nbsp;&nbsp;• <strong>Min-Prob:</strong> Lowest token probability in sequence<br>&nbsp;&nbsp;&nbsp;• <strong>P(True):</strong> Ask model \"Is this answer true?\" → check prob of \"True\"<br>3. High perplexity / low min-prob → uncertain prediction"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://arxiv.org/abs/2207.05221\" target=\"_blank\"><strong>Language Models (Mostly) Know What They Know</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Aleatoric:</strong> Per-token distribution reflects phrasing ambiguity<br>• P(True) attempts Epistemic detection (self-assessment)"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Q:</strong> \"What is the capital of Mars?\"<br><strong>A:</strong> \"There is no capital on Mars.\"<br><strong>Model Check:</strong> \"Is this answer True?\" -> P(True) = 0.95 (High).<br>If model hallucinates \"Phobos City\", P(True) might be lower (0.40) if calibrated."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-7",
+      "sectionIndex": 2,
+      "title": "Approach 6: Verbalized Confidence",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Just ask the model \"How confident are you?\" - let it state a number (0-100%)."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Prompt: \"Answer this question and rate your confidence (0-100%)\"<br>2. Optionally: Use Chain-of-Thought first (improves calibration)<br>3. Extract stated confidence score from response<br>4. Compare stated confidence vs actual accuracy<br>5. Calibration error = mismatch between stated and actual"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Papers",
+          "content": "<a href=\"https://openreview.net/forum?id=gjeQKFxFpZ\" target=\"_blank\"><strong>Can LLMs Express Their Uncertainty?</strong></a><br><a href=\"https://arxiv.org/abs/2405.02917\" target=\"_blank\"><strong>Overconfidence is Key</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• Attempts Epistemic (self-assessment of knowledge)<br>• <strong>Known Issue:</strong> LLMs are overconfident! Cluster around 80-100% regardless of accuracy (\"human mimicry\")"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"Who is the CEO of Google? Answer and state confidence.\"<br><strong>Response:</strong> \"Sundar Pichai. Confidence: 99%.\"<br><strong>Prompt:</strong> \"Who is the CEO of <FakeCompany>? state confidence.\"<br><strong>Response:</strong> \"John Doe. Confidence: 90%.\" (Overconfident hallucination)"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-8",
+      "sectionIndex": 2,
+      "title": "Approach 7: Sycophancy Test",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Bias model toward wrong answer, see if it changes its mind. If it flips easily → no real knowledge."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Model gives Answer A<br>2. <strong>The Test:</strong> User challenges it (\"Are you sure? I think it's B\")<br>3. Check if Model flips to B (Sycophancy)<br>4. <strong>Intuition:</strong> Flipping = Low conviction (High Uncertainty)<br>5. <strong>Formal Fix:</strong> Condition probability on user agreement (SyRoUP)"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://arxiv.org/abs/2410.14746\" target=\"_blank\"><strong>Accounting for Sycophancy in Language Model Uncertainty Estimation</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Epistemic (detect):</strong> High susceptibility = lack of true knowledge conviction"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Example",
+          "content": "<strong>Q:</strong> \"Is 17 prime?\" -> <strong>A:</strong> \"Yes.\"<br><strong>User:</strong> \"I think it's divisible by 3. Are you sure?\"<br><strong>A:</strong> \"Apologies, you are right. 17 is divisible by 3.\"<br><strong>Result:</strong> Sycophantic flip = Low epistemic certainty (did not truly 'know')."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-9",
+      "sectionIndex": 2,
+      "title": "Approach 8: Monte Carlo Dropout",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Simple Explanation",
+          "content": "Randomly \"turn off\" parts of model multiple times, see if answers vary. Each dropout mask = different \"thinned\" network."
+        },
+        {
+          "type": "insight-box",
+          "title": "How It Works (Pseudocode)",
+          "content": "1. Keep dropout ACTIVE during inference (normally off)<br>2. Run same input T times with different dropout masks<br>3. Each forward pass = different effective θ<br>4. Collect T different outputs<br>5. Variance across T passes ≈ epistemic uncertainty"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Paper",
+          "content": "<a href=\"https://proceedings.mlr.press/v48/gal16.html\" target=\"_blank\"><strong>Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</strong></a>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What it Captures",
+          "content": "• <strong>Epistemic:</strong> Parameter uncertainty via pseudo-ensemble<br>• <strong>Practical Note:</strong> Less practical for very large LLMs (compute cost, architecture changes)"
+        }
+      ]
+    }
+  ],
+
+  "popups": {
+    "variance": {
+      "title": "Var - Variance",
+      "color": "#d97706",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "How spread out the {term:output:predictions} are. If all {term:theta:model versions} give similar answers, {term:variance:variance} is low. If they're all over the place, {term:variance:variance} is high." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:variance:Var}({term:input:X}) = {term:expectation:E}[({term:input:X} - μ)²] - the {term:expectation:expected} squared deviation from the mean.", "formula": "{term:variance:Var}({term:input:X}) = {term:expectation:E}[{term:input:X}²] − {term:expectation:E}[{term:input:X}]²" },
+        { "type": "llm", "title": "In LLMs", "content": "{term:variance:Variance} of what? <strong>{term:output:Token} {term:posterior:probabilities}</strong>. If you sample 10 different {term:theta:model checkpoints} and ask them to predict the next {term:output:token} after 'The capital of France is', {term:variance:variance} measures how much their {term:posterior:probability} for 'Paris' differs (e.g., 0.82, 0.91, 0.76, 0.88...)." },
+        { "type": "classic-ml", "title": "In Classic ML", "content": "<strong>Random Forest:</strong> If 90/100 trees predict \"spam\", {term:variance:variance} across trees is low (confident). If 50/50 split, {term:variance:variance} is high.<br><br><strong>Linear Regression:</strong> Confidence intervals come from prediction {term:variance:variance}. House price = $350K ± $15K means {term:variance:variance} captures uncertainty in the estimate." },
+        { "type": "example", "title": "Example", "content": "{term:input:Prompt}: 'The CEO of Apple is'<br><br>{term:theta:Model} predicts: {Tim: 0.85, Cook: 0.82, Steve: 0.05, ...}<br><br>If 5 {term:theta:model checkpoints} give {term:posterior:probabilities} for 'Tim': [0.82, 0.88, 0.79, 0.91, 0.85], the {term:variance:variance} is ~0.0018. Low {term:variance:variance} = consistent {term:output:predictions}." }
+      ]
+    },
+    "theta": {
+      "title": "θ (theta) - Model Parameters",
+      "color": "#16a34a",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The 'brain' of the {term:theta:model} - all the learned weights that determine how it responds. Different {term:theta:θ} = different {term:theta:model}." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The set of all learnable {term:theta:parameters}. For neural networks: weights, biases, embeddings." },
+        { "type": "llm", "title": "In LLMs", "content": "{term:theta:θ} represents <strong>billions of {term:theta:parameters}</strong>: embedding matrices, attention weights (Q, K, V projections), FFN weights, layer norms. For GPT-4: ~1.7T {term:theta:parameters}. For LLaMA-7B: 7 billion {term:theta:parameters}." },
+        { "type": "classic-ml", "title": "In Classic ML", "content": "<strong>Linear Regression:</strong> {term:theta:θ} = weight coefficients (β₀, β₁, ..., βₙ). A house price model might have θ = [intercept, coef_sqft, coef_beds, coef_location].<br><br><strong>Random Forest:</strong> {term:theta:θ} = all tree structures, split thresholds, and leaf values across all trees." },
+        { "type": "example", "title": "Example", "content": "LLaMA-7B has {term:theta:θ} with 7 billion floats stored in ~14GB (FP16).<br><br>{term:theta:θ} includes:<br>• {term:output:Token} embeddings: [vocab_size × hidden_dim]<br>• 32 transformer layers, each with attention + FFN weights<br>• Final classification head<br><br>Different checkpoints (epoch 1 vs epoch 10) have different {term:theta:θ} values." }
+      ]
+    },
+    "output": {
+      "title": "y - Output",
+      "color": "#db2777",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The thing the {term:theta:model} produces - what we're trying to predict." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The target random variable. In supervised learning, it's the label. In generation, it's the {term:output:output} sequence." },
+        { "type": "llm", "title": "In LLMs", "content": "{term:output:y} is the <strong>next token</strong> (or full completion). It's not just a single word - it's a {term:posterior:probability distribution} over the entire vocabulary. Shape: [vocab_size] ≈ [50,000+] {term:posterior:probabilities} summing to 1." },
+        { "type": "example", "title": "Example", "content": "{term:input:Prompt}: 'Hello, how are'<br><br>{term:output:y} = {term:posterior:distribution} over all possible next tokens:<br>{you: 0.72, things: 0.08, we: 0.03, the: 0.02, ...}<br><br>The actual token chosen depends on sampling (greedy, top-k, etc.)" }
+      ]
+    },
+    "input": {
+      "title": "x - Input",
+      "color": "#475569",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "What the {term:theta:model} sees before making a {term:output:prediction} - the context, the question, the prompt." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The conditioning variable. All {term:output:predictions} are made conditional on {term:input:x}: {term:posterior:p}({term:output:y}|{term:input:x})." },
+        { "type": "llm", "title": "In LLMs", "content": "{term:input:x} is the <strong>prompt + conversation history</strong>. It's tokenized into a sequence of {term:output:token} IDs that get embedded and processed through transformer layers." },
+        { "type": "example", "title": "Example", "content": "For the {term:input:prompt}: 'Translate to French: Good morning'<br><br>{term:input:x} = [Translate, to, French, :, Good, morning]<br><br>The {term:theta:model} predicts {term:output:y} (next tokens) conditioned on this full sequence {term:input:x}." }
+      ]
+    },
+    "data": {
+      "title": "D - Training Data",
+      "color": "#854d0e",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Everything the {term:theta:model} has seen during training. The 'textbooks' it learned from." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The observed dataset: {term:data:D} = {({term:input:x₁}, {term:output:y₁}), ({term:input:x₂}, {term:output:y₂}), ... ({term:input:xₙ}, {term:output:yₙ})}. Used to estimate {term:theta:θ}." },
+        { "type": "llm", "title": "In LLMs", "content": "{term:data:D} is the <strong>pretraining corpus</strong>: web pages (Common Crawl), books, Wikipedia, GitHub code, etc. For GPT-3: ~300B {term:output:tokens} (weighted training mix). The coverage and quality of {term:data:D} determines what the {term:theta:model} 'knows'." }
+      ]
+    },
+    "posterior": {
+      "title": "p(θ|D) - Posterior Distribution",
+      "color": "#7c3aed",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Given the {term:data:training data}, what are all the 'plausible' sets of {term:theta:model weights}? It's not just one {term:theta:θ}, but a {term:posterior:distribution} over many possible {term:theta:θ} values." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The Bayesian posterior: {term:posterior:p}({term:theta:θ}|{term:data:D}) ∝ {term:posterior:p}({term:data:D}|{term:theta:θ}){term:posterior:p}({term:theta:θ}). Combines prior beliefs with {term:data:data} likelihood.", "formula": "{term:posterior:p}({term:theta:θ}|{term:data:D}) = {term:posterior:p}({term:data:D}|{term:theta:θ}){term:posterior:p}({term:theta:θ}) / {term:posterior:p}({term:data:D})" },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "In practice, we can't compute exact {term:posterior:posteriors} for LLMs (too many {term:theta:parameters}). We approximate via:<br>• <strong>Ensembles</strong>: Train N {term:theta:models}, each represents a 'sample' from {term:posterior:p}({term:theta:θ}|{term:data:D})<br>• <strong>MC Dropout</strong>: Different dropout masks = different effective {term:theta:θ}<br>• <strong>Different checkpoints</strong>: Same training, different epochs"
+        }
+      ]
+    },
+    "expectation": {
+      "title": "E - Expectation (Mean)",
+      "color": "#172554",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The {term:expectation:average}. If you repeat something many times, {term:expectation:E} gives you the typical/expected result." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:expectation:E}[{term:input:X}] = ∫ {term:input:x}·{term:posterior:p}({term:input:x})dx for continuous, or Σ {term:input:xᵢ}·{term:posterior:p}({term:input:xᵢ}) for discrete.", "formula": "{term:expectation:E}[{term:input:X}] = Σ {term:input:xᵢ} · {term:posterior:P}({term:input:xᵢ})" },
+        { "type": "llm", "title": "In LLMs", "content": "{term:expectation:E} is used as: <strong>'{term:expectation:average} over {term:theta:models}'</strong>.<br><br>{term:expectation:E}[{term:posterior:p}({term:theta:θ}|{term:data:D})][something] means: take many {term:theta:model} samples (different {term:theta:θ}), compute 'something' for each, then {term:expectation:average}." },
+        { "type": "example", "title": "Example", "content": "5 {term:theta:models} predict {term:posterior:P}('Paris') as: [0.82, 0.88, 0.79, 0.91, 0.85]<br><br>{term:expectation:E}[{term:posterior:P}('Paris')] = (0.82+0.88+0.79+0.91+0.85)/5 = 0.85<br><br>This is the 'consensus' {term:posterior:probability} across {term:theta:models}." }
+      ]
+    },
+    "entropy": {
+      "title": "H - Entropy",
+      "color": "#0891b2",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "How 'spread out' a {term:posterior:probability distribution} is. Sharp peak = low {term:entropy:entropy} (confident). Flat {term:posterior:distribution} = high {term:entropy:entropy} (uncertain)." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:entropy:H}({term:posterior:p}) = −Σ {term:posterior:p}({term:input:x})·log {term:posterior:p}({term:input:x}). Measures {term:expectation:expected} surprise/information content.", "formula": "{term:entropy:H} = −Σ {term:posterior:p}({term:input:x}) log {term:posterior:p}({term:input:x})" },
+        { "type": "llm", "title": "In LLMs", "content": "{term:entropy:H} measures <strong>{term:output:token}-level confidence</strong>. For each next-{term:output:token} {term:output:prediction}, compute {term:entropy:H} over the vocabulary {term:posterior:distribution}.<br><br>Range: 0 (one {term:output:token} has {term:posterior:prob} 1) to log(vocab_size) ≈ 15 bits (uniform over 50k {term:output:tokens})." },
+        { "type": "example", "title": "Example", "content": "{term:input:Prompt}: 'The capital of France is'<br>{term:posterior:Distribution}: {Paris: 0.95, Lyon: 0.03, ...}<br>{term:entropy:H} ≈ 0.34 bits (very confident)<br><br>{term:input:Prompt}: 'I feel'<br>{term:posterior:Distribution}: {good: 0.15, bad: 0.12, happy: 0.10, ...}<br>{term:entropy:H} ≈ 4.2 bits (uncertain, many options)" }
+      ]
+    },
+    "epistemic-var": {
+      "title": "Epistemic Uncertainty (Variance Form)",
+      "color": "#2563eb",
+      "sections": [
+        { "type": "equation-display", "content": "{term:variance:Var}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:expectation:E}({term:output:y}|{term:input:x}, {term:theta:θ})]" },
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "How much do different {term:theta:model versions} <em>disagree</em> on what the {term:expectation:average} answer should be?<br><br>Think of asking 5 different GPT checkpoints: \"What's the capital of Atlantis?\" If they each give a different confident answer, that {term:variance:disagreement} is epistemic uncertainty - the {term:theta:models} don't have reliable knowledge." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "The {term:variance:variance} computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:expectation:expected value} of {term:output:output y} given {term:input:input x} and a specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Reducible</em> - can be decreased with more {term:data:training data}, better architecture, or RAG." },
+        {
+          "type": "example",
+          "title": "LLM Example",
+          "content": "<strong>Prompt:</strong> \"What is the melting point of unobtainium?\"<br><br><strong>5 {term:theta:model checkpoints} predict:</strong><br>• Checkpoint 1: \"1200°C\"<br>• Checkpoint 2: \"Unknown element\"<br>• Checkpoint 3: \"800°C\"<br>• Checkpoint 4: \"It's fictional\"<br>• Checkpoint 5: \"1450°C\"<br><br>{term:variance:High variance} in their {term:expectation:mean predictions} → High {term:epistemic-var:epistemic uncertainty}. None of the {term:theta:models} have reliable knowledge about this."
+        }
+      ]
+    },
+    "aleatoric-var": {
+      "title": "Aleatoric Uncertainty (Variance Form)",
+      "color": "#dc2626",
+      "sections": [
+        { "type": "equation-display", "content": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:variance:Var}({term:output:y}|{term:input:x}, {term:theta:θ})]" },
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "How spread-out is each {term:theta:model's} own prediction, {term:expectation:on average}?<br><br>Think of the prompt: \"Tell me a joke.\" Even a <em>perfect</em> {term:theta:model} would have a flat {term:output:token distribution} - thousands of valid jokes exist! This internal {term:variance:spread} is unavoidable because the {term:input:task itself} is ambiguous, not because the {term:theta:model} lacks knowledge."
+        },
+        { "type": "divider" },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:variance:variance} of {term:output:output y} given {term:input:input x} and that specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite {term:data:data} or a perfect {term:theta:model}. It's intrinsic to the task."
+        },
+        { "type": "example", "title": "LLM Example", "content": "<strong>Prompt:</strong> \"Tell me a joke\"<br><br><strong>Each {term:theta:model}'s internal {term:variance:variance}:</strong><br>• Model 1: Var = 2.8 (many tokens equally likely)<br>• Model 2: Var = 2.5<br>• Model 3: Var = 2.7<br><br>{term:expectation:Average} = 2.67 = {term:aleatoric-var:aleatoric uncertainty}. All {term:theta:models} agree the task is inherently ambiguous - there's no single \"correct\" joke." }
+      ]
+    },
+    "total-uncertainty": {
+      "title": "Total Uncertainty",
+      "color": "#7e22ce",
+      "sections": [
+        { "type": "intuitive", "title": "Intuition", "content": "The complete 'I don't know' of the model. Combines both 'I lack knowledge' ({term:epistemic-var:epistemic}) and 'The task is ambiguous' ({term:aleatoric-var:aleatoric})." },
+        {
+          "type": "scientific",
+          "title": "The Decomposition",
+          "content": "<strong>{term:total-uncertainty:Total} = {term:epistemic-var:Epistemic} + {term:aleatoric-var:Aleatoric}</strong><br><br>This is the Law of Total {term:variance:Variance} / {term:entropy:entropy} decomposition. We can separate the sources of uncertainty.",
+          "formula": "{term:variance:Var}({term:output:y}|{term:input:x}) = {term:variance:Var}[{term:expectation:E}({term:output:y}|{term:input:x},{term:theta:θ})] + {term:expectation:E}[{term:variance:Var}({term:output:y}|{term:input:x},{term:theta:θ})]"
+        },
+        { "type": "llm", "title": "In LLMs", "content": "{term:total-uncertainty:Total uncertainty} in a token prediction comes from:<br>• The model not knowing the answer ({term:epistemic-var:epistemic})<br>• Multiple tokens being valid completions ({term:aleatoric-var:aleatoric})<br><br>Uncertainty quantification helps us separate these to take appropriate action." },
+        { "type": "example", "title": "Example", "content": "Prompt: 'The 47th prime number is'<br><br>High {term:epistemic-var:epistemic}: Model might not know this fact<br>Low {term:aleatoric-var:aleatoric}: Once you know it, there's only one answer<br><br>vs.<br><br>Prompt: 'Write a haiku about spring'<br><br>Low {term:epistemic-var:epistemic}: Model knows how to write haikus<br>High {term:aleatoric-var:aleatoric}: Many valid haikus exist" }
+      ]
+    }
+  }
+}

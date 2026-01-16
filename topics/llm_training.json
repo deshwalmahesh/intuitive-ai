@@ -1,0 +1,538 @@
+{
+  "meta": {
+    "title": "LLM Training: From Pre-training to RLHF",
+    "subtitle": "A deep dive into how Large Language Models are trained",
+    "version": "1.0"
+  },
+
+  "navigation": {
+    "sections": [
+      {
+        "id": 0,
+        "title": " Pre-training",
+        "slides": ["slide-1-1", "slide-1-2", "slide-1-3"]
+      },
+      {
+        "id": 1,
+        "title": " Supervised Fine-Tuning",
+        "slides": ["slide-2-1", "slide-2-2", "slide-2-3"]
+      },
+      {
+        "id": 2,
+        "title": " RLHF (PPO & GRPO)",
+        "slides": ["slide-3-1", "slide-3-2", "slide-3-3"]
+      }
+    ]
+  },
+
+  "colorPalette": {
+    "loss": "#dc2626",
+    "gradient": "#16a34a",
+    "weights": "#7c3aed",
+    "data": "#854d0e",
+    "token": "#db2777",
+    "probability": "#0891b2",
+    "reward": "#f59e0b",
+    "policy": "#4f46e5",
+    "value": "#0d9488",
+    "kl": "#9333ea",
+    "advantage": "#2563eb",
+    "reference": "#64748b"
+  },
+
+  "terms": {
+    "loss": { "display": "L", "colorKey": "loss", "popupKey": "loss" },
+    "gradient": { "display": "∇", "colorKey": "gradient", "popupKey": "gradient" },
+    "weights": { "display": "θ", "colorKey": "weights", "popupKey": "weights" },
+    "data": { "display": "D", "colorKey": "data", "popupKey": "data" },
+    "token": { "display": "t", "colorKey": "token", "popupKey": "token" },
+    "probability": { "display": "P", "colorKey": "probability", "popupKey": "probability" },
+    "reward": { "display": "R", "colorKey": "reward", "popupKey": "reward" },
+    "policy": { "display": "π", "colorKey": "policy", "popupKey": "policy" },
+    "value": { "display": "V", "colorKey": "value", "popupKey": "value" },
+    "kl": { "display": "KL", "colorKey": "kl", "popupKey": "kl" },
+    "advantage": { "display": "A", "colorKey": "advantage", "popupKey": "advantage" },
+    "reference": { "display": "π_ref", "colorKey": "reference", "popupKey": "reference" }
+  },
+
+  "slides": [
+    {
+      "id": "slide-1-1",
+      "sectionIndex": 0,
+      "title": "What is Pre-training?",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Foundation",
+          "content": "<strong>Pre-training</strong> is teaching an LLM to predict the next {term:token:token} given previous tokens. It's like teaching a child to read by showing them billions of sentences."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Objective:</strong> Learn general language patterns, facts, and reasoning abilities from massive text corpora.<br><br><strong>Scale:</strong> Trillions of {term:token:tokens}, thousands of GPUs, weeks to months of training."
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Aspect", "Details"],
+          "rows": [
+            ["<strong>Data</strong>", "Web text (Common Crawl), books, Wikipedia, code (GitHub)"],
+            ["<strong>Objective</strong>", "Next token prediction (causal LM) or masked LM"],
+            ["<strong>Compute</strong>", "10²³ - 10²⁵ FLOPs for modern LLMs"],
+            ["<strong>Result</strong>", "Base model that can complete text but isn't instruction-following"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-1-2",
+      "sectionIndex": 0,
+      "title": "The Pre-training Objective",
+      "content": [
+        {
+          "type": "equation",
+          "id": "pretraining_loss",
+          "label": "Cross-Entropy Loss (Next Token Prediction)",
+          "parts": [
+            {"type": "term", "key": "loss", "text": "L"},
+            {"type": "operator", "symbol": "="},
+            {"type": "raw", "text": "−"},
+            {
+              "type": "labeled-expression",
+              "underline": "blue",
+              "label": "Sum over sequence",
+              "labelColor": "probability",
+              "popupKey": "probability",
+              "content": [
+                {"type": "raw", "text": "Σ"},
+                {"type": "subscript", "content": [{"type": "raw", "text": "i"}]}
+              ]
+            },
+            {"type": "raw", "text": " log "},
+            {
+              "type": "labeled-expression",
+              "underline": "orange",
+              "label": "Model probability",
+              "labelColor": "weights",
+              "popupKey": "weights",
+              "content": [
+                {"type": "term", "key": "probability", "text": "P"},
+                {"type": "subscript", "content": [{"type": "term", "key": "weights", "text": "θ"}]},
+                {"type": "raw", "text": "("},
+                {"type": "term", "key": "token", "text": "t"},
+                {"type": "subscript", "content": [{"type": "raw", "text": "i"}]},
+                {"type": "raw", "text": " | "},
+                {"type": "term", "key": "token", "text": "t"},
+                {"type": "subscript", "content": [{"type": "raw", "text": "<i"}]},
+                {"type": "raw", "text": ")"}
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "Minimize the negative log {term:probability:probability} of predicting the correct next {term:token:token} given all previous tokens. The {term:weights:model weights θ} are updated via {term:gradient:gradient descent}."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "What happens during training?",
+          "content": "1. Sample a batch of text sequences from {term:data:training data}<br>2. For each {term:token:token}, compute model's {term:probability:probability distribution} over vocabulary<br>3. Calculate {term:loss:cross-entropy loss} against ground truth<br>4. Backpropagate to compute {term:gradient:gradients}<br>5. Update {term:weights:weights} using optimizer (Adam, AdamW)"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-3",
+      "sectionIndex": 0,
+      "title": "Pre-training Results",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What the model learns",
+          "content": "• <strong>Syntax & Grammar:</strong> Proper sentence structure<br>• <strong>World Knowledge:</strong> Facts about entities, events, concepts<br>• <strong>Reasoning Patterns:</strong> Logical chains, analogies<br>• <strong>Code Understanding:</strong> Programming languages, APIs<br>• <strong>Multilinguality:</strong> Many languages from diverse web data"
+        },
+        {
+          "type": "insight-box",
+          "title": "But there's a problem...",
+          "content": "The base model predicts <em>likely continuations</em>, not <em>helpful responses</em>.<br><br><strong>Prompt:</strong> 'What is the capital of France?'<br><strong>Base Model:</strong> 'What is the capital of Germany? What is the capital of Italy?...' (continues the pattern)<br><br>We need <strong>fine-tuning</strong> to make it assistant-like!"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Model", "Training Tokens", "Parameters"],
+          "rows": [
+            ["GPT-3", "300B", "175B"],
+            ["LLaMA 2", "2T", "7B-70B"],
+            ["GPT-4", "~13T (estimated)", "~1.7T (estimated)"],
+            ["LLaMA 3", "15T+", "8B-405B"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-2-1",
+      "sectionIndex": 1,
+      "title": "Supervised Fine-Tuning (SFT)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is SFT?",
+          "content": "<strong>SFT</strong> = Teaching the model to follow instructions by showing it (instruction, response) pairs.<br><br>Unlike pre-training which uses raw text, SFT uses <em>curated</em> high-quality examples of how an assistant should behave."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Goal:</strong> Transform a text completion model into an instruction-following assistant."
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Aspect", "Pre-training", "SFT"],
+          "rows": [
+            ["<strong>Data</strong>", "Raw internet text", "Curated (prompt, response) pairs"],
+            ["<strong>Scale</strong>", "Trillions of tokens", "Thousands to millions of examples"],
+            ["<strong>Objective</strong>", "Next token prediction", "Next token on response only"],
+            ["<strong>Quality</strong>", "Noisy, diverse", "High quality, consistent style"],
+            ["<strong>Result</strong>", "Text completion", "Instruction following"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-2-2",
+      "sectionIndex": 1,
+      "title": "SFT Training Process",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Data Format",
+          "content": "<strong>Input:</strong> '[INST] What is machine learning? [/INST]'<br><strong>Target:</strong> 'Machine learning is a subset of AI that enables systems to learn from data...'<br><br>The {term:loss:loss} is only computed on the <em>response</em> tokens, not the instruction."
+        },
+        {
+          "type": "equation",
+          "id": "sft_loss",
+          "label": "SFT Loss (Response-Only)",
+          "parts": [
+            {"type": "term", "key": "loss", "text": "L"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "SFT"}]},
+            {"type": "operator", "symbol": "="},
+            {"type": "raw", "text": "−"},
+            {"type": "raw", "text": "Σ"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "response"}]},
+            {"type": "raw", "text": " log "},
+            {"type": "term", "key": "probability", "text": "P"},
+            {"type": "subscript", "content": [{"type": "term", "key": "weights", "text": "θ"}]},
+            {"type": "raw", "text": "("},
+            {"type": "term", "key": "token", "text": "t"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "i"}]},
+            {"type": "raw", "text": " | instruction, "},
+            {"type": "term", "key": "token", "text": "t"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "<i"}]},
+            {"type": "raw", "text": ")"}
+          ],
+          "explanation": {
+            "prefix": "",
+            "template": "Only the {term:token:tokens} in the response contribute to the {term:loss:loss}. The instruction provides context but isn't predicted."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Techniques",
+          "content": "• <strong>LoRA/QLoRA:</strong> Parameter-efficient fine-tuning (freeze base, train adapters)<br>• <strong>Instruction Templates:</strong> Consistent format for prompts<br>• <strong>Chat Format:</strong> Multi-turn conversation structure<br>• <strong>Data Quality:</strong> More important than quantity"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-3",
+      "sectionIndex": 1,
+      "title": "SFT Results & Limitations",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What SFT achieves",
+          "content": "✅ Follows instructions<br>✅ Answers questions directly<br>✅ Maintains consistent persona<br>✅ Formats outputs properly (code, lists, etc.)"
+        },
+        {
+          "type": "insight-box",
+          "title": "But there are limitations...",
+          "content": "❌ <strong>Imitates, doesn't optimize:</strong> Copies annotator behavior, good or bad<br>❌ <strong>Distribution mismatch:</strong> May struggle outside training distribution<br>❌ <strong>No preference learning:</strong> Doesn't know which of two good answers is <em>better</em><br><br>This is where <strong>RLHF</strong> comes in!"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Dataset", "Size", "Source"],
+          "rows": [
+            ["Dolly", "15K", "Databricks employees"],
+            ["OpenAssistant", "161K", "Crowdsourced"],
+            ["Alpaca", "52K", "GPT-3.5 generated"],
+            ["UltraChat", "1.5M", "GPT-3.5/4 generated"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-3-1",
+      "sectionIndex": 2,
+      "title": "Reinforcement Learning from Human Feedback",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is RLHF?",
+          "content": "<strong>RLHF</strong> = Using human preferences to train a {term:reward:reward model}, then optimizing the LLM to maximize that {term:reward:reward} while staying close to the SFT model.<br><br>It's teaching the model not just <em>what</em> to say, but <em>how well</em> to say it."
+        },
+        {
+          "type": "html",
+          "content": "<strong>The Three Steps:</strong><br>1. <strong>SFT</strong> - Create initial instruction-following model<br>2. <strong>Reward Model</strong> - Train model to predict human preferences<br>3. <strong>RL Optimization</strong> - Optimize {term:policy:policy} against {term:reward:reward} with {term:kl:KL} constraint"
+        },
+        {
+          "type": "insight-box",
+          "title": "Why not just use more SFT data?",
+          "content": "• Human preferences are <em>comparative</em>: 'A is better than B' is easier to annotate than writing perfect responses<br>• SFT copies behavior; RLHF optimizes for <em>quality</em><br>• RLHF learns subtle preferences that are hard to explicitly write down"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-2",
+      "sectionIndex": 2,
+      "title": "PPO: Proximal Policy Optimization",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Classic RLHF Algorithm",
+          "content": "<strong>PPO</strong> is the standard RL algorithm used in RLHF. It updates the {term:policy:policy} to maximize {term:reward:reward} while constraining how much the {term:policy:policy} can change in each step."
+        },
+        {
+          "type": "equation",
+          "id": "ppo_objective",
+          "label": "PPO Objective",
+          "parts": [
+            {"type": "term", "key": "loss", "text": "L"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "PPO"}]},
+            {"type": "operator", "symbol": "="},
+            {"type": "raw", "text": "𝔼["},
+            {"type": "raw", "text": " min("},
+            {
+              "type": "labeled-expression",
+              "underline": "blue",
+              "label": "Ratio",
+              "labelColor": "policy",
+              "popupKey": "policy",
+              "content": [
+                {"type": "raw", "text": "r("},
+                {"type": "term", "key": "weights", "text": "θ"},
+                {"type": "raw", "text": ")"}
+              ]
+            },
+            {"type": "term", "key": "advantage", "text": "A"},
+            {"type": "raw", "text": ", clip(r, 1−ε, 1+ε)"},
+            {"type": "term", "key": "advantage", "text": "A"},
+            {"type": "raw", "text": ") ]"},
+            {"type": "raw", "text": " − β·"},
+            {
+              "type": "labeled-expression",
+              "underline": "orange",
+              "label": "KL Penalty",
+              "labelColor": "kl",
+              "popupKey": "kl",
+              "content": [
+                {"type": "term", "key": "kl", "text": "KL"},
+                {"type": "raw", "text": "("},
+                {"type": "term", "key": "policy", "text": "π"},
+                {"type": "raw", "text": " || "},
+                {"type": "term", "key": "reference", "text": "π_ref"},
+                {"type": "raw", "text": ")"}
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "",
+            "template": "Maximize {term:reward:reward} (via {term:advantage:advantage}) while keeping the {term:policy:policy} close to the {term:reference:reference model} using a {term:kl:KL divergence} penalty."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Components",
+          "content": "• <strong>r(θ):</strong> Ratio of new to old {term:policy:policy} {term:probability:probabilities}<br>• <strong>{term:advantage:A}:</strong> How much better the action is than expected<br>• <strong>clip:</strong> Prevents too large updates<br>• <strong>{term:kl:KL} penalty:</strong> Prevents model from drifting too far from SFT"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-3",
+      "sectionIndex": 2,
+      "title": "GRPO: Group Relative Policy Optimization",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "A Simpler Alternative",
+          "content": "<strong>GRPO</strong> (from DeepSeek) eliminates the need for a separate {term:value:value function} by computing {term:advantage:advantages} relative to a group of samples for the same prompt."
+        },
+        {
+          "type": "equation",
+          "id": "grpo_advantage",
+          "label": "GRPO Advantage Estimation",
+          "parts": [
+            {"type": "term", "key": "advantage", "text": "A"},
+            {"type": "subscript", "content": [{"type": "raw", "text": "i"}]},
+            {"type": "operator", "symbol": "="},
+            {
+              "type": "labeled-expression",
+              "underline": "blue",
+              "label": "Normalized reward",
+              "labelColor": "reward",
+              "popupKey": "reward",
+              "content": [
+                {"type": "raw", "text": "("},
+                {"type": "term", "key": "reward", "text": "R"},
+                {"type": "subscript", "content": [{"type": "raw", "text": "i"}]},
+                {"type": "raw", "text": " − mean("},
+                {"type": "term", "key": "reward", "text": "R"},
+                {"type": "raw", "text": ")) / std("},
+                {"type": "term", "key": "reward", "text": "R"},
+                {"type": "raw", "text": ")"}
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>Key insight:</strong> ",
+            "template": "Instead of learning a {term:value:value function}, GRPO samples multiple responses per prompt and uses the group's {term:reward:reward} statistics to compute relative {term:advantage:advantages}."
+          }
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Aspect", "PPO", "GRPO"],
+          "rows": [
+            ["<strong>{term:value:Value} function</strong>", "Required (extra model)", "Not needed"],
+            ["<strong>Memory</strong>", "Higher (4 models)", "Lower (2-3 models)"],
+            ["<strong>Stability</strong>", "Sensitive to hyperparams", "More robust"],
+            ["<strong>Sample efficiency</strong>", "Better (learned baseline)", "Needs more samples per prompt"]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Why GRPO is Popular",
+          "content": "• Simpler implementation (no critic network)<br>• Used by DeepSeek for their R1 model<br>• Works well with verifiable rewards (math, code)<br>• Easier to scale"
+        }
+      ]
+    }
+  ],
+
+  "popups": {
+    "loss": {
+      "title": "L - Loss Function",
+      "color": "#dc2626",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "A number that tells us how wrong the model is. Lower {term:loss:loss} = better predictions. Training tries to minimize this." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "In LLMs, typically cross-entropy: {term:loss:L} = −Σ log {term:probability:P}(correct {term:token:token}). Measures negative log-likelihood of ground truth." },
+        { "type": "example", "title": "Example", "content": "If model predicts 'Paris' with 90% confidence and it's correct:<br>{term:loss:L} = −log(0.9) ≈ 0.105 (low, good!)<br><br>If model predicts 'Paris' with 10% confidence:<br>{term:loss:L} = −log(0.1) ≈ 2.3 (high, bad!)" }
+      ]
+    },
+    "gradient": {
+      "title": "∇ - Gradient",
+      "color": "#16a34a",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The direction to nudge {term:weights:weights} to reduce {term:loss:loss}. Like a compass pointing downhill." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:gradient:∇}L = vector of partial derivatives of {term:loss:loss} w.r.t. each {term:weights:weight}. Points in direction of steepest increase." },
+        { "type": "example", "title": "Example", "content": "If {term:gradient:∇}L = [0.1, -0.2, 0.05], we update weights:<br>{term:weights:θ_new} = {term:weights:θ} - lr × {term:gradient:∇}L<br>= {term:weights:θ} - 0.001 × [0.1, -0.2, 0.05]" }
+      ]
+    },
+    "weights": {
+      "title": "θ - Model Weights",
+      "color": "#7c3aed",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "All the numbers inside the neural network that get learned during training. The 'brain' of the model." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:weights:θ} ∈ ℝⁿ where n = billions for modern LLMs. Includes embeddings, attention weights, MLP weights, layer norms." },
+        { "type": "example", "title": "Example", "content": "LLaMA-7B: 7 billion {term:weights:parameters}<br>GPT-4: ~1.7 trillion {term:weights:parameters}<br><br>Stored as fp16/bf16 floats, so 7B params ≈ 14GB" }
+      ]
+    },
+    "data": {
+      "title": "D - Training Data",
+      "color": "#854d0e",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The text the model learns from. Quality and diversity of {term:data:data} directly impacts model capabilities." },
+        { "type": "llm", "title": "In Pre-training", "content": "Trillions of {term:token:tokens} from web, books, code. Common Crawl, Wikipedia, Stack Overflow, GitHub." },
+        { "type": "llm", "title": "In SFT", "content": "Curated (instruction, response) pairs. 10K-1M examples, human-written or AI-generated." }
+      ]
+    },
+    "token": {
+      "title": "t - Token",
+      "color": "#db2777",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "A chunk of text - could be a word, part of a word, or a character. LLMs process text as sequences of {term:token:tokens}." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "Output of tokenizer (BPE, SentencePiece). Vocabulary typically 32K-100K {term:token:tokens}." },
+        { "type": "example", "title": "Example", "content": "'Hello, world!' → ['Hello', ',', ' world', '!'] (4 {term:token:tokens})<br>'Unbelievable' → ['Un', 'believ', 'able'] (3 {term:token:tokens})" }
+      ]
+    },
+    "probability": {
+      "title": "P - Probability",
+      "color": "#0891b2",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "How confident the model is about a {term:token:token}. Ranges from 0 (impossible) to 1 (certain), sums to 1 over vocabulary." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:probability:P}({term:token:t}|context) = softmax(logits)[{term:token:t}]. Distribution over vocabulary at each position." },
+        { "type": "example", "title": "Example", "content": "'The capital of France is' →<br>{term:probability:P}('Paris') = 0.92<br>{term:probability:P}('Lyon') = 0.03<br>{term:probability:P}('Berlin') = 0.01<br>..." }
+      ]
+    },
+    "reward": {
+      "title": "R - Reward",
+      "color": "#f59e0b",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "A score that says how 'good' a response is. Comes from a reward model trained on human preferences." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:reward:R}: (prompt, response) → ℝ. Higher = more preferred. Trained to predict which response humans prefer." },
+        { "type": "example", "title": "Example", "content": "Prompt: 'Explain gravity'<br><br>Response A (detailed, accurate): {term:reward:R} = 0.85<br>Response B (brief, vague): {term:reward:R} = 0.32<br><br>RL training maximizes expected {term:reward:R}." }
+      ]
+    },
+    "policy": {
+      "title": "π - Policy",
+      "color": "#4f46e5",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The LLM itself, viewed as a function that takes prompts and produces responses. In RL terms, the 'agent' that chooses actions ({term:token:tokens})." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:policy:π}(response|prompt) = Π {term:probability:P}({term:token:t_i}|prompt, {term:token:t_<i}). The full distribution over responses." },
+        { "type": "example", "title": "Example", "content": "{term:policy:π_θ}('Hello!' | 'Hi') = 0.05<br>{term:policy:π_θ}('Hi there!' | 'Hi') = 0.12<br><br>RL training changes {term:weights:θ} to increase {term:probability:probability} of high-{term:reward:reward} responses." }
+      ]
+    },
+    "value": {
+      "title": "V - Value Function",
+      "color": "#0d9488",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Predicts how much total {term:reward:reward} we expect from a given state. Used as a baseline to reduce variance in RL." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:value:V}(s) = 𝔼[Σ {term:reward:R}_t | s_0 = s]. Expected return starting from state s." },
+        { "type": "llm", "title": "In RLHF", "content": "Often a separate model (critic) that predicts {term:reward:reward} for partial responses. Not needed in GRPO!" }
+      ]
+    },
+    "kl": {
+      "title": "KL - KL Divergence",
+      "color": "#9333ea",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "Measures how different two {term:probability:probability} distributions are. Used to keep the RL {term:policy:policy} close to the SFT model." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:kl:KL}(P||Q) = Σ P(x) log(P(x)/Q(x)). Always ≥ 0, equals 0 only if P = Q.", "formula": "{term:kl:KL}({term:policy:π} || {term:reference:π_ref}) = 𝔼_{term:policy:π}[log {term:policy:π}(a|s) - log {term:reference:π_ref}(a|s)]" },
+        { "type": "example", "title": "Why it matters", "content": "Without {term:kl:KL} penalty, RL might find 'reward hacking' - responses that get high {term:reward:reward} but are nonsensical. {term:kl:KL} keeps model grounded in SFT behavior." }
+      ]
+    },
+    "advantage": {
+      "title": "A - Advantage",
+      "color": "#2563eb",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "How much better an action is compared to the average. Positive = better than expected, negative = worse." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:advantage:A}(s,a) = Q(s,a) - {term:value:V}(s). Or in GRPO: normalized {term:reward:reward} within a group.", "formula": "{term:advantage:A} = {term:reward:R} - baseline" },
+        { "type": "example", "title": "Example", "content": "Group of 4 responses with {term:reward:rewards} [0.2, 0.5, 0.8, 0.3]<br>Mean = 0.45, Std = 0.23<br><br>{term:advantage:A} for response with R=0.8:<br>= (0.8 - 0.45) / 0.23 = 1.52 (strongly positive)" }
+      ]
+    },
+    "reference": {
+      "title": "π_ref - Reference Policy",
+      "color": "#64748b",
+      "sections": [
+        { "type": "intuitive", "title": "Intuitive Definition", "content": "The SFT model we started with, frozen. Used as an anchor to prevent the RL {term:policy:policy} from going crazy." },
+        { "type": "divider" },
+        { "type": "scientific", "title": "", "content": "{term:reference:π_ref} = copy of {term:policy:π} before RL training. {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) penalizes drift." },
+        { "type": "example", "title": "Why it matters", "content": "If {term:policy:π} says 'Great answer!' to everything (gets high {term:reward:reward}), {term:kl:KL} penalty kicks in because {term:reference:π_ref} wouldn't do that." }
+      ]
+    }
+  }
+}

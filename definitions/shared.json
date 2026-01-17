@@ -200,12 +200,18 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Cross-entropy {term:loss:loss} measures the negative log-likelihood of the correct {term:token:token}. Formula: {term:loss:L} = −Σ log {term:probability:P}(correct {term:token:token} | context). Lower values indicate the {term:model:model} assigns higher {term:probability:probability} to correct answers."
+          "content": "Cross-entropy {term:loss:loss} measures the negative log-likelihood of the correct {term:token:token}. Lower values indicate the {term:model:model} assigns higher {term:probability:probability} to correct answers.",
+          "formula": "{term:loss:L} = −Σ log {term:probability:P}(correct {term:token:token} | context)"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> {term:model:Model} sees 'The capital of France is ___'<br><strong>Step 2:</strong> {term:model:Model} predicts {term:probability:probabilities} for every word in {term:vocabulary:vocabulary}<br><strong>Step 3:</strong> {term:model:Model} assigns 90% to 'Paris' (the correct answer)<br><strong>Step 4:</strong> Calculate {term:loss:L} = −log(0.9) ≈ 0.105<br><strong>Step 5:</strong> Low {term:loss:loss}! {term:model:Model} was confident and correct.<br><br><strong>Bad case:</strong> If {term:model:model} only gave 10% to 'Paris':<br>{term:loss:L} = −log(0.1) ≈ 2.3 (high = needs improvement)"
+          "content": "<strong>Prompt:</strong> 'The capital of France is ___'<br><br>\n<strong>Step 1:</strong> {term:model:Model} outputs {term:probability:probabilities} for all {term:vocabulary:vocabulary} entries<br>\n<strong>Step 2:</strong> {term:model:Model} assigns probabilities:<br>\n<code class=\"code-block\">\n  {\"Paris\": 0.90, \"Lyon\": 0.03, \"Berlin\": 0.02, ...49997 others}\n</code>\n<strong>Step 3:</strong> Correct answer is 'Paris', so:<br>\n<code class=\"code-block\">\n  {term:loss:L} = −log(0.90) ≈ 0.105\n</code>\n<strong>Step 4:</strong> Low {term:loss:loss}! {term:model:Model} was confident and correct.<br><br>\n<strong>Bad case (low confidence):</strong><br>\n<code class=\"code-block\">\n  {\"Paris\": 0.10, \"Lyon\": 0.08, \"Berlin\": 0.07, ...}\n  {term:loss:L} = −log(0.10) ≈ 2.3 (HIGH = needs improvement!)\n</code>"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "<strong>Training objective:</strong> Minimize average {term:loss:loss} across all {term:token:tokens} in the training {term:data:corpus}.<br><br><strong>Typical values:</strong><br>• Pre-trained LLM: {term:loss:L} ≈ 2-3 (perplexity ~8-20)<br>• After fine-tuning: {term:loss:L} ≈ 1.5-2.5<br>• On memorized text: {term:loss:L} → 0"
         }
       ]
     },
@@ -224,12 +230,18 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:gradient:∇}{term:loss:L} is a vector of partial derivatives of the {term:loss:loss} function with respect to each {term:weights:weight} parameter. It points in the direction of steepest increase, so we move opposite to it."
+          "content": "{term:gradient:∇}{term:loss:L} is a vector of partial derivatives of the {term:loss:loss} function with respect to each {term:weights:weight} parameter. It points in the direction of steepest increase, so we move opposite to it.",
+          "formula": "{term:gradient:∇}{term:loss:L} = [∂{term:loss:L}/∂{term:weights:θ}₁, ∂{term:loss:L}/∂{term:weights:θ}₂, ..., ∂{term:loss:L}/∂{term:weights:θ}ₙ]"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
           "content": "<strong>Step 1:</strong> Current {term:weights:weights} θ = [2.0, 3.0, 1.5]<br><strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br><strong>Step 3:</strong> Calculate {term:gradient:gradient}: {term:gradient:∇}L = [0.1, -0.2, 0.05]<br><strong>Step 4:</strong> Apply learning rate (lr = 0.001):<br>θ_new = θ − lr × {term:gradient:∇}L<br>θ_new = [2.0, 3.0, 1.5] − [0.0001, -0.0002, 0.00005]<br><strong>Step 5:</strong> New {term:weights:weights} = [1.9999, 3.0002, 1.49995]<br><strong>Result:</strong> {term:loss:Loss} should be slightly lower now!"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "<strong>What the gradient looks like:</strong><br>\nFor LLaMA-7B, {term:gradient:∇L} has the <strong>same shape</strong> as {term:weights:θ}: 7 billion numbers!<br><br>\n<code class=\"code-block\">\n# Gradient for one attention layer (simplified)\n∇W_Q = [[0.001, -0.003, ...],  # 4096 × 4096 matrix\n        [0.002,  0.001, ...],\n        ...]\n</code>\n<strong>Gradient accumulation:</strong> With large {term:model:models}, we often can't fit the full batch in memory. We accumulate {term:gradient:gradients} over multiple mini-batches before applying the update."
         }
       ]
     },
@@ -248,7 +260,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:weights:θ} ∈ ℝⁿ where n = billions for modern LLMs. Includes embeddings, attention weights (Q, K, V projections), FFN weights, layer norms."
+          "content": "The set of all learnable parameters in a neural network. For LLMs, this includes embeddings, attention {term:weights:weights} (Q, K, V projections), FFN {term:weights:weights}, and layer norms.",
+          "formula": "{term:weights:θ} ∈ ℝⁿ where n = number of parameters"
         },
         {
           "type": "llm",
@@ -257,8 +270,8 @@
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "LLaMA-7B has {term:weights:θ} with 7 billion floats stored in ~14GB (FP16).<br><br>{term:weights:θ} includes:<br>• {term:token:Token} embeddings: [vocab_size × hidden_dim]<br>• 32 transformer layers, each with attention + FFN weights<br>• Final classification head<br><br>Different checkpoints (epoch 1 vs epoch 10) have different {term:weights:θ} values."
+          "title": "What Weights Look Like",
+          "content": "<strong>A single Linear layer (768 → 768):</strong><br>\n<code class=\"code-block\">\nW = [[ 0.023, -0.015,  0.087, ...],  # 768 columns\n     [ 0.042,  0.156, -0.034, ...],\n     [-0.008,  0.091,  0.023, ...],\n     ...                              # 768 rows\n    ]  # Shape: (768, 768) = 589,824 params\n</code>\n<strong>LLaMA-7B composition:</strong><br>\n• Token embeddings: 32,000 × 4,096 = 131M params<br>\n• Each of 32 layers: ~218M params<br>\n• Total: ~7 billion {term:weights:parameters} stored in ~14GB (FP16)"
         }
       ]
     },
@@ -287,8 +300,8 @@
         },
         {
           "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Pre-training {term:data:data}:</strong><br>Step 1: Crawl the web (Common Crawl: 250B pages)<br>Step 2: Add quality sources (Wikipedia, books, GitHub code)<br>Step 3: Filter out low-quality/harmful content<br>Step 4: Tokenize into ~2 trillion {term:token:tokens}<br><br><strong>SFT {term:data:data}:</strong><br>Step 1: Human writes instruction: 'Explain quantum physics simply'<br>Step 2: Human writes ideal response: 'Imagine particles as...'<br>Step 3: Collect 50K-1M such pairs<br>Step 4: {term:model:Model} learns to imitate these responses"
+          "title": "What Training Data Looks Like",
+          "content": "<strong>Pre-training data (next token prediction):</strong><br>\n<code class=\"code-block\">\nBatch of 4 sequences, each 512 tokens:\n[\n  [15496, 11, 995, 0, ...],     # \"Hello, world!...\"\n  [464, 3139, 286, 4881, ...],  # \"The capital of France...\"\n  [1212, 318, 257, 1332, ...],  # \"This is a test...\"\n  [8496, 284, 262, 6908, ...],  # \"Welcome to the future...\"\n]\nShape: (batch_size=4, seq_len=512)\n</code>\n<strong>SFT data (instruction-following):</strong><br>\n<code class=\"code-block\">\n{\n  \"instruction\": \"Explain quantum physics simply\",\n  \"input\": \"\",\n  \"output\": \"Imagine tiny particles that can be in...\"\n}\n</code>\n<strong>RLHF data (preference pairs):</strong><br>\n<code class=\"code-block\">\n{\n  \"prompt\": \"What's the weather?\",\n  \"chosen\": \"I don't have access to real-time data...\",\n  \"rejected\": \"It's sunny today!\"  # Hallucination!\n}\n</code>"
         }
       ]
     },
@@ -337,7 +350,7 @@
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits} for all 50K {term:vocabulary:vocab} entries<br><strong>Step 2:</strong> Apply {term:softmax:softmax} to convert to {term:probability:probabilities}<br><strong>Step 3:</strong> Result:<br>  • {term:probability:P}('Paris') = 0.92<br>  • {term:probability:P}('Lyon') = 0.03<br>  • {term:probability:P}('Berlin') = 0.01<br>  • ...49,996 other {term:token:tokens} share remaining 0.04<br><br>{term:summation:Σ} of all {term:probability:probabilities} = 1.0 (always!)"
+          "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br>\n<strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits} for all 50K {term:vocabulary:vocab} entries<br>\n<strong>Step 2:</strong> Apply {term:softmax:softmax} to convert to {term:probability:probabilities}<br>\n<strong>Step 3:</strong> Result (showing top tokens):<br>\n<code class=\"code-block\">\n{\n  \"Paris\":  0.92,\n  \"Lyon\":   0.03,\n  \"Berlin\": 0.01,\n  \"Rome\":   0.005,\n  ...49,996 others share 0.035\n}\n</code>\n<strong>Key property:</strong> {term:summation:Σ} of ALL {term:probability:probabilities} = 1.0 (always!)"
         }
       ]
     },
@@ -356,7 +369,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:reward:R}: (prompt, response) → ℝ is a scalar function trained on human preference {term:data:data}. Given pairs (response_A, response_B) where humans prefer A, the {term:reward:reward} {term:model:model} learns: {term:reward:R}(A) > {term:reward:R}(B). Training uses Bradley-Terry model with cross-entropy {term:loss:loss}."
+          "content": "A scalar function trained on human preference {term:data:data}. Given pairs (response_A, response_B) where humans prefer A, the {term:reward:reward} {term:model:model} learns to assign higher scores to preferred responses. Training uses Bradley-Terry model with cross-entropy {term:loss:loss}.",
+          "formula": "{term:reward:R}: (prompt, response) → ℝ"
         },
         {
           "type": "example",
@@ -380,7 +394,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:policy:π_θ}(response|prompt) = ∏ᵢ {term:probability:P}({term:token:tᵢ}|prompt, {term:token:t}<i) where {term:weights:θ} are the {term:model:model} parameters. The {term:policy:policy} defines a distribution over all possible responses."
+          "content": "A {term:policy:policy} maps prompts to {term:probability:probability} distributions over responses. In LLMs, it's the full {term:model:model} with {term:weights:weights} {term:weights:θ}. Each response's {term:probability:probability} is the product of {term:token:token} {term:probability:probabilities}.",
+          "formula": "{term:policy:π}_{term:weights:θ}(response|prompt) = ∏ᵢ {term:probability:P}({term:token:t}ᵢ|prompt, {term:token:t}₁...{term:token:t}ᵢ₋₁)"
         },
         {
           "type": "example",
@@ -404,7 +419,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:value:V}(s) = 𝔼[Σ {term:reward:R}_t | s_0 = s] is the {term:expectation:expected} cumulative {term:reward:reward} from state s. In RLHF, a separate 'critic' network estimates {term:value:V} to compute {term:advantage:advantages}: {term:advantage:A} = {term:reward:R} - {term:value:V}."
+          "content": "The {term:expectation:expected} cumulative {term:reward:reward} from a given state. In RLHF, a 'critic' network estimates {term:value:V} to compute {term:advantage:advantages}.",
+          "formula": "{term:value:V}(s) = {term:expectation:E}[{term:summation:Σ} {term:reward:R}_t | s₀ = s]"
         },
         {
           "type": "example",
@@ -428,12 +444,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:kl:KL}(P||Q) = Σₓ P(x) log(P(x)/Q(x)). Properties: Always ≥ 0, equals 0 iff P = Q, asymmetric. In RLHF: {term:kl:KL}({term:policy:π} || {term:reference:π_ref}) penalizes deviation from the SFT baseline."
+          "content": "Measures how one {term:probability:probability} distribution differs from another. Properties: Always ≥ 0, equals 0 iff P = Q, asymmetric (KL(P||Q) ≠ KL(Q||P)). In RLHF, penalizes deviation from the SFT baseline.",
+          "formula": "{term:kl:KL}({term:probability:P}||{term:probability:Q}) = {term:summation:Σ}_x {term:probability:P}(x) log({term:probability:P}(x)/{term:probability:Q}(x))"
         },
         {
           "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> {term:reference:Reference} {term:model:model} ({term:reference:π_ref}) {term:probability:probabilities} for 'How are you?':<br>  • 'I'm good' → 0.4, 'Fine' → 0.3, 'Great!' → 0.2, 'AMAZING!!!' → 0.1<br><strong>Step 2:</strong> After RL, new {term:policy:policy} ({term:policy:π}) might become:<br>  • 'I'm good' → 0.1, 'AMAZING!!!' → 0.8 ({term:reward:reward} hacking!)<br><strong>Step 3:</strong> Calculate {term:kl:KL} divergence:<br>  {term:kl:KL} = 0.1×log(0.1/0.4) + 0.8×log(0.8/0.1) = very high!<br><strong>Step 4:</strong> High {term:kl:KL} penalty reduces total objective<br><strong>Step 5:</strong> {term:model:Model} is pushed back toward natural responses<br><strong>Result:</strong> Prevents '{term:reward:reward} hacking' while still improving!"
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Scenario:</strong> Reference model (SFT) vs RL policy responding to 'How are you?'<br><br>\n<strong>Token probabilities for 4 response options:</strong><br>\n<code class=\"code-block\">\n              SFT (π_ref)    RL (π)\n'I'm good'        0.4         0.1\n'Fine'            0.3         0.05\n'Great!'          0.2         0.05\n'AMAZING!!'       0.1         0.8   ← RL loves this!\n</code>\n<strong>KL divergence calculation:</strong><br>\n<code class=\"code-block\">\nKL(π || π_ref) = Σ π(x) × log(π(x) / π_ref(x))\n= 0.1×log(0.1/0.4) + 0.05×log(0.05/0.3) \n  + 0.05×log(0.05/0.2) + 0.8×log(0.8/0.1)\n= 0.1×(-1.39) + 0.05×(-1.79) + 0.05×(-1.39) + 0.8×(2.08)\n= -0.14 + -0.09 + -0.07 + 1.66\n≈ 1.36 bits  ← HIGH! RL drifted too far\n</code>\n<strong>Result:</strong> High KL → apply penalty to prevent reward hacking!"
         }
       ]
     },
@@ -462,8 +479,8 @@
         },
         {
           "type": "example",
-          "title": "Step-by-Step Example (GRPO)",
-          "content": "<strong>Prompt:</strong> 'Explain photosynthesis simply'<br><br><strong>Step 1:</strong> Generate 4 responses, get {term:reward:rewards}: [0.2, 0.5, 0.8, 0.3]<br><strong>Step 2:</strong> Compute group stats: mean=0.45, std=0.23<br><strong>Step 3:</strong> Calculate {term:advantage:advantages}:<br>  • Response 1: (0.2−0.45)/0.23 = −1.09 (discourage)<br>  • Response 2: (0.5−0.45)/0.23 = +0.22 (slightly reinforce)<br>  • Response 3: (0.8−0.45)/0.23 = +1.52 (strongly reinforce!)<br>  • Response 4: (0.3−0.45)/0.23 = −0.65 (discourage)<br><strong>Result:</strong> Response 3 gets the largest positive update."
+          "title": "Step-by-Step Calculation (GRPO)",
+          "content": "<strong>Prompt:</strong> 'Explain photosynthesis simply'<br><br>\n<strong>Step 1 - Generate 4 responses and get rewards:</strong><br>\n<code class=\"code-block\">\nrewards = [0.2, 0.5, 0.8, 0.3]\n</code>\n<strong>Step 2 - Compute group statistics:</strong><br>\n<code class=\"code-block\">\nmean = (0.2 + 0.5 + 0.8 + 0.3) / 4 = 0.45\nstd  = 0.23\n</code>\n<strong>Step 3 - Calculate normalized advantages:</strong><br>\n<code class=\"code-block\">\nA₁ = (0.2 - 0.45) / 0.23 = -1.09  ← Discourage!\nA₂ = (0.5 - 0.45) / 0.23 = +0.22  ← Slightly reinforce\nA₃ = (0.8 - 0.45) / 0.23 = +1.52  ← Strongly reinforce!\nA₄ = (0.3 - 0.45) / 0.23 = -0.65  ← Discourage\n</code>\n<strong>Result:</strong> Response 3 (best in group) gets largest positive update!"
         }
       ]
     },
@@ -482,7 +499,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:reference:π_ref} is a frozen copy of the {term:policy:policy} {term:weights:weights} before RL training begins. The {term:kl:KL} penalty term {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) constrains how far the learned {term:policy:policy} can deviate."
+          "content": "A frozen copy of the {term:policy:policy} {term:weights:weights} from before RL training. The {term:kl:KL} penalty constrains how far the trained {term:policy:policy} can deviate from this baseline.",
+          "formula": "{term:reference:π_ref} = frozen({term:policy:π}_{SFT})"
         },
         {
           "type": "example",
@@ -506,7 +524,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:vocabulary:V} = {{term:token:t₀}, {term:token:t₁}, ..., {term:token:t_n}} where |V| is typically 32K-100K. Each {term:token:token} maps to a unique integer ID. The {term:model:model} outputs {term:logits:logits} with shape [|V|], one score per {term:vocabulary:vocab} entry."
+          "content": "The fixed set of all {term:token:tokens} the {term:model:model} can recognize and generate. Each {term:token:token} maps to a unique integer ID. The {term:model:model} outputs {term:logits:logits} with shape [|{term:vocabulary:V}|].",
+          "formula": "{term:vocabulary:V} = {{term:token:t}₀, {term:token:t}₁, ..., {term:token:t}_n} where |{term:vocabulary:V}| ∈ [32K, 100K]"
         },
         {
           "type": "example",
@@ -555,7 +574,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:logits:Logits} ∈ ℝ^|V| are the output of the final linear layer before {term:softmax:softmax}. Shape: [batch_size, seq_len, {term:vocabulary:vocab_size}]. Higher {term:logits:logit} = {term:model:model} more favors that {term:token:token}."
+          "content": "Raw unnormalized scores from the final linear layer. Higher {term:logits:logit} = {term:model:model} more favors that {term:token:token}. Apply {term:softmax:softmax} to convert to {term:probability:probabilities}.",
+          "formula": "{term:logits:logits} ∈ ℝ^|{term:vocabulary:V}| where shape = [batch_size, seq_len, vocab_size]"
         },
         {
           "type": "example",
@@ -579,7 +599,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A {term:model:model} f_{term:weights:θ}: X → Y is a parameterized function where {term:weights:θ} are learned during training. For LLMs: {term:input:input} = {term:token:token} sequence, {term:output:output} = {term:logits:logits} over {term:vocabulary:vocabulary}. Architecture defines the function class; training finds optimal {term:weights:θ}."
+          "content": "A parameterized function mapping {term:input:inputs} to {term:output:outputs}. For LLMs: {term:input:input} = {term:token:token} sequence, {term:output:output} = {term:logits:logits} over {term:vocabulary:vocabulary}. Architecture defines the function class; training finds optimal {term:weights:θ}.",
+          "formula": "{term:model:f}_{term:weights:θ}: X → Y"
         },
         {
           "type": "example",
@@ -620,7 +641,7 @@
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "How spread out the {term:output:predictions} are. If all {term:model:model} versions give similar answers, {term:variance:variance} is low. If they're all over the place, {term:variance:variance} is high."
+          "content": "{term:variance:Variance} measures 'spread' or 'disagreement'. Imagine asking 5 different {term:model:models} the same question:<br><br>\n• If they ALL say \"Paris\" with 92% confidence → <strong>Low {term:variance:variance}</strong> (agreement)<br>\n• If they say \"Paris\" (30%), \"London\" (25%), \"Berlin\" (20%)... → <strong>High {term:variance:variance}</strong> (disagreement)<br><br>\nHigh {term:variance:variance} = high uncertainty about the answer."
         },
         {
           "type": "divider"
@@ -643,8 +664,8 @@
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "{term:input:Prompt}: 'The CEO of Apple is'<br><br>{term:model:Model} predicts: {Tim: 0.85, Cook: 0.82, Steve: 0.05, ...}<br><br>If 5 {term:model:model} checkpoints give {term:probability:probabilities} for 'Tim': [0.82, 0.88, 0.79, 0.91, 0.85], the {term:variance:variance} is ~0.0018. Low {term:variance:variance} = consistent {term:output:predictions}."
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>5 {term:model:models} predict {term:probability:P}('Paris'):</strong><br>\n<code class=\"code-block\">\nvalues = [0.82, 0.88, 0.79, 0.91, 0.85]\n</code>\n<strong>Step 1:</strong> Calculate mean (μ):<br>\n<code class=\"code-block\">\nμ = (0.82 + 0.88 + 0.79 + 0.91 + 0.85) / 5 = 0.85\n</code>\n<strong>Step 2:</strong> Calculate squared differences:<br>\n<code class=\"code-block\">\n(0.82-0.85)² = 0.0009\n(0.88-0.85)² = 0.0009\n(0.79-0.85)² = 0.0036\n(0.91-0.85)² = 0.0036\n(0.85-0.85)² = 0.0000\n</code>\n<strong>Step 3:</strong> Average = {term:variance:Variance}:<br>\n<code class=\"code-block\">\nVar = (0.0009 + 0.0009 + 0.0036 + 0.0036 + 0) / 5 = 0.0018\n</code>\n<strong>Result:</strong> Low {term:variance:variance} = {term:model:models} mostly agree!"
         }
       ]
     },
@@ -663,7 +684,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The set of all learnable parameters. For neural networks: {term:weights:weights}, biases, embeddings."
+          "content": "The set of all learnable parameters in a neural network. For LLMs, this includes embeddings, attention {term:weights:weights} (Q, K, V), FFN {term:weights:weights}, and layer norms.",
+          "formula": "{term:theta:θ} = {W_embed, W_attn, W_ffn, ...} ∈ ℝⁿ"
         },
         {
           "type": "llm",
@@ -777,8 +799,8 @@
         },
         {
           "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Bayesian Linear Regression:</strong><br><br><strong>Step 1 - Prior:</strong> Before seeing {term:data:data}, assume {term:theta:θ} ~ Normal(0, 1)<br>(weights probably small, centered around 0)<br><br><strong>Step 2 - See {term:data:data}:</strong> 100 house prices with features<br><br><strong>Step 3 - Compute {term:posterior:Posterior}:</strong><br>{term:posterior:p}({term:theta:θ}|{term:data:D}) ~ Normal(μ_post, σ_post)<br>Now μ_post = 2.5 (data shifted our belief)<br>And σ_post = 0.3 (data reduced our uncertainty)<br><br><strong>Interpretation:</strong> We now believe {term:theta:θ} is probably around 2.5, with some uncertainty."
+          "title": "Step-by-Step Visual Example",
+          "content": "<strong>Scenario: Estimating a coin's bias (θ = probability of heads)</strong><br><br>\n<strong>Step 1 - Prior belief:</strong> Before flipping, assume fair coin<br>\n<code class=\"code-block\">\nPrior: θ ~ Beta(1, 1)  # Uniform - any value 0-1 equally likely\nMost likely θ = 0.5\n</code>\n<strong>Step 2 - Observe data:</strong> Flip 10 times → 8 heads, 2 tails<br>\n<code class=\"code-block\">\nData: D = {H, H, H, T, H, H, H, H, T, H}\n</code>\n<strong>Step 3 - Compute posterior:</strong><br>\n<code class=\"code-block\">\nPosterior: θ|D ~ Beta(1+8, 1+2) = Beta(9, 3)\nMost likely θ = 9/(9+3) = 0.75\n</code>\n<strong>Result:</strong> Data shifted our belief from 0.5 → 0.75, with reduced uncertainty!"
         }
       ]
     },
@@ -789,7 +811,7 @@
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "The average. If you repeat something many times, {term:expectation:E} gives you the typical/{term:expectation:expected} result."
+          "content": "The {term:expectation:expected value} is the 'weighted average' – what you'd get on average if you repeated an experiment many times.<br><br>\n<strong>Think of it as:</strong> If a coin gives $10 on heads (50%) and $0 on tails (50%), the {term:expectation:expected value} is $5 – not because you ever get $5, but because that's the long-run average.<br><br>\nIn ML, we use {term:expectation:E} to average over uncertainty: 'What's the average {term:output:prediction} across all possible {term:model:models}?'"
         },
         {
           "type": "divider"
@@ -837,8 +859,8 @@
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "{term:input:Prompt}: 'The capital of France is'<br>Distribution: {Paris: 0.95, Lyon: 0.03, ...}<br>{term:entropy:H} ≈ 0.34 bits (very confident)<br><br>{term:input:Prompt}: 'I feel'<br>Distribution: {good: 0.15, bad: 0.12, happy: 0.10, ...}<br>{term:entropy:H} ≈ 4.2 bits (uncertain, many options)"
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br>\n<strong>Model output distribution (top tokens):</strong><br>\n<code class=\"code-block\">\nP = {\"Paris\": 0.95, \"Lyon\": 0.03, \"Berlin\": 0.02}\n</code>\n<strong>Entropy calculation:</strong><br>\n<code class=\"code-block\">\nH = -[0.95×log₂(0.95) + 0.03×log₂(0.03) + 0.02×log₂(0.02)]\nH = -[0.95×(-0.074) + 0.03×(-5.06) + 0.02×(-5.64)]\nH = -[-0.07 + -0.15 + -0.11]\nH ≈ 0.33 bits  ← Very confident!\n</code>\n<strong>Compare to uncertain prompt:</strong> 'I feel ___'<br>\n<code class=\"code-block\">\nP = {\"good\": 0.15, \"bad\": 0.12, \"happy\": 0.10, \"sad\": 0.08, ...}\nH ≈ 4.2 bits  ← Much more uncertain!\n</code>"
         }
       ]
     },
@@ -865,8 +887,8 @@
         },
         {
           "type": "example",
-          "title": "LLM Example",
-          "content": "<strong>Prompt:</strong> \"What is the melting point of unobtainium?\"<br><br><strong>5 {term:model:model} checkpoints predict:</strong><br>• Checkpoint 1: \"1200°C\"<br>• Checkpoint 2: \"Unknown element\"<br>• Checkpoint 3: \"800°C\"<br>• Checkpoint 4: \"It's fictional\"<br>• Checkpoint 5: \"1450°C\"<br><br>{term:variance:High variance} in their {term:expectation:mean predictions} → High {term:epistemic-var:epistemic uncertainty}. None of the {term:model:models} have reliable knowledge about this."
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'What is the capital of Narnia?'<br><br>\n<strong>5 model checkpoints predict P('Cair Paravel'):</strong><br>\n<code class=\"code-block\">\nModel 1: P = 0.75  (confident it's 'Cair Paravel')\nModel 2: P = 0.12  (thinks it's something else)\nModel 3: P = 0.65\nModel 4: P = 0.08  (very uncertain)\nModel 5: P = 0.55\n</code>\n<strong>Step 1:</strong> Compute each model's mean prediction = [0.75, 0.12, 0.65, 0.08, 0.55]<br>\n<strong>Step 2:</strong> Take variance of these means:<br>\n<code class=\"code-block\">\nμ = 0.43\nEpistemic Var = Var([0.75, 0.12, 0.65, 0.08, 0.55]) = 0.076\n</code>\n<strong>Result:</strong> HIGH epistemic uncertainty! Models disagree → knowledge gap (fictional place)."
         }
       ]
     },
@@ -893,8 +915,8 @@
         },
         {
           "type": "example",
-          "title": "LLM Example",
-          "content": "<strong>Prompt:</strong> \"Tell me a joke\"<br><br><strong>Each {term:model:model}'s internal {term:variance:variance}:</strong><br>• {term:model:Model} 1: Var = 2.8 (many {term:token:tokens} equally likely)<br>• {term:model:Model} 2: Var = 2.5<br>• {term:model:Model} 3: Var = 2.7<br><br>Average = 2.67 = {term:aleatoric-var:aleatoric uncertainty}. All {term:model:models} agree the task is inherently ambiguous - there's no single \"correct\" joke."
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'Tell me a joke about ___'<br><br>\n<strong>Each model's internal variance (spread in token probs):</strong><br>\n<code class=\"code-block\">\nModel 1: Variance of P(tokens) = 2.8  (many tokens equally valid)\nModel 2: Variance of P(tokens) = 2.5\nModel 3: Variance of P(tokens) = 2.7\nModel 4: Variance of P(tokens) = 2.9\nModel 5: Variance of P(tokens) = 2.6\n</code>\n<strong>Step 1:</strong> List each model's internal variance: [2.8, 2.5, 2.7, 2.9, 2.6]<br>\n<strong>Step 2:</strong> Take AVERAGE of these variances:<br>\n<code class=\"code-block\">\nAleatoric Var = E[Var] = (2.8+2.5+2.7+2.9+2.6)/5 = 2.7\n</code>\n<strong>Result:</strong> HIGH aleatoric! Task is inherently ambiguous (many valid jokes)."
         }
       ]
     },
@@ -920,8 +942,8 @@
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "Prompt: 'The 47th prime number is'<br><br>High {term:epistemic-var:epistemic}: {term:model:Model} might not know this fact<br>Low {term:aleatoric-var:aleatoric}: Once you know it, there's only one answer<br><br>vs.<br><br>Prompt: 'Write a haiku about spring'<br><br>Low {term:epistemic-var:epistemic}: {term:model:Model} knows how to write haikus<br>High {term:aleatoric-var:aleatoric}: Many valid haikus exist"
+          "title": "Decomposition Example",
+          "content": "<strong>Prompt:</strong> 'What is the melting point of unobtainium?'<br><br>\n<strong>Total Uncertainty:</strong> HIGH<br><br>\n<strong>Breakdown (Variance form):</strong><br>\n<code class=\"code-block\">\nTotal Var = 2.5\n\nEpistemic (model disagreement) = 2.3\n  → Models give different answers: \"1200°C\", \"800°C\", \"fictional\"\n  → REDUCIBLE: Could improve with better training data\n\nAleatoric (inherent ambiguity) = 0.2\n  → Even within each model, slight uncertainty\n  → IRREDUCIBLE: Multiple valid phrasings exist\n</code>\n<strong>Compare to:</strong> 'Write a haiku about spring'<br>\n<code class=\"code-block\">\nTotal Var = 2.8\n\nEpistemic = 0.3  # Models agree on haiku structure\nAleatoric = 2.5  # Many valid haikus exist (irreducible!)\n</code>"
         }
       ]
     },
@@ -950,8 +972,8 @@
         },
         {
           "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Scenario:</strong> Predicting weather from satellite images<br><br><strong>{term:entropy:H}(Weather):</strong> 2 bits (4 equally likely outcomes: sunny, rainy, cloudy, snowy)<br><br><strong>{term:entropy:H}(Weather|Satellite):</strong> After seeing satellite image, uncertainty drops to 0.5 bits<br><br><strong>{term:mutual-info:I}(Weather; Satellite):</strong> = 2 − 0.5 = 1.5 bits<br><br><strong>Interpretation:</strong> Satellite images provide 1.5 bits of information about weather - they're highly informative!"
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Scenario:</strong> How much does knowing the prompt reduce output uncertainty?<br><br>\n<strong>Without prompt:</strong><br>\n<code class=\"code-block\">\nH(next_token) = log₂(50,000) ≈ 15.6 bits\n# Any token in vocab equally likely\n</code>\n<strong>With prompt 'The capital of France is':</strong><br>\n<code class=\"code-block\">\nH(next_token | prompt) ≈ 0.5 bits\n# Almost certainly \"Paris\"\n</code>\n<strong>Mutual Information:</strong><br>\n<code class=\"code-block\">\nI(next_token; prompt) = H(next_token) - H(next_token | prompt)\n                      = 15.6 - 0.5 = 15.1 bits\n</code>\n<strong>Result:</strong> Knowing the prompt provides 15.1 bits of information about the next token!"
         }
       ]
     },
@@ -978,8 +1000,8 @@
         },
         {
           "type": "example",
-          "title": "LLM Example",
-          "content": "<strong>Prompt:</strong> \"Who won the 2024 election?\"<br><br><strong>3 {term:theta:model checkpoints}:</strong><br>• Model A (early 2024): {term:entropy:H} = 0.1 bits, answers \"Unknown\"<br>• Model B (late 2024): {term:entropy:H} = 0.2 bits, answers \"Trump\"<br>• Model C (mid 2024): {term:entropy:H} = 0.3 bits, answers \"Biden\"<br><br>Each {term:theta:model} is internally confident (low {term:entropy:entropy}), but they disagree → High {term:mutual-info:I} → High {term:epistemic-info:epistemic uncertainty}."
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'Who won the 2024 US election?'<br><br>\n<strong>3 model checkpoints (trained at different times):</strong><br>\n<code class=\"code-block\">\nModel A (early 2024): H = 0.1 bits, answers \"Unknown\"\nModel B (late 2024):  H = 0.2 bits, answers \"Trump\"\nModel C (mid 2024):   H = 0.3 bits, answers \"Biden\"\n</code>\n<strong>Key observation:</strong> Each model is internally CONFIDENT (low H)<br>\nBUT they DISAGREE with each other!<br><br>\n<strong>Compute Mutual Information (= Epistemic):</strong><br>\n<code class=\"code-block\">\nI(y; θ | x, D) = H(y|x,D) - E[H(y|x,θ)]\n             ≈ Total entropy - Avg individual entropy\n             = HIGH (because model disagree)\n</code>\n<strong>Result:</strong> Knowing WHICH model would resolve uncertainty → epistemic!"
         }
       ]
     },
@@ -1006,8 +1028,8 @@
         },
         {
           "type": "example",
-          "title": "LLM Example",
-          "content": "<strong>Prompt:</strong> \"The weather today is ___\"<br><br><strong>Each {term:theta:model's} {term:entropy:entropy}:</strong><br>• Model 1: {term:entropy:H} = 3.2 bits (sunny, rainy, cloudy equally likely)<br>• Model 2: {term:entropy:H} = 3.0 bits<br>• Model 3: {term:entropy:H} = 3.4 bits<br><br>{term:expectation:Average} {term:entropy:H} = 3.2 bits = {term:aleatoric-info:aleatoric uncertainty}. All {term:theta:models} agree the {term:input:task} is inherently ambiguous."
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'The weather today is ___'<br><br>\n<strong>Each model's entropy (internal fuzziness):</strong><br>\n<code class=\"code-block\">\nModel 1: H = 3.2 bits (sunny, rainy, cloudy all valid)\nModel 2: H = 3.0 bits\nModel 3: H = 3.4 bits\nModel 4: H = 3.1 bits\nModel 5: H = 3.3 bits\n</code>\n<strong>Key observation:</strong> ALL models have HIGH internal entropy<br>\nThey AGREE that the task is ambiguous!<br><br>\n<strong>Compute Expected Entropy (= Aleatoric):</strong><br>\n<code class=\"code-block\">\nE[H(y|x,θ)] = (3.2 + 3.0 + 3.4 + 3.1 + 3.3) / 5 = 3.2 bits\n</code>\n<strong>Result:</strong> Even a perfect model can't reduce this → irreducible aleatoric!"
         }
       ]
     }

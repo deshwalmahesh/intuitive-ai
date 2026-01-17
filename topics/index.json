@@ -7,10 +7,16 @@
       "path": "topics/uncertainty_quantification.json"
     },
     {
-      "id": "llm_training",
-      "title": "LLM Training: From Pre-training to RLHF",
-      "description": "Pre-training, SFT, RL, PPO, GRPO",
-      "path": "topics/llm_training.json"
+      "id": "rl_in_llms",
+      "title": "Reinforcement Learning (RL) in LLMs",
+      "description": "RL, PPO, GRPO",
+      "path": "topics/rl_in_llms.json"
+    },
+    {
+      "id": "training_finetuning_llms",
+      "title": "Training and Fine-tuning LLMs",
+      "description": "Types of training and fine-tuning, training mechanics, debunking jargon and myths",
+      "path": "topics/training_finetuning_llms.json"
     }
   ]
 }

@@ -1,7 +1,90 @@
 {
+  "_DOCUMENTATION": {
+    "CRITICAL": "This template MUST render a real page when applied. Copy it, fill in your content, and it works.",
+    
+    "PHILOSOPHY": {
+      "core_goal": "When someone closes a popup, they MUST be smarter than before.",
+      "the_problem": "Scientific jargon creates artificial barriers. 'Posterior' sounds scary but just means 'beliefs after seeing data'.",
+      "solution": "Ground every concept in: (1) intuitive explanation of what it DOES, (2) formal definition + formula, (3) PERCEIVABLE real example"
+    },
+
+    "SECTION_RULES": {
+      "INTUITIVE": {
+        "purpose": "Explain what this concept DOES in AI/ML systems",
+        "contains": [
+          "What is this concept?",
+          "What does it DO in practice?",
+          "Where is it used in AI/ML?",
+          "WHY does it matter?"
+        ],
+        "does_NOT_contain": "Examples with numbers - save those for the example section",
+        "verbosity": "VERBOSE - Multiple sentences showing practical meaning",
+        "color_coding": "All key terms must use {term:key:display} syntax for clickable colored words",
+        "bad_example": "Variance measures spread | Temperature = spicy (garbage metaphor)",
+        "good_example": "Variance tells you how much different model versions DISAGREE on the same prediction. High variance means your model is uncertain. Used in ensemble methods and uncertainty quantification."
+      },
+      "SCIENTIFIC": {
+        "purpose": "Formal mathematical definition + formula",
+        "MUST_contain": [
+          "content: The textual mathematical definition",
+          "formula: The actual mathematical formula with clickable terms"
+        ],
+        "verbosity": "CONCISE - Just the definition and formula",
+        "example": {
+          "content": "The expected squared deviation of a random variable X from its mean μ.",
+          "formula": "{term:variance:Var}(X) = {term:expectation:E}[({term:input:X} - {term:mean:μ})²]"
+        }
+      },
+      "EXAMPLE": {
+        "purpose": "Show REAL perceivable data - actual numbers, arrays, calculations",
+        "MUST_contain": "Literal data that humans can VISUALIZE",
+        "does_NOT_contain": "Abstract 'let X be...' nonsense",
+        "verbosity": "DETAILED - Step-by-step calculations with real numbers",
+        "examples": {
+          "probability": "{'Paris': 0.92, 'Lyon': 0.03, 'Berlin': 0.02, ...47K others}",
+          "weights": "[[0.23, -0.45, 0.12], [-0.67, 0.89, -0.34]]",
+          "variance": "values = [0.82, 0.88, 0.79] → mean = 0.83, Var = 0.0018"
+        }
+      }
+    },
+
+    "COLOURING_RULES": {
+      "golden_rule": "Same concept = Same color = Same popup. EVERYWHERE.",
+      "context_matters": {
+        "explanation": "Same SYMBOL can mean different things in different contexts. Give them DIFFERENT colors and popups!",
+        "examples": [
+          "p (posterior: p(θ|D)) → Blue popup for parameter beliefs",
+          "P (probability: P(y|x)) → Cyan popup for output predictions", 
+          "σ (sigmoid in neural networks) → Purple popup",
+          "σ (standard deviation in statistics) → Orange popup"
+        ]
+      },
+      "when_to_color": [
+        "Greek letters (θ, Σ, μ, σ): ALWAYS",
+        "Math symbols (E, Var, log, Σ, ∫): ALWAYS",
+        "Key nouns matching concepts: ALWAYS",
+        "Terms inside popups: ALWAYS (nested learning)"
+      ]
+    },
+
+    "SHARED_VS_TOPIC_DEFINITIONS": {
+      "shared_json": "Common concepts used across many topics: θ, P, E, Var, Loss, etc.",
+      "topic_json": "Concepts specific to this topic only. Can reference shared definitions via {term:key:display}",
+      "rule": "If you use a concept in 2+ topics, put it in shared.json"
+    },
+
+    "ANTI_PATTERNS": [
+      "❌ One-line intuitive: 'Variance measures spread' → ✅ Multi-sentence practical explanation",
+      "❌ Garbage metaphor: 'Temperature = spicy' → ✅ 'Controls exploration vs repetition in token sampling'",
+      "❌ Abstract example: 'Let X be a random variable' → ✅ Show actual array: [0.82, 0.88, 0.79]",
+      "❌ Formula only in scientific: → ✅ Textual definition + formula",
+      "❌ Same color for different meanings → ✅ Different popup for each meaning"
+    ]
+  },
+
   "meta": {
     "title": "Your Topic Title",
-    "subtitle": "Optional subtitle",
+    "subtitle": "Optional subtitle or tagline",
     "version": "1.0"
   },
 
@@ -9,111 +92,214 @@
     "sections": [
       {
         "id": 0,
-        "title": " Section 1",
-        "slides": ["slide-1-1", "slide-1-2"]
+        "title": "🎯 Section 1: Introduction",
+        "slides": ["slide-intro-1", "slide-intro-2"]
       },
       {
         "id": 1,
-        "title": " Section 2",
-        "slides": ["slide-2-1"]
+        "title": "📐 Section 2: Core Concepts",
+        "slides": ["slide-core-1", "slide-core-2", "slide-core-3"]
+      },
+      {
+        "id": 2,
+        "title": "🔬 Section 3: Applications",
+        "slides": ["slide-app-1"]
       }
     ]
   },
 
-  "colorPalette": {
-    "primary": "#4f46e5",
-    "secondary": "#16a34a",
-    "accent": "#d97706"
-  },
-
-  "_referenceColors": [
-    "#dc2626", "#ea580c", "#d97706", "#ca8a04", "#65a30d", 
-    "#16a34a", "#059669", "#0d9488", "#0891b2", "#0284c7", 
-    "#2563eb", "#4f46e5", "#7c3aed", "#9333ea", "#c026d3"
-  ],
-
-  "terms": {
-    "example-term": {
-      "display": "Example",
-      "colorKey": "primary",
-      "popupKey": "example-term"
+  "_reference_colors": {
+    "common_palette": {
+      "theta": "#16a34a",
+      "probability": "#0891b2",
+      "posterior": "#2563eb",
+      "variance": "#d97706",
+      "loss": "#dc2626",
+      "expectation": "#7c3aed",
+      "input": "#64748b",
+      "entropy": "#db2777"
     }
   },
 
   "slides": [
     {
-      "id": "slide-1-1",
+      "id": "slide-intro-1",
       "sectionIndex": 0,
-      "title": "Welcome to Your Topic",
+      "title": "Introduction",
       "content": [
         {
           "type": "html",
-          "content": "This is your first slide. Add content here."
+          "content": "<strong>Welcome!</strong> This slide introduces the core concept. Use {term:probability:probability} for clickable colored terms that open popups."
         },
         {
           "type": "insight-box",
-          "title": "Key Concept",
-          "content": "Explain something important here. Use {term:example-term:clickable terms} to link to popups."
+          "title": "Key Insight",
+          "content": "Use insight boxes for important callouts. All terms like {term:theta:model parameters} are clickable."
         }
       ]
     },
     {
-      "id": "slide-1-2",
+      "id": "slide-intro-2",
       "sectionIndex": 0,
-      "title": "Second Slide",
+      "title": "Comparison Table",
       "content": [
         {
           "type": "table",
           "class": "uncertainty-table",
-          "headers": ["Column 1", "Column 2", "Column 3"],
+          "headers": ["Concept", "What It Does", "Example"],
           "rows": [
-            ["Row 1 Cell 1", "Row 1 Cell 2", "Row 1 Cell 3"],
-            ["Row 2 Cell 1", "Row 2 Cell 2", "Row 2 Cell 3"]
+            ["{term:variance:Variance}", "Measures disagreement between models", "Var = 0.0018 → models agree"],
+            ["{term:theta:θ}", "Model parameters (weights)", "7B numbers in LLaMA-7B"],
+            ["{term:loss:Loss}", "How wrong the model is", "L = 2.3 → still learning"]
           ]
         }
       ]
     },
     {
-      "id": "slide-2-1",
+      "id": "slide-core-1",
       "sectionIndex": 1,
-      "title": "Section 2 Content",
+      "title": "Simple Equation",
       "content": [
         {
-          "type": "image",
-          "src": "images/your-image.png",
-          "alt": "Description of image"
+          "type": "html",
+          "content": "Every symbol in this equation is clickable. Click any term to learn more."
+        },
+        {
+          "type": "equation",
+          "label": "Cross-Entropy Loss",
+          "parts": [
+            { "type": "term", "key": "loss", "text": "L" },
+            { "type": "operator", "symbol": "=" },
+            { "type": "raw", "text": "−" },
+            { "type": "term", "key": "summation", "text": "Σ" },
+            { "type": "raw", "text": " log " },
+            { "type": "term", "key": "probability", "text": "P" },
+            { "type": "raw", "text": "(correct token)" }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "{term:loss:Loss} = negative sum of log {term:probability:probabilities} of correct tokens."
+          }
+        }
+      ]
+    },
+    {
+      "id": "slide-core-2",
+      "sectionIndex": 1,
+      "title": "Complex Equation with Labels",
+      "content": [
+        {
+          "type": "equation",
+          "id": "variance_decomposition",
+          "label": "Uncertainty Decomposition",
+          "parts": [
+            { "type": "term", "key": "total-uncertainty", "text": "Total" },
+            { "type": "operator", "symbol": "=" },
+            {
+              "type": "labeled-expression",
+              "underline": "blue",
+              "label": "Epistemic",
+              "labelColor": "epistemic-var",
+              "popupKey": "epistemic-var",
+              "content": [
+                { "type": "term", "key": "variance", "text": "Var" },
+                { "type": "raw", "text": "[" },
+                { "type": "term", "key": "expectation", "text": "E" },
+                { "type": "raw", "text": "(y|x,θ)]" }
+              ]
+            },
+            { "type": "operator", "symbol": "+" },
+            {
+              "type": "labeled-expression",
+              "underline": "orange",
+              "label": "Aleatoric",
+              "labelColor": "aleatoric-var",
+              "popupKey": "aleatoric-var",
+              "content": [
+                { "type": "term", "key": "expectation", "text": "E" },
+                { "type": "raw", "text": "[Var(y|x,θ)]" }
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "{term:total-uncertainty:Total uncertainty} = model disagreement + inherent randomness."
+          }
+        }
+      ]
+    },
+    {
+      "id": "slide-core-3",
+      "sectionIndex": 1,
+      "title": "Deep Dive",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What Does This Concept Do?",
+          "content": "Start with practical AI/ML explanation. Where is this used? What does it tell you about your model?"
         },
         {
           "type": "html",
-          "content": "Content for section 2."
+          "content": "<strong>Key Properties:</strong><br>• Property 1: Describe with {term:variance:clickable terms}<br>• Property 2: Use real examples<br>• Property 3: Connect to practical usage"
+        },
+        {
+          "type": "insight-box",
+          "title": "Real Example",
+          "content": "<strong>5 model checkpoints predict P('Paris'):</strong><br><code class=\"code-block\">[0.82, 0.88, 0.79, 0.91, 0.85]\nmean = 0.85, Var = 0.0018\n→ Low variance = models AGREE</code>"
+        }
+      ]
+    },
+    {
+      "id": "slide-app-1",
+      "sectionIndex": 2,
+      "title": "Applications",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Where Is This Used?",
+          "content": "• <strong>Healthcare:</strong> Uncertainty triggers specialist review<br>• <strong>Finance:</strong> High uncertainty = human escalation<br>• <strong>LLMs:</strong> Low confidence = 'I don't know' response"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": ["Without This", "With This"],
+          "rows": [
+            ["Model says 'Paris'", "Model says 'Paris' (95% confident)"],
+            ["Prediction: $350K", "Range: $350K ± $15K (95% CI)"],
+            ["Classification: Spam", "Spam (87 of 100 trees agree)"]
+          ]
         }
       ]
     }
   ],
 
-  "popups": {
-    "example-term": {
-      "title": "Example Term",
-      "color": "#4f46e5",
+  "_POPUP_TEMPLATE": {
+    "_comment": "Example popup structure - add these to definitions/shared.json or topic-specific section",
+    "example-concept": {
+      "title": "Symbol - Full Name",
+      "color": "#hexcolor",
       "sections": [
         {
           "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "A simple explanation of this term."
+          "title": "What It Does",
+          "content": "Practical AI/ML explanation. What is this concept? What does it DO? Where is it used? All {term:key:relevant terms} should be colored and clickable."
         },
-        {
-          "type": "divider"
-        },
+        { "type": "divider" },
         {
           "type": "scientific",
           "title": "",
-          "content": "Formal definition here.",
-          "formula": "Optional formula"
+          "content": "The formal mathematical definition in words - what this symbol represents mathematically.",
+          "formula": "{term:variance:Var}(X) = {term:expectation:E}[({term:input:X} - μ)²]"
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "A concrete example of this concept."
+          "title": "Real Example",
+          "content": "<strong>Step-by-step calculation:</strong><br><code class=\"code-block\">values = [0.82, 0.88, 0.79, 0.91, 0.85]\nmean = 0.85\nVar = Σ(x - mean)² / n = 0.0018\n→ LOW variance = models agree!</code>"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "How this applies specifically to language models. Token probabilities, sampling, etc."
         }
       ]
     }

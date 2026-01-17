@@ -51,7 +51,7 @@
       "content": [
         {
           "type": "image",
-          "src": "images/what_is_uncertainty.png",
+          "src": "images/uncertainty_quantification/what_is_uncertainty.png",
           "alt": "what is uncertainty",
           "style": "max-height: 500px;"
         },
@@ -121,7 +121,7 @@
         },
         {
           "type": "image",
-          "src": "images/entropy_graph_type.png",
+          "src": "images/uncertainty_quantification/entropy_graph_type.png",
           "alt": "Entropy visualization"
         },
         {

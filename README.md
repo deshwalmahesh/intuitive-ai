@@ -1,7 +1,7 @@
 # Interactive Intuitive and Hype Free AI/ML Concepts
 
 > **"Making complex concepts click, literally."**  
-> Because reading papers shouldn't feel like deciphering ancient hieroglyphics.
+> Because understanding papers & concepts shouldn't exactly be how some loner people decided
 
 ---
 

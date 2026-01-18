@@ -84,7 +84,9 @@ const Popup = {
             const titleEl = section.querySelector('.modal-section-title');
             if (titleEl && titleEl.textContent.includes('Example')) {
                 const content = section.querySelector('.modal-section-content');
-                if (content) content.classList.add('modal-example');
+                if (content && !content.querySelector('.code-block') && !content.querySelector('.insight-box')) {
+                    content.classList.add('modal-example');
+                }
             }
         });
         

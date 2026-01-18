@@ -734,3 +734,64 @@ h2 {
     line-height: 1.8;
     overflow: auto;
 }
+
+/* ============================================
+    TERM GRID (Glossary View)
+    ============================================ */
+.term-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 8px;
+}
+
+@media (max-width: 900px) {
+    .term-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .term-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.term-grid-box {
+    background: white;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 14px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+}
+
+.term-grid-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    background: linear-gradient(135deg, rgba(var(--term-color-rgb, 102, 126, 234), 0.05), white);
+}
+
+.term-grid-symbol {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.term-grid-title {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}

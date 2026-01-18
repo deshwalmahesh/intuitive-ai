@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "title": "ML/AI Glossary",
+    "subtitle": "Quick reference for common terms",
+    "version": "1.0",
+    "loadAllTerms": true
+  },
+  "navigation": {
+    "sections": [
+      {
+        "id": 0,
+        "title": "All Terms",
+        "slides": ["slide-glossary"]
+      }
+    ]
+  },
+  "slides": [
+    {
+      "id": "slide-glossary",
+      "sectionIndex": 0,
+      "title": "ML/AI Glossary",
+      "content": [
+        {
+          "type": "html",
+          "content": "<p style=\"text-align: center; color: #64748b; margin-bottom: 16px;\">Click any term to see its definition, examples, and usage in LLMs</p>"
+        },
+        {
+          "type": "term-grid",
+          "columns": 4
+        }
+      ]
+    }
+  ]
+}

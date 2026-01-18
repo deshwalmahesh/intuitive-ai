@@ -3,3 +3,5 @@ tmp/
 .env
 .mypy_cache/
 .claude/
+__pycache__/
+*.pyc

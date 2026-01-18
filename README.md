@@ -1,4 +1,4 @@
-# Interactive Scientific Blog Engine 🧠
+# Interactive Intuitive and Hype Free AI/ML Concepts
 
 > **"Making complex concepts click, literally."**  
 > Because reading papers shouldn't feel like deciphering ancient hieroglyphics.
@@ -130,22 +130,18 @@ Your equation has `{term:theta:θ}` (green). In your intuitive explanation:
 
 ## Shared vs Topic-Specific Definitions
 
-### In `definitions/shared.json` (The Commons)
+### The Priority: Check `shared.json` First
 
-Put definitions that are used across MANY topics:
+**Try to use `definitions/shared.json` as much as possible.** It contains ALL the existing definitions.
 
-- θ (model parameters) - used everywhere
-- P (probability) - used everywhere
-- E (expectation) - used everywhere
-- Variance, Loss, Gradient, etc.
+1.  **Search First**: Before defining anything, search `definitions/shared.json`.
+2.  **Create Second**: If it's not there, then create it.
 
-### In topic JSON files (Topic-Specific)
+### Where to Place New Definitions?
 
-Put definitions that are SPECIFIC to that topic:
-
-- "Epistemic Uncertainty" → specific to uncertainty quantification topic
-- "KL Divergence" → used heavily in training topics
-- Custom formulas unique to your topic
+- **Generic / Common in AI**: Put it in `definitions/shared.json`.
+  - _Reason_: Lots of things are remarkably common in AI. If it's generic or used in multiple places, it belongs in shared.
+- **Topic Specific**: Only put it in the project-specific file if it is strictly unique to that topic and won't be reused.
 
 **Rule:** Topic-specific definitions CAN reference shared definitions via `{term:key:display}` syntax.
 
@@ -369,4 +365,4 @@ MIT. Go make science more understandable.
 
 ---
 
-_Built by [Mahesh Deshwal](https://www.linkedin.com/in/deshwalmahesh/) — someone who got tired of papers that explain nothing while using maximum words._
+_Built by [Mahesh Deshwal](https://www.linkedin.com/in/deshwalmahesh/) - someone who got tired of papers that explain nothing while using maximum words._

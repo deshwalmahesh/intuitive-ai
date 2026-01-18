@@ -1012,5 +1012,216 @@
         }
       ]
     }
-  ]
+  ],
+  "colorPalette": {
+    "mutual-info": "#9333ea",
+    "epistemic-var": "#2563eb",
+    "aleatoric-var": "#dc2626",
+    "epistemic-info": "#4f46e5",
+    "aleatoric-info": "#e11d48",
+    "total": "#7e22ce"
+  },
+  "terms": {
+    "mutual-info": {
+      "display": "I",
+      "colorKey": "mutual-info",
+      "popupKey": "mutual-info"
+    },
+    "epistemic-var": {
+      "display": "Epistemic",
+      "colorKey": "epistemic-var",
+      "popupKey": "epistemic-var"
+    },
+    "aleatoric-var": {
+      "display": "Aleatoric",
+      "colorKey": "aleatoric-var",
+      "popupKey": "aleatoric-var"
+    },
+    "epistemic-info": {
+      "display": "Epistemic",
+      "colorKey": "epistemic-info",
+      "popupKey": "epistemic-info"
+    },
+    "aleatoric-info": {
+      "display": "Aleatoric",
+      "colorKey": "aleatoric-info",
+      "popupKey": "aleatoric-info"
+    },
+    "total-uncertainty": {
+      "display": "Total",
+      "colorKey": "total",
+      "popupKey": "total-uncertainty"
+    }
+  },
+  "popups": {
+    "epistemic-var": {
+      "title": "Epistemic Uncertainty (Variance Form)",
+      "color": "#2563eb",
+      "sections": [
+        {
+          "type": "equation-display",
+          "content": "{term:variance:Var}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:expectation:E}({term:output:y}|{term:input:x}, {term:theta:θ})]"
+        },
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "How much do different {term:model:model} versions <em>disagree</em> on what the average answer should be?<br><br>Think of asking 5 different GPT checkpoints: \"What's the capital of Atlantis?\" If they each give a different confident answer, that disagreement is {term:epistemic-var:epistemic} uncertainty - the {term:model:models} don't have reliable knowledge."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:variance:variance} computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:expectation:expected value} of {term:output:output y} given {term:input:input x} and a specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Reducible</em> - can be decreased with more {term:data:training data}, better architecture, or RAG."
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'What is the capital of Narnia?'<br><br>\n<strong>5 model checkpoints predict P('Cair Paravel'):</strong><br>\n<code class=\"code-block\">\nModel 1: P = 0.75  (confident it's 'Cair Paravel')\nModel 2: P = 0.12  (thinks it's something else)\nModel 3: P = 0.65\nModel 4: P = 0.08  (very uncertain)\nModel 5: P = 0.55\n</code>\n<strong>Step 1:</strong> Compute each model's mean prediction = [0.75, 0.12, 0.65, 0.08, 0.55]<br>\n<strong>Step 2:</strong> Take variance of these means:<br>\n<code class=\"code-block\">\nμ = 0.43\nEpistemic Var = Var([0.75, 0.12, 0.65, 0.08, 0.55]) = 0.076\n</code>\n<strong>Result:</strong> HIGH epistemic uncertainty! Models disagree → knowledge gap (fictional place)."
+        }
+      ]
+    },
+    "aleatoric-var": {
+      "title": "Aleatoric Uncertainty (Variance Form)",
+      "color": "#dc2626",
+      "sections": [
+        {
+          "type": "equation-display",
+          "content": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:variance:Var}({term:output:y}|{term:input:x}, {term:theta:θ})]"
+        },
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "How spread-out is each {term:model:model}'s own prediction, on average?<br><br>Think of the prompt: \"Tell me a joke.\" Even a <em>perfect</em> {term:model:model} would have a flat {term:token:token} distribution - thousands of valid jokes exist! This internal spread is unavoidable because the {term:input:task itself} is ambiguous, not because the {term:model:model} lacks knowledge."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:variance:variance} of {term:output:output y} given {term:input:input x} and that specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite {term:data:data} or a perfect {term:model:model}. It's intrinsic to the task."
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'Tell me a joke about ___'<br><br>\n<strong>Each model's internal variance (spread in token probs):</strong><br>\n<code class=\"code-block\">\nModel 1: Variance of P(tokens) = 2.8  (many tokens equally valid)\nModel 2: Variance of P(tokens) = 2.5\nModel 3: Variance of P(tokens) = 2.7\nModel 4: Variance of P(tokens) = 2.9\nModel 5: Variance of P(tokens) = 2.6\n</code>\n<strong>Step 1:</strong> List each model's internal variance: [2.8, 2.5, 2.7, 2.9, 2.6]<br>\n<strong>Step 2:</strong> Take AVERAGE of these variances:<br>\n<code class=\"code-block\">\nAleatoric Var = E[Var] = (2.8+2.5+2.7+2.9+2.6)/5 = 2.7\n</code>\n<strong>Result:</strong> HIGH aleatoric! Task is inherently ambiguous (many valid jokes)."
+        }
+      ]
+    },
+    "total-uncertainty": {
+      "title": "Total Uncertainty",
+      "color": "#7e22ce",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuition",
+          "content": "The complete 'I don't know' of the {term:model:model}. Combines both 'I lack knowledge' ({term:epistemic-var:epistemic}) and 'The task is ambiguous' ({term:aleatoric-var:aleatoric})."
+        },
+        {
+          "type": "scientific",
+          "title": "The Decomposition",
+          "content": "<strong>{term:total-uncertainty:Total} = {term:epistemic-var:Epistemic} + {term:aleatoric-var:Aleatoric}</strong><br><br>This is the Law of Total {term:variance:Variance} / {term:entropy:entropy} decomposition. We can separate the sources of uncertainty.",
+          "formula": "{term:variance:Var}({term:output:y}|{term:input:x}) = {term:variance:Var}[{term:expectation:E}({term:output:y}|{term:input:x},{term:theta:θ})] + {term:expectation:E}[{term:variance:Var}({term:output:y}|{term:input:x},{term:theta:θ})]"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "{term:total-uncertainty:Total uncertainty} in a {term:token:token} prediction comes from:<br>• The {term:model:model} not knowing the answer ({term:epistemic-var:epistemic})<br>• Multiple {term:token:tokens} being valid completions ({term:aleatoric-var:aleatoric})<br><br>Uncertainty quantification helps us separate these to take appropriate action."
+        },
+        {
+          "type": "example",
+          "title": "Decomposition Example",
+          "content": "<strong>Prompt:</strong> 'What is the melting point of unobtainium?'<br><br>\n<strong>Total Uncertainty:</strong> HIGH<br><br>\n<strong>Breakdown (Variance form):</strong><br>\n<code class=\"code-block\">\nTotal Var = 2.5\n\nEpistemic (model disagreement) = 2.3\n  → Models give different answers: \"1200°C\", \"800°C\", \"fictional\"\n  → REDUCIBLE: Could improve with better training data\n\nAleatoric (inherent ambiguity) = 0.2\n  → Even within each model, slight uncertainty\n  → IRREDUCIBLE: Multiple valid phrasings exist\n</code>\n<strong>Compare to:</strong> 'Write a haiku about spring'<br>\n<code class=\"code-block\">\nTotal Var = 2.8\n\nEpistemic = 0.3  # Models agree on haiku structure\nAleatoric = 2.5  # Many valid haikus exist (irreducible!)\n</code>"
+        }
+      ]
+    },
+    "mutual-info": {
+      "title": "I - Mutual Information",
+      "color": "#9333ea",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "{term:mutual-info:Mutual Information} measures how much knowing one variable tells you about another. If knowing X completely determines Y, {term:mutual-info:I}(X;Y) is high. If X and Y are independent (knowing one tells you nothing about the other), {term:mutual-info:I}(X;Y) = 0. Think of it as: 'How much does knowing the {term:input:input} reduce my uncertainty about the {term:output:output}?'"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "{term:mutual-info:I}(X;Y) = {term:entropy:H}(Y) − {term:entropy:H}(Y|X) = {term:entropy:H}(X) − {term:entropy:H}(X|Y). It's the reduction in {term:entropy:entropy} of one variable given knowledge of the other. Properties: Always non-negative, symmetric ({term:mutual-info:I}(X;Y) = {term:mutual-info:I}(Y;X)), measured in bits.",
+          "formula": "{term:mutual-info:I}(X;Y) = {term:entropy:H}(Y) − {term:entropy:H}(Y|X)"
+        },
+        {
+          "type": "llm",
+          "title": "In Uncertainty Quantification",
+          "content": "{term:mutual-info:Mutual Information} is used to decompose total uncertainty into {term:epistemic-info:epistemic} and {term:aleatoric-info:aleatoric} components (entropy version). {term:mutual-info:I}({term:output:y}; {term:theta:θ} | {term:input:x}, {term:data:D}) measures how much the {term:model:model} {term:theta:parameters θ} inform the prediction - this IS the {term:epistemic-info:epistemic uncertainty}."
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Scenario:</strong> How much does knowing the prompt reduce output uncertainty?<br><br>\n<strong>Without prompt:</strong><br>\n<code class=\"code-block\">\nH(next_token) = log₂(50,000) ≈ 15.6 bits\n# Any token in vocab equally likely\n</code>\n<strong>With prompt 'The capital of France is':</strong><br>\n<code class=\"code-block\">\nH(next_token | prompt) ≈ 0.5 bits\n# Almost certainly \"Paris\"\n</code>\n<strong>Mutual Information:</strong><br>\n<code class=\"code-block\">\nI(next_token; prompt) = H(next_token) - H(next_token | prompt)\n                      = 15.6 - 0.5 = 15.1 bits\n</code>\n<strong>Result:</strong> Knowing the prompt provides 15.1 bits of information about the next token!"
+        }
+      ]
+    },
+    "epistemic-info": {
+      "title": "Epistemic Uncertainty (Info-Theoretic Form)",
+      "color": "#4f46e5",
+      "sections": [
+        {
+          "type": "equation-display",
+          "content": "{term:mutual-info:I}({term:output:y}, {term:theta:θ} | {term:input:x}, {term:data:D})"
+        },
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "How much would knowing the \"true\" {term:model:model} reduce our uncertainty about the {term:output:output}?<br><br>If different {term:theta:model versions} give <em>confidently different</em> answers, that's high {term:mutual-info:mutual information}. Model A says \"Paris\" (99% confident), Model B says \"London\" (99% confident). They disagree - so the answer heavily depends on <em>which</em> {term:theta:θ} you ask."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:mutual-info:mutual information} between {term:output:output y} and {term:theta:model parameters θ}, conditioned on {term:input:input x} and {term:data:training data D}.<br><br>Computed as: {term:entropy:H}({term:output:y}|{term:input:x},{term:data:D}) − {term:expectation:E}[{term:entropy:H}({term:output:y}|{term:input:x},{term:theta:θ})]<br><br><strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more {term:data:data}."
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'Who won the 2024 US election?'<br><br>\n<strong>3 model checkpoints (trained at different times):</strong><br>\n<code class=\"code-block\">\nModel A (early 2024): H = 0.1 bits, answers \"Unknown\"\nModel B (late 2024):  H = 0.2 bits, answers \"Trump\"\nModel C (mid 2024):   H = 0.3 bits, answers \"Biden\"\n</code>\n<strong>Key observation:</strong> Each model is internally CONFIDENT (low H)<br>\nBUT they DISAGREE with each other!<br><br>\n<strong>Compute Mutual Information (= Epistemic):</strong><br>\n<code class=\"code-block\">\nI(y; θ | x, D) = H(y|x,D) - E[H(y|x,θ)]\n             ≈ Total entropy - Avg individual entropy\n             = HIGH (because model disagree)\n</code>\n<strong>Result:</strong> Knowing WHICH model would resolve uncertainty → epistemic!"
+        }
+      ]
+    },
+    "aleatoric-info": {
+      "title": "Aleatoric Uncertainty (Info-Theoretic Form)",
+      "color": "#e11d48",
+      "sections": [
+        {
+          "type": "equation-display",
+          "content": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:entropy:H}({term:posterior:p}({term:output:y}|{term:input:x}, {term:theta:θ}))]"
+        },
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "{term:expectation:On average}, how \"fuzzy\" is each {term:theta:model's} {term:output:token distribution}?<br><br>All {term:theta:models} might <em>agree</em> that multiple {term:output:tokens} are valid. For \"The weather today is ___\", every {term:theta:model} assigns high {term:entropy:entropy} because \"sunny\", \"rainy\", \"nice\" are all valid. This shared fuzziness is the inherent ambiguity of the {term:input:task}."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:entropy:entropy} of that {term:theta:model's} {term:posterior:probability distribution} over {term:output:output y}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - even with infinite {term:data:data}, this {term:entropy:entropy} remains because the {term:input:task itself} is ambiguous."
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Prompt:</strong> 'The weather today is ___'<br><br>\n<strong>Each model's entropy (internal fuzziness):</strong><br>\n<code class=\"code-block\">\nModel 1: H = 3.2 bits (sunny, rainy, cloudy all valid)\nModel 2: H = 3.0 bits\nModel 3: H = 3.4 bits\nModel 4: H = 3.1 bits\nModel 5: H = 3.3 bits\n</code>\n<strong>Key observation:</strong> ALL models have HIGH internal entropy<br>\nThey AGREE that the task is ambiguous!<br><br>\n<strong>Compute Expected Entropy (= Aleatoric):</strong><br>\n<code class=\"code-block\">\nE[H(y|x,θ)] = (3.2 + 3.0 + 3.4 + 3.1 + 3.3) / 5 = 3.2 bits\n</code>\n<strong>Result:</strong> Even a perfect model can't reduce this → irreducible aleatoric!"
+        }
+      ]
+    }
+  }
 }

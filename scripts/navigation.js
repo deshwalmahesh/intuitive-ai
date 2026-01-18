@@ -10,6 +10,9 @@ const Navigation = {
     // Current state
     currentSectionIndex: 0,
     currentSlideIndex: 0,
+    
+    // Store keyboard handler reference for cleanup
+    _keyboardHandler: null,
 
     /**
      * Initialize navigation with config
@@ -68,7 +71,13 @@ const Navigation = {
      * Setup keyboard navigation
      */
     setupKeyboard() {
-        document.addEventListener('keydown', (e) => {
+        // Remove existing handler if any (prevents duplicate listeners)
+        if (this._keyboardHandler) {
+            document.removeEventListener('keydown', this._keyboardHandler);
+        }
+        
+        // Create and store handler reference
+        this._keyboardHandler = (e) => {
             // Don't navigate if modal is open
             const modal = document.getElementById('modal-overlay');
             if (modal?.classList.contains('active')) return;
@@ -92,7 +101,9 @@ const Navigation = {
                     this.prevSection();
                     break;
             }
-        });
+        };
+        
+        document.addEventListener('keydown', this._keyboardHandler);
     },
 
     /**
@@ -257,6 +268,21 @@ const Navigation = {
             const isLastSection = this.currentSectionIndex === this.config.sections.length - 1;
             const isLastSlide = this.currentSlideIndex === section.slides.length - 1;
             nextBtn.disabled = (isLastSection && isLastSlide);
+        }
+    },
+
+    /**
+     * Reset navigation state (call when leaving topic viewer)
+     */
+    reset() {
+        this.currentSectionIndex = 0;
+        this.currentSlideIndex = 0;
+        this.config = { sections: [] };
+        
+        // Remove keyboard listener
+        if (this._keyboardHandler) {
+            document.removeEventListener('keydown', this._keyboardHandler);
+            this._keyboardHandler = null;
         }
     }
 };

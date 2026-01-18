@@ -1,6 +1,12 @@
 {
   "topics": [
     {
+      "id": "ml_ai_glossary",
+      "title": "ML/AI Glossary",
+      "description": "Quick reference for all ML/AI terms - Loss, Gradient, Entropy, KL Divergence, and more",
+      "path": "topics/ml_ai_glossary.json"
+    },
+    {
       "id": "uncertainty_quantification",
       "title": "Uncertainty Quantification in LLMs",
       "description": "Entropy, Epistemic vs Aleatoric, Hallucination Detection",

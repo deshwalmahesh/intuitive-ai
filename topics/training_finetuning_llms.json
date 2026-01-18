@@ -1,95 +1,130 @@
 {
   "meta": {
     "title": "Fine-tuning LLMs: The Complete Guide",
-    "subtitle": "Types of fine-tuning, training mechanics, and debunking the Pre-training vs SFT myth",
+    "subtitle": "Understanding how models learn - from pre-training to fine-tuning",
     "version": "1.0"
   },
   "navigation": {
     "sections": [
       {
         "id": 0,
-        "title": "What is Fine-tuning?",
+        "title": "1. Training a Model",
         "slides": [
-          "slide-1-1",
-          "slide-1-2",
-          "slide-1-3"
+          "slide-0-1",
+          "slide-0-2",
+          "slide-0-3",
+          "slide-0-4",
+          "slide-0-5"
         ]
       },
       {
         "id": 1,
-        "title": "Model Architectures for Tasks",
+        "title": "2. Encoder vs Decoder Tasks",
+        "slides": [
+          "slide-1-1",
+          "slide-1-2",
+          "slide-1-3",
+          "slide-1-4"
+        ]
+      },
+      {
+        "id": 2,
+        "title": "3. Model Types & Evolution",
         "slides": [
           "slide-2-1",
           "slide-2-2",
           "slide-2-3",
           "slide-2-4",
-          "slide-2-5"
-        ]
-      },
-      {
-        "id": 2,
-        "title": "The Training Myth",
-        "slides": [
-          "slide-3-1",
-          "slide-3-2",
-          "slide-3-3",
-          "slide-3-4"
+          "slide-2-5",
+          "slide-2-6"
         ]
       },
       {
         "id": 3,
-        "title": "How Training Works",
+        "title": "4. Fine-tuning Styles",
         "slides": [
-          "slide-4-1",
-          "slide-4-2",
-          "slide-4-3",
-          "slide-4-4"
+          "slide-3-1",
+          "slide-3-2",
+          "slide-3-3",
+          "slide-3-4",
+          "slide-3-5",
+          "slide-3-6"
         ]
       }
     ]
   },
   "colorPalette": {
-    "full-finetuning": "#16a34a",
-    "adapter": "#7c3aed",
-    "lora": "#0891b2",
-    "teacher-forcing": "#f59e0b",
+    "pre-training": "#059669",
+    "fine-tuning": "#7c3aed",
     "causal-mask": "#dc2626",
+    "teacher-forcing": "#f59e0b",
+    "mlm": "#0891b2",
+    "cls-token": "#8b5cf6",
     "bos-token": "#059669",
     "eos-token": "#db2777",
-    "prompt-masking": "#64748b",
-    "transfer-learning": "#4f46e5",
-    "frozen-layers": "#6366f1",
-    "classification-head": "#8b5cf6",
-    "lm-head": "#0ea5e9",
-    "token-classification": "#10b981",
-    "cls-embedding": "#f97316",
-    "multi-label": "#ec4899"
+    "sft": "#4f46e5",
+    "encoder-only": "#2563eb",
+    "decoder-only": "#16a34a",
+    "attention-mask": "#ea580c",
+    "bce-loss": "#dc2626",
+    "cce-loss": "#b91c1c",
+    "mse-loss": "#991b1b",
+    "sigmoid-activation": "#ea580c",
+    "multi-class": "#2563eb",
+    "multi-label": "#16a34a",
+    "token-classification": "#7c3aed",
+    "lm-head": "#0891b2",
+    "hidden-state": "#6366f1",
+    "ner": "#059669",
+    "pos-tagging": "#0d9488",
+    "extractive-qa": "#7c3aed",
+    "mask-token": "#f59e0b",
+    "preference-data": "#f59e0b",
+    "system-prompt": "#0891b2",
+    "chat-template": "#db2777",
+    "reward-model": "#ea580c",
+    "full-finetuning": "#059669",
+    "partial-finetuning": "#2563eb",
+    "peft": "#7c3aed",
+    "lora": "#db2777",
+    "lora-rank": "#f59e0b",
+    "lora-alpha": "#0891b2",
+    "frozen-layer": "#64748b",
+    "trainable-layer": "#16a34a",
+    "prefix-tuning": "#8b5cf6",
+    "prompt-tuning": "#0d9488",
+    "adapter": "#ea580c"
   },
   "terms": {
-    "full-finetuning": {
-      "display": "Full Fine-tuning",
-      "colorKey": "full-finetuning",
-      "popupKey": "full-finetuning"
+    "pre-training": {
+      "display": "Pre-training",
+      "colorKey": "pre-training",
+      "popupKey": "pre-training"
     },
-    "adapter": {
-      "display": "Adapter",
-      "colorKey": "adapter",
-      "popupKey": "adapter"
+    "fine-tuning": {
+      "display": "Fine-tuning",
+      "colorKey": "fine-tuning",
+      "popupKey": "fine-tuning"
     },
-    "lora": {
-      "display": "LoRA",
-      "colorKey": "lora",
-      "popupKey": "lora"
+    "causal-mask": {
+      "display": "Causal Mask",
+      "colorKey": "causal-mask",
+      "popupKey": "causal-mask"
     },
     "teacher-forcing": {
       "display": "Teacher Forcing",
       "colorKey": "teacher-forcing",
       "popupKey": "teacher-forcing"
     },
-    "causal-mask": {
-      "display": "Causal Mask",
-      "colorKey": "causal-mask",
-      "popupKey": "causal-mask"
+    "mlm": {
+      "display": "MLM",
+      "colorKey": "mlm",
+      "popupKey": "mlm"
+    },
+    "cls-token": {
+      "display": "[CLS]",
+      "colorKey": "cls-token",
+      "popupKey": "cls-token"
     },
     "bos-token": {
       "display": "BOS",
@@ -101,56 +136,181 @@
       "colorKey": "eos-token",
       "popupKey": "eos-token"
     },
-    "prompt-masking": {
-      "display": "Prompt Masking",
-      "colorKey": "prompt-masking",
-      "popupKey": "prompt-masking"
+    "sft": {
+      "display": "SFT",
+      "colorKey": "sft",
+      "popupKey": "sft"
     },
-    "transfer-learning": {
-      "display": "Transfer Learning",
-      "colorKey": "transfer-learning",
-      "popupKey": "transfer-learning"
+    "encoder-only": {
+      "display": "Encoder-only",
+      "colorKey": "encoder-only",
+      "popupKey": "encoder-only"
     },
-    "frozen-layers": {
-      "display": "Frozen Layers",
-      "colorKey": "frozen-layers",
-      "popupKey": "frozen-layers"
+    "decoder-only": {
+      "display": "Decoder-only",
+      "colorKey": "decoder-only",
+      "popupKey": "decoder-only"
     },
-    "classification-head": {
-      "display": "Classification Head",
-      "colorKey": "classification-head",
-      "popupKey": "classification-head"
+    "attention-mask": {
+      "display": "Attention Mask",
+      "colorKey": "attention-mask",
+      "popupKey": "attention-mask"
     },
-    "lm-head": {
-      "display": "LM Head",
-      "colorKey": "lm-head",
-      "popupKey": "lm-head"
+    "bce-loss": {
+      "display": "BCE",
+      "colorKey": "bce-loss",
+      "popupKey": "bce-loss"
+    },
+    "cce-loss": {
+      "display": "CCE",
+      "colorKey": "cce-loss",
+      "popupKey": "cce-loss"
+    },
+    "mse-loss": {
+      "display": "MSE",
+      "colorKey": "mse-loss",
+      "popupKey": "mse-loss"
+    },
+    "sigmoid-activation": {
+      "display": "σ",
+      "colorKey": "sigmoid-activation",
+      "popupKey": "sigmoid-activation"
+    },
+    "multi-class": {
+      "display": "Multi-class",
+      "colorKey": "multi-class",
+      "popupKey": "multi-class"
+    },
+    "multi-label": {
+      "display": "Multi-label",
+      "colorKey": "multi-label",
+      "popupKey": "multi-label"
     },
     "token-classification": {
       "display": "Token Classification",
       "colorKey": "token-classification",
       "popupKey": "token-classification"
     },
-    "cls-embedding": {
-      "display": "[CLS] Embedding",
-      "colorKey": "cls-embedding",
-      "popupKey": "cls-embedding"
+    "lm-head": {
+      "display": "LM Head",
+      "colorKey": "lm-head",
+      "popupKey": "lm-head"
     },
-    "multi-label": {
-      "display": "Multi-label",
-      "colorKey": "multi-label",
-      "popupKey": "multi-label"
+    "hidden-state": {
+      "display": "Hidden State",
+      "colorKey": "hidden-state",
+      "popupKey": "hidden-state"
+    },
+    "ner": {
+      "display": "NER",
+      "colorKey": "ner",
+      "popupKey": "ner"
+    },
+    "pos-tagging": {
+      "display": "POS",
+      "colorKey": "pos-tagging",
+      "popupKey": "pos-tagging"
+    },
+    "extractive-qa": {
+      "display": "Extractive QA",
+      "colorKey": "extractive-qa",
+      "popupKey": "extractive-qa"
+    },
+    "mask-token": {
+      "display": "[MASK]",
+      "colorKey": "mask-token",
+      "popupKey": "mask-token"
+    },
+    "preference-data": {
+      "display": "Preference Data",
+      "colorKey": "preference-data",
+      "popupKey": "preference-data"
+    },
+    "system-prompt": {
+      "display": "System Prompt",
+      "colorKey": "system-prompt",
+      "popupKey": "system-prompt"
+    },
+    "chat-template": {
+      "display": "Chat Template",
+      "colorKey": "chat-template",
+      "popupKey": "chat-template"
+    },
+    "reward-model": {
+      "display": "Reward Model",
+      "colorKey": "reward-model",
+      "popupKey": "reward-model"
+    },
+    "transfer-learning": {
+      "display": "Transfer Learning",
+      "colorKey": "fine-tuning",
+      "popupKey": "transfer-learning"
+    },
+    "full-finetuning": {
+      "display": "Full Fine-tuning",
+      "colorKey": "full-finetuning",
+      "popupKey": "full-finetuning"
+    },
+    "partial-finetuning": {
+      "display": "Partial Fine-tuning",
+      "colorKey": "partial-finetuning",
+      "popupKey": "partial-finetuning"
+    },
+    "peft": {
+      "display": "PEFT",
+      "colorKey": "peft",
+      "popupKey": "peft"
+    },
+    "lora": {
+      "display": "LoRA",
+      "colorKey": "lora",
+      "popupKey": "lora"
+    },
+    "lora-rank": {
+      "display": "r",
+      "colorKey": "lora-rank",
+      "popupKey": "lora-rank"
+    },
+    "lora-alpha": {
+      "display": "α",
+      "colorKey": "lora-alpha",
+      "popupKey": "lora-alpha"
+    },
+    "frozen-layer": {
+      "display": "Frozen",
+      "colorKey": "frozen-layer",
+      "popupKey": "frozen-layer"
+    },
+    "trainable-layer": {
+      "display": "Trainable",
+      "colorKey": "trainable-layer",
+      "popupKey": "trainable-layer"
+    },
+    "prefix-tuning": {
+      "display": "Prefix Tuning",
+      "colorKey": "prefix-tuning",
+      "popupKey": "prefix-tuning"
+    },
+    "prompt-tuning": {
+      "display": "Prompt Tuning",
+      "colorKey": "prompt-tuning",
+      "popupKey": "prompt-tuning"
+    },
+    "adapter": {
+      "display": "Adapter",
+      "colorKey": "adapter",
+      "popupKey": "adapter"
     }
   },
   "popups": {
-    "full-finetuning": {
-      "title": "Full Fine-tuning",
-      "color": "#16a34a",
+    "pre-training": {
+      "title": "Pre-training - Learning Language from Scratch",
+      "color": "#059669",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:full-finetuning:Full fine-tuning} means updating EVERY single {term:weights:parameter} in the {term:model:model} during training. It's like taking a pre-trained brain and reshaping ALL its connections for your specific task. This gives maximum flexibility but requires substantial compute and risks forgetting pre-trained knowledge."
+          "content": "{term:pre-training:Pre-training} is teaching a {term:model:model} the fundamental patterns of language using MASSIVE amounts of unlabeled text (trillions of {term:token:tokens}). The {term:model:model} learns grammar, syntax, semantics, facts, and reasoning patterns - WITHOUT any human-labeled examples! It's like a child learning to speak by listening to millions of conversations."
         },
         {
           "type": "divider"
@@ -158,24 +318,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "All {term:weights:parameters} θ in the {term:model:model} are trainable. The {term:gradient:gradients} are computed for every layer (embedding, attention, FFN) and {term:weights:weights} are updated via backpropagation.",
-          "formula": "{term:weights:θ}_new = {term:weights:θ}_old - η × {term:gradient:∇}{term:loss:L}({term:weights:θ})"
+          "content": "The process of initializing {term:weights:model parameters} by training on a self-supervised objective (next token prediction or masked token prediction) over a large corpus. The {term:model:model} learns P(token|context) from the statistical patterns in text.",
+          "formula": "{term:loss:L} = −{term:summation:Σ} log {term:probability:P}({term:token:t}_i | context)"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>LLaMA-7B Full Fine-tuning:</strong><br><code class=\"code-block\">Trainable params: 7,000,000,000 (100%)\nMemory breakdown (FP16):\n  Model weights: ~14GB\n  Gradients: ~14GB\n  Optimizer states (AdamW): ~42-84GB\n  Total: ~100-120GB VRAM needed!\nStorage: 14GB per checkpoint\nRisk: Catastrophic forgetting if no regularization</code>"
+          "title": "Real Scale",
+          "content": "<ul><li><strong>GPT-3:</strong> ~300 billion tokens (~570 GB of text)</li><li><strong>LLaMA-2:</strong> ~2 trillion tokens</li><li><strong>GPT-4:</strong> Unknown (estimated 10+ trillion)</li><li><strong>Compute cost:</strong> $1M - $100M+</li><li><strong>Time:</strong> Weeks on 1000s of GPUs</li></ul>"
         }
       ]
     },
-    "adapter": {
-      "title": "Adapter - Parameter-Efficient Modules",
+    "fine-tuning": {
+      "title": "Fine-tuning - Adapting for Your Task",
       "color": "#7c3aed",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:adapter:Adapters} are small trainable modules inserted INTO the {term:model:model} while keeping original {term:weights:weights} {term:frozen-layers:frozen}. Think of it like adding specialized 'plugins' to a pre-trained brain. The base knowledge stays intact while new capabilities are learned through tiny add-on networks."
+          "content": "{term:fine-tuning:Fine-tuning} takes a {term:pre-training:pre-trained} {term:model:model} that already 'knows' language and adapts it for YOUR specific task using YOUR {term:data:labeled data}. Instead of training billions of {term:weights:parameters} from random values, you start from a {term:model:model} that already understands language! This is {term:transfer-learning:transfer learning}."
         },
         {
           "type": "divider"
@@ -183,24 +343,74 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Small bottleneck layers (down-projection → non-linearity → up-projection) inserted after attention or FFN layers. Only {term:adapter:adapter} {term:weights:weights} are trained; base {term:model:model} stays {term:frozen-layers:frozen}.",
-          "formula": "h = h + {term:adapter:Adapter}(h) = h + W_up × ReLU(W_down × h)"
+          "content": "Continuing training from {term:pre-training:pre-trained} {term:weights:weights} θ_pretrained on a task-specific dataset. The {term:model:model} adapts its representations while preserving general language knowledge. Can be full (all parameters) or partial (selected layers).",
+          "formula": "{term:weights:θ}_new = {term:weights:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}_{task}"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Adapter on 7B model:</strong><br><code class=\"code-block\">Base model params: 7B (frozen)\nAdapter params: ~10M (0.14% trainable)\nMemory: ~14GB (base) + ~40MB (adapter)\nStorage: 40MB per task adapter</code>"
+          "title": "Cost Comparison",
+          "content": "<strong>Training from scratch:</strong><ul><li>Data: Trillions of tokens</li><li>Cost: ~$4.6M (GPT-3 scale)</li><li>Time: Weeks on 1000s of GPUs</li></ul><strong>Fine-tuning:</strong><ul><li>Data: 1K - 100K examples</li><li>Cost: ~$100 - $10K</li><li>Time: Hours on 1-8 GPUs</li></ul><em>100x - 1000x cheaper!</em>"
         }
       ]
     },
-    "lora": {
-      "title": "LoRA - Low-Rank Adaptation",
+    "encoder-only": {
+      "title": "Encoder-only Models (BERT-style)",
+      "color": "#2563eb",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:encoder-only:Encoder-only} models like BERT, RoBERTa, and ALBERT use <strong>bidirectional attention</strong> - each {term:token:token} can see ALL other tokens (past AND future). This makes them excellent for understanding tasks (classification, NER) but unsuitable for text generation."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The attention mechanism has no causal mask, allowing position i to attend to all positions j ∈ [0, n]. Pre-trained using Masked Language Modeling ({term:mlm:MLM}) where 15% of tokens are masked and predicted using bidirectional context.",
+          "formula": "Attention(Q, K, V) = {term:softmax:softmax}(QK^T / √d) × V"
+        },
+        {
+          "type": "example",
+          "title": "BERT Attention Pattern",
+          "content": "For sequence <code>[CLS] The cat sat [SEP]</code>:<br><br>Each token can attend to ALL other tokens (bidirectional):<ul><li><strong>[CLS]</strong> sees: [CLS], The, cat, sat, [SEP]</li><li><strong>The</strong> sees: [CLS], The, cat, sat, [SEP]</li><li><strong>cat</strong> sees: [CLS], The, cat, sat, [SEP]</li></ul>Result: Every token has FULL context from both directions!"
+        }
+      ]
+    },
+    "decoder-only": {
+      "title": "Decoder-only Models (GPT/LLaMA-style)",
+      "color": "#16a34a",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:decoder-only:Decoder-only} models like GPT, LLaMA, and Mistral use <strong>causal (autoregressive) attention</strong> - each {term:token:token} can ONLY see previous tokens and itself (NOT future tokens). This enables text generation one {term:token:token} at a time."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Uses {term:causal-mask:causal masking} to prevent future token access. Pre-trained using next token prediction: P(t_i | t_1, ..., t_{i-1}). The {term:causal-mask:causal mask} is a lower triangular matrix applied to attention scores.",
+          "formula": "Attention = {term:softmax:softmax}(QK^T / √d + {term:causal-mask:Mask}) × V"
+        },
+        {
+          "type": "example",
+          "title": "GPT Attention Pattern",
+          "content": "For sequence <code>[BOS] The cat sat</code>:<br><br>Each token can only see itself and PREVIOUS tokens:<ul><li><strong>[BOS]</strong> sees: only [BOS]</li><li><strong>The</strong> sees: [BOS], The</li><li><strong>cat</strong> sees: [BOS], The, cat</li><li><strong>sat</strong> sees: [BOS], The, cat, sat</li></ul>Result: Can't peek at future tokens!"
+        }
+      ]
+    },
+    "mlm": {
+      "title": "MLM - Masked Language Modeling",
       "color": "#0891b2",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:lora:LoRA} approximates {term:weights:weight} updates using two small matrices instead of the full matrix. Imagine a 4096×4096 update split into 4096×16 and 16×4096 matrices. Same effect, 1/256th the parameters! The original {term:weights:weights} stay frozen; LoRA matrices are added at inference."
+          "content": "{term:mlm:MLM} is BERT's {term:pre-training:pre-training} objective. Randomly mask 15% of {term:token:tokens} and have the {term:model:model} predict the original ones using bidirectional context. It's like a fill-in-the-blank game - 'The [MASK] sat on the mat' → predict 'cat'."
         },
         {
           "type": "divider"
@@ -208,24 +418,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "For a {term:weights:weight} matrix W ∈ ℝ^(d×k), instead of training ΔW directly, decompose it as ΔW = B × A where B ∈ ℝ^(d×r) and A ∈ ℝ^(r×k) with rank r << min(d,k).",
-          "formula": "W_adapted = W_frozen + {term:lora:LoRA} = W + B × A"
+          "content": "Of the 15% selected tokens: 80% replaced with [MASK], 10% with random token, 10% unchanged. This prevents the model from only learning when [MASK] is present. Loss is computed only on masked positions.",
+          "formula": "{term:loss:L}_{MLM} = −{term:summation:Σ}_{masked} log {term:probability:P}({term:token:t}_{original} | context)"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>LoRA on LLaMA-7B attention:</strong><br><code class=\"code-block\">Original W_q shape: (4096, 4096) → 16.7M params\nLoRA rank r=16:\n  B shape: (4096, 16) → 65K params\n  A shape: (16, 4096) → 65K params\n  Total: 130K params (0.78% of original!)\n\nFor 4 projections (Q,K,V,O) × 32 layers:\n  ~16M trainable params (0.23% of 7B)</code>"
+          "title": "MLM in Action",
+          "content": "<strong>Original sentence:</strong> \"The cat sat on the mat\"<br><br><strong>Step 1:</strong> Select 15% of tokens → \"cat\", \"mat\"<br><br><strong>Step 2:</strong> Transform selected tokens:<ul><li>\"cat\" → [MASK] (80% chance)</li><li>\"mat\" → \"dog\" (10% random replacement)</li></ul><strong>Step 3:</strong> Model input: \"The [MASK] sat on the dog\"<br><br><strong>Step 4:</strong> Model predicts:<ul><li>Position 2: P(\"cat\") = 0.89</li><li>Position 6: P(\"mat\") = 0.72</li></ul><strong>Step 5:</strong> Loss computed only on masked positions!"
         }
       ]
     },
-    "transfer-learning": {
-      "title": "Transfer Learning",
-      "color": "#4f46e5",
+    "cls-token": {
+      "title": "[CLS] - Classification Token",
+      "color": "#8b5cf6",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:transfer-learning:Transfer learning} means taking knowledge from one task and applying it to another. A {term:model:model} pre-trained on trillions of {term:token:tokens} already 'knows' language—grammar, facts, reasoning patterns. Fine-tuning transfers this knowledge to your specific task instead of learning from scratch."
+          "content": "The {term:cls-token:[CLS]} token is a special token prepended to every BERT input. Its final hidden state is designed to capture the 'summary' of the entire sequence through bidirectional attention. For classification tasks, you attach a classification head on TOP of this {term:cls-token:[CLS]} embedding."
         },
         {
           "type": "divider"
@@ -233,74 +443,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Pre-trained {term:weights:weights} serve as initialization instead of random values. The {term:model:model} starts from a point in {term:weights:weight} space that already captures useful representations, requiring far fewer examples to adapt.",
-          "formula": "{term:weights:θ}_init = {term:weights:θ}_pretrained (not random)"
+          "content": "The hidden state at position 0 after all transformer layers. Since BERT uses bidirectional attention, {term:cls-token:[CLS]} attends to ALL tokens and learns an aggregate representation during {term:pre-training:pre-training} (via NSP task) and {term:fine-tuning:fine-tuning}.",
+          "formula": "cls_embedding = hidden_states[:, 0, :] ∈ ℝ^{batch × hidden_dim}"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Training from scratch vs Transfer:</strong><br><code class=\"code-block\">Training GPT-3 from scratch:\n  Data: 300B tokens\n  Compute: ~$4.6M (estimated)\n  Time: Weeks on thousands of GPUs\n\nFine-tuning GPT-3 on your task:\n  Data: 1K-100K examples\n  Compute: ~$100-$10K\n  Time: Hours on 1-8 GPUs</code>"
-        }
-      ]
-    },
-    "frozen-layers": {
-      "title": "Frozen Layers",
-      "color": "#6366f1",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "What It Does",
-          "content": "{term:frozen-layers:Frozen layers} are parts of the {term:model:model} where {term:weights:weights} are NOT updated during training. The {term:gradient:gradients} are computed but not applied. This preserves pre-trained knowledge while only updating specific components like {term:adapter:adapters} or top layers."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "Parameters are marked with requires_grad=False. During backpropagation, {term:gradient:gradients} flow through but {term:weights:weights} remain constant.",
-          "formula": "{term:weights:θ}_frozen = {term:weights:θ}_frozen (no update)"
-        },
-        {
-          "type": "example",
-          "title": "Real Example",
-          "content": "<strong>PyTorch implementation:</strong><br><code class=\"code-block\">for param in model.base.parameters():\n    param.requires_grad = False  # Freeze\n\nfor param in model.lora_layers.parameters():\n    param.requires_grad = True   # Trainable</code>"
-        }
-      ]
-    },
-    "teacher-forcing": {
-      "title": "Teacher Forcing",
-      "color": "#f59e0b",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "What It Does",
-          "content": "During training, instead of using the {term:model:model}'s own predictions as input for the next step, we use the actual correct {term:token:tokens} from the training {term:data:data}. This prevents error accumulation and enables PARALLEL processing of entire sequences."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "At training time, input at position i is always the ground truth token t_i from {term:data:training data}, not the model's prediction. Combined with {term:causal-mask:causal masking}, this allows computing {term:loss:loss} for ALL positions in ONE forward pass.",
-          "formula": "Input[i] = GroundTruth[i] (not argmax(Output[i-1]))"
-        },
-        {
-          "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Training vs Inference:</strong><br><code class=\"code-block\">Training (teacher forcing):\n  Input:  [BOS, 'The', 'cat', 'sat']\n  Target: ['The', 'cat', 'sat', EOS]\n  → ALL 4 predictions computed in 1 forward pass!\n\nInference (autoregressive):\n  Step 1: [BOS] → 'The'\n  Step 2: [BOS, 'The'] → 'cat'\n  Step 3: [BOS, 'The', 'cat'] → 'sat'\n  → 3 separate forward passes!</code>"
+          "title": "Using [CLS] for Classification",
+          "content": "<strong>Input:</strong> <code>[CLS] I love this movie! [SEP]</code><br><br><strong>Step 1:</strong> Pass through BERT (12 layers)<ul><li>hidden_states shape: (batch, 7, 768)</li></ul><strong>Step 2:</strong> Extract [CLS] embedding<ul><li><code>cls_embed = hidden_states[:, 0, :]</code></li><li>shape: (batch, 768)</li></ul><strong>Step 3:</strong> Add classification head<ul><li><code>logits = Linear(768, 2)(cls_embed)</code></li></ul><strong>Step 4:</strong> Apply softmax → [0.08, 0.92] → Positive!"
         }
       ]
     },
     "causal-mask": {
-      "title": "Causal Attention Mask",
+      "title": "Causal Mask - Preventing Future Peeking",
       "color": "#dc2626",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "The {term:causal-mask:causal mask} prevents each position from 'seeing' future {term:token:tokens}. Like reading a book with the future pages covered—position 3 can see positions 1, 2, 3 but NOT 4, 5, etc. This is essential for autoregressive generation where we predict one {term:token:token} at a time."
+          "content": "The {term:causal-mask:causal mask} prevents each position from 'seeing' future {term:token:tokens}. Like reading a book with future pages covered - position 3 can see positions 1, 2, 3 but NOT 4, 5. Essential for autoregressive generation where we predict one {term:token:token} at a time."
         },
         {
           "type": "divider"
@@ -308,13 +468,38 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "An upper triangular matrix of -∞ values is added to attention scores BEFORE {term:softmax:softmax}. Since exp(-∞) → 0, future positions get zero attention weight.",
-          "formula": "Attention = {term:softmax:softmax}(QK^T / √d + {term:causal-mask:Mask})"
+          "content": "An upper triangular matrix of -∞ values added to attention scores BEFORE {term:softmax:softmax}. Since exp(-∞) → 0, future positions get zero attention weight after softmax. Creates a lower triangular attention pattern.",
+          "formula": "Attention = {term:softmax:softmax}(QK^T / √d + Mask), where Mask[i,j] = 0 if j ≤ i, else −∞"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Mask for sequence length 4:</strong><br><code class=\"code-block\">Mask = [[ 0,  -∞, -∞, -∞],\n        [ 0,   0, -∞, -∞],\n        [ 0,   0,  0, -∞],\n        [ 0,   0,  0,  0]]\n\nAfter softmax:\n        [[1.0, 0.0, 0.0, 0.0],  ← pos 0 sees only itself\n         [0.5, 0.5, 0.0, 0.0],  ← pos 1 sees 0,1\n         [0.3, 0.3, 0.4, 0.0],  ← pos 2 sees 0,1,2\n         [0.2, 0.2, 0.3, 0.3]] ← pos 3 sees all</code>"
+          "title": "Mask Visualization (seq_len=4)",
+          "content": "<strong>Before softmax (raw mask values):</strong><br><code class=\"code-block\">       t0   t1   t2   t3\nt0 [   0,  -∞,  -∞,  -∞ ]\nt1 [   0,   0,  -∞,  -∞ ]\nt2 [   0,   0,   0,  -∞ ]\nt3 [   0,   0,   0,   0 ]</code><br><br><strong>After softmax:</strong> Lower triangular matrix where each row sums to 1.0. Since exp(-∞) = 0, future tokens are completely ignored."
+        }
+      ]
+    },
+    "teacher-forcing": {
+      "title": "Teacher Forcing - Parallel Training",
+      "color": "#f59e0b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "During training, instead of using the {term:model:model}'s own predictions as input for the next step, we use the actual correct {term:token:tokens} from the training {term:data:data}. This prevents error accumulation and enables PARALLEL processing of entire sequences in ONE forward pass!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "At training time, input at position i is always the ground truth token t_i, NOT the model's prediction. Combined with {term:causal-mask:causal masking}, this allows computing {term:loss:loss} for ALL positions in ONE forward pass - making training fast.",
+          "formula": "Input[i] = GroundTruth[i], NOT argmax({term:probability:P}(t | t_1...t_{i-1}))"
+        },
+        {
+          "type": "example",
+          "title": "Training vs Inference",
+          "content": "<strong>TRAINING (teacher forcing, parallel):</strong><ul><li>Input: <code>[BOS, 'The', 'cat', 'sat']</code></li><li>Target: <code>['The', 'cat', 'sat', EOS]</code></li><li>ALL 4 predictions in 1 forward pass!</li><li>Loss computed at all positions simultaneously</li></ul><strong>INFERENCE (autoregressive, sequential):</strong><ul><li>Step 1: [BOS] → predict 'The'</li><li>Step 2: [BOS, 'The'] → predict 'cat'</li><li>Step 3: [BOS, 'The', 'cat'] → predict 'sat'</li><li>3 separate forward passes - much slower!</li></ul>"
         }
       ]
     },
@@ -325,7 +510,7 @@
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:bos-token:BOS} is a special {term:token:token} that marks where a sequence starts. It gives the {term:model:model} a consistent starting point and helps distinguish between the beginning of a new conversation vs continuation of an existing one."
+          "content": "{term:bos-token:BOS} is a special {term:token:token} that marks where a sequence starts. It gives the {term:model:model} a consistent starting point for generation and helps distinguish between new conversations vs continuations."
         },
         {
           "type": "divider"
@@ -333,13 +518,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A special token ID (often ID 1 or 2 depending on tokenizer) prepended to input sequences. Has its own learned embedding vector that signals sequence start.",
+          "content": "A special token ID (often 1 or 2) prepended to input sequences. Has its own learned embedding vector signaling sequence start.",
           "formula": "Input = [{term:bos-token:BOS}] + tokenize(text)"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>LLaMA tokenization:</strong><br><code class=\"code-block\">Text: 'Hello world'\nTokenized: [1, 15496, 3186]\n           ↑\n         BOS token (ID=1)</code>"
+          "title": "Tokenization with BOS",
+          "content": "<strong>Text:</strong> \"Hello world\"<br><br><strong>Tokenized:</strong> <code>[1, 15496, 995]</code><ul><li><code>1</code> = BOS token</li><li><code>15496</code> = \"Hello\"</li><li><code>995</code> = \"world\"</li></ul>"
         }
       ]
     },
@@ -350,7 +535,7 @@
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:eos-token:EOS} marks where a sequence ends. During generation, when the {term:model:model} outputs EOS, we stop generating. During training, it teaches the {term:model:model} when to stop. Without it, models would generate text forever!"
+          "content": "{term:eos-token:EOS} marks where a sequence ends. During generation, when the {term:model:model} outputs {term:eos-token:EOS}, we stop generating. During training, it teaches the {term:model:model} when responses should end."
         },
         {
           "type": "divider"
@@ -358,24 +543,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A special token ID appended to target sequences during training. The model learns to predict EOS when the response should end. Generation stops when EOS probability is highest.",
+          "content": "A special token ID appended to target sequences. The {term:model:model} learns to predict {term:eos-token:EOS} when the response should terminate.",
           "formula": "Target = tokenize(response) + [{term:eos-token:EOS}]"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Training target:</strong><br><code class=\"code-block\">Response: 'The capital is Paris'\nTarget tokens: [450, 7483, 338, 3681, 2]\n                                      ↑\n                                    EOS (ID=2)\n\nDuring generation, stop when:\nargmax(logits) == EOS token ID</code>"
+          "title": "During Generation",
+          "content": "<strong>Response tokens:</strong> <code>[450, 7483, 338, 3681, 2]</code><ul><li>Token IDs 450, 7483, 338, 3681 = response text</li><li><code>2</code> = EOS token (signals stop)</li></ul><strong>Generation stops when:</strong> <code>argmax(logits) == EOS_token_ID</code>"
         }
       ]
     },
-    "prompt-masking": {
-      "title": "Prompt Masking in SFT",
-      "color": "#64748b",
+    "sft": {
+      "title": "SFT - Supervised Fine-Tuning",
+      "color": "#4f46e5",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:prompt-masking:Prompt masking} excludes the instruction/prompt {term:token:tokens} from {term:loss:loss} calculation during SFT. We only want the {term:model:model} to learn to generate RESPONSES, not memorize prompts. The prompt flows through for context but doesn't contribute to {term:gradient:gradients}."
+          "content": "{term:sft:SFT} teaches the {term:model:model} to follow instructions using human-written (instruction, response) pairs. The {term:model:model} learns patterns like 'when given this instruction, respond this way'. It's still next-{term:token:token} prediction - just on curated {term:data:data}!"
         },
         {
           "type": "divider"
@@ -383,24 +568,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Target labels for prompt positions are set to -100 (PyTorch ignore_index). CrossEntropyLoss skips these positions when computing the final {term:loss:loss}.",
-          "formula": "Labels[prompt_positions] = -100 (ignored)"
+          "content": "Same {term:loss:loss} function as {term:pre-training:pre-training}! The key difference is the {term:data:data} format (instruction-response pairs) and optional prompt masking (labels=-100 for prompt {term:token:tokens} so they don't contribute to {term:loss:loss}).",
+          "formula": "{term:loss:L}_{SFT} = −{term:summation:Σ}_{response} log {term:probability:P}({term:token:t}_i | prompt, {term:token:t}_1...{term:token:t}_{i-1})"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>SFT with prompt masking:</strong><br><code class=\"code-block\">Input:  'Translate: Hello → Bonjour'\nTokens: [Trans, late, :, Hello, →, Bon, jour]\nLabels: [-100, -100, -100, -100, -100, Bon, jour]\n         ↑ prompt (ignored)            ↑ response (trained)\n\nLoss = CE(logits[5:], labels[5:])\n     = only computed on 'Bonjour' tokens!</code>"
+          "title": "SFT Data Format",
+          "content": "<strong>JSONL format (industry standard):</strong><br><code class=\"code-block\">{\"messages\": [\n  {\"role\": \"system\", \"content\": \"You are helpful.\"},\n  {\"role\": \"user\", \"content\": \"Translate: Hello\"},\n  {\"role\": \"assistant\", \"content\": \"Bonjour\"}\n]}</code><br><br><strong>Key point:</strong> Loss is computed only on assistant response tokens! Prompt tokens have <code>labels = -100</code> (ignored by PyTorch CrossEntropyLoss)."
         }
       ]
     },
-    "classification-head": {
-      "title": "Classification Head",
-      "color": "#8b5cf6",
+    "attention-mask": {
+      "title": "Attention Mask - Handling Padding",
+      "color": "#ea580c",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "A {term:classification-head:classification head} is a simple linear layer added on top of a transformer backbone to convert {term:model:model} embeddings into class predictions. It takes the pooled representation (e.g., [CLS] token or last token) and projects it to the number of classes you want to predict."
+          "content": "The {term:attention-mask:attention mask} tells the {term:model:model} which {term:token:tokens} are real and which are just padding (added to make sequences equal length in a batch). Padding tokens should be ignored in attention calculations."
         },
         {
           "type": "divider"
@@ -408,24 +593,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A linear transformation that maps the hidden representation to class logits. For a hidden size h and C classes: Linear(h, C).",
-          "formula": "logits = W × embedding + b, where W ∈ ℝ^(C×h)"
+          "content": "A binary mask where 1 = real token, 0 = padding. Applied to attention scores by setting padding positions to -∞ before {term:softmax:softmax}. Combined with {term:causal-mask:causal mask} in decoder-only {term:model:models}.",
+          "formula": "attention_mask[i] = 1 if token[i] is real, else 0"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>BERT for 3-class sentiment:</strong><br><code class=\"code-block\">hidden_size = 768\nnum_classes = 3  # pos, neg, neutral\n\nself.classifier = Linear(768, 3)\n\n# [CLS] embedding: (batch, 768)\n# Output logits: (batch, 3)</code>"
+          "title": "Padding Example",
+          "content": "<strong>Batch (padded to max length):</strong><ul><li>Seq 1: <code>[BOS, The, cat, sat, EOS]</code> → mask: <code>[1,1,1,1,1]</code></li><li>Seq 2: <code>[BOS, Hi, EOS, PAD, PAD]</code> → mask: <code>[1,1,1,0,0]</code></li></ul><strong>Result:</strong> PAD tokens don't affect other tokens' representations."
         }
       ]
     },
-    "lm-head": {
-      "title": "Language Model Head",
-      "color": "#0ea5e9",
+    "bce-loss": {
+      "title": "BCE - Binary Cross-Entropy Loss",
+      "color": "#dc2626",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "The {term:lm-head:LM head} projects transformer hidden states to the full {term:vocabulary:vocabulary} size at EVERY position. It's what makes text generation possible—predicting the next {term:token:token}'s probability distribution over 50K+ possible tokens."
+          "content": "{term:bce-loss:Binary Cross-Entropy} measures how wrong your {term:model:model}'s {term:probability:probability} prediction is for a YES/NO question. Think: <strong>confident + wrong = massive penalty!</strong>"
         },
         {
           "type": "divider"
@@ -433,24 +618,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A linear layer that maps hidden states of dimension h to vocabulary size V, applied at every sequence position.",
-          "formula": "logits = LMHead(hidden) ∈ ℝ^(batch × seq_len × V)"
+          "content": "Measures dissimilarity between predicted {term:probability:probability} <em>p</em> and true binary label <em>y</em> ∈ {0, 1}. The log function heavily penalizes confident wrong predictions.",
+          "formula": "{term:bce-loss:L} = −[y · log(p) + (1−y) · log(1−p)]"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>GPT-2 LM Head:</strong><br><code class=\"code-block\">hidden_size = 768\nvocab_size = 50257\n\nself.lm_head = Linear(768, 50257)\n\n# Hidden states: (batch, seq_len, 768)\n# Output logits: (batch, seq_len, 50257)\n# → 50K probabilities per position!</code>"
+          "title": "Step-by-Step Example",
+          "content": "<strong>Spam Detection:</strong><br><ul><li>True = spam (y=1), Prediction = 95% spam → Loss = <code>−log(0.95)</code> = <strong>0.05</strong> ✓</li><li>True = spam (y=1), Prediction = 5% spam → Loss = <code>−log(0.05)</code> = <strong>3.0</strong> ✗</li></ul>Being confidently wrong is <strong>60× worse!</strong>"
         }
       ]
     },
-    "token-classification": {
-      "title": "Token Classification",
-      "color": "#10b981",
+    "cce-loss": {
+      "title": "CCE - Categorical Cross-Entropy Loss",
+      "color": "#b91c1c",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:token-classification:Token classification} assigns a label to EACH {term:token:token} in a sequence, not just the whole sequence. Used for Named Entity Recognition (NER), Part-of-Speech (POS) tagging, and span extraction. The same linear head is applied to every token's embedding."
+          "content": "{term:cce-loss:Categorical Cross-Entropy} is for 'pick ONE out of many'. Only the <em>true class's</em> {term:probability:probability} matters for the {term:loss:loss}."
         },
         {
           "type": "divider"
@@ -458,24 +643,24 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A linear layer applied independently to each token position's hidden state. Labels=-100 for special tokens (ignored in {term:loss:loss}).",
-          "formula": "labels[i] = argmax(Linear(hidden[i])) for each position i"
+          "content": "For K classes with one-hot targets, simplifies to negative log of the true class probability.",
+          "formula": "{term:cce-loss:L} = −Σᵢ yᵢ·log(pᵢ) = −log(p_{true})"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>NER with BERT:</strong><br><code class=\"code-block\">Input:  [\"[CLS]\", \"John\", \"works\", \"at\", \"Google\", \"[SEP]\"]\nLabels: [-100, \"B-PER\", \"O\", \"O\", \"B-ORG\", -100]\n\n# Linear(768, 9) applied to each token\n# Output: (batch, 6, 9) → 9 entity types\n# -100 positions ignored in loss!</code>"
+          "title": "Calculation Example",
+          "content": "<strong>Image Classification (3 classes):</strong><br><ul><li>Classes: <code>[cat, dog, bird]</code></li><li>True: dog → one-hot: <code>[0, 1, 0]</code></li><li>Prediction: <code>[0.1, 0.85, 0.05]</code></li></ul><strong>Loss:</strong> <code>−log(0.85)</code> = <strong>0.16</strong><br>Only the dog {term:probability:probability} (0.85) mattered!"
         }
       ]
     },
-    "cls-embedding": {
-      "title": "[CLS] Token Embedding",
-      "color": "#f97316",
+    "mse-loss": {
+      "title": "MSE - Mean Squared Error Loss",
+      "color": "#991b1b",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "In encoder models like BERT, the [CLS] {term:token:token} is a special token prepended to every input. Its final embedding is designed to capture the 'summary' of the entire sequence and is used as input to classification heads."
+          "content": "{term:mse-loss:MSE} measures 'how far off' your numeric prediction is. <strong>Big errors hurt quadratically more</strong> than small ones."
         },
         {
           "type": "divider"
@@ -483,24 +668,74 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The hidden state at position 0 (where [CLS] sits) after passing through all transformer layers. In bidirectional attention, [CLS] attends to all tokens.",
-          "formula": "cls_embedding = hidden_states[:, 0, :]"
+          "content": "Average of squared differences between predicted ŷ and true y values.",
+          "formula": "{term:mse-loss:L} = (1/n) × Σ(y − ŷ)²"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>BERT classification:</strong><br><code class=\"code-block\">Input: [\"[CLS]\", \"I\", \"love\", \"this\", \"!\", \"[SEP]\"]\n\n# hidden_states shape: (batch, 6, 768)\ncls_emb = hidden_states[:, 0, :]  # (batch, 768)\nlogits = classifier(cls_emb)       # (batch, num_classes)</code>"
+          "title": "Example",
+          "content": "<strong>House Price Prediction:</strong><br><ul><li>True: $350K, Predicted: $320K</li><li>Error: $30K → Error²: <strong>$900M</strong></li></ul>Doubling the error → 4× the {term:loss:loss}!"
+        }
+      ]
+    },
+    "sigmoid-activation": {
+      "title": "σ - Sigmoid Activation",
+      "color": "#ea580c",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:sigmoid-activation:Sigmoid} squashes any number to (0, 1). <strong>Each output is INDEPENDENT</strong> - that's why it's used for {term:multi-label:multi-label} classification!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "S-shaped function. Large positive → ~1, large negative → ~0, zero → exactly 0.5.",
+          "formula": "{term:sigmoid-activation:σ}(z) = 1 / (1 + e^(−z))"
+        },
+        {
+          "type": "example",
+          "title": "Sigmoid vs Softmax",
+          "content": "<strong>{term:softmax:Softmax}:</strong> <code>[2.0, 1.0, 0.5]</code> → <code>[0.59, 0.24, 0.17]</code> <em>sum = 1.0</em><br><br><strong>{term:sigmoid-activation:Sigmoid}:</strong> <code>[2.0, 1.0, 0.5]</code> → <code>[0.88, 0.73, 0.62]</code> <em>each independent!</em>"
+        }
+      ]
+    },
+    "multi-class": {
+      "title": "Multi-class Classification",
+      "color": "#2563eb",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:multi-class:Multi-class} = 'pick <strong>exactly ONE</strong>' from many options. Uses {term:softmax:Softmax} - {term:probability:probabilities} sum to 1, forcing a single choice."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Mutually exclusive classes. Output is a valid {term:probability:probability} distribution.",
+          "formula": "Output: {term:softmax:softmax}(logits) → [p₁, p₂, ..., pₖ] where Σpᵢ = 1"
+        },
+        {
+          "type": "example",
+          "title": "Examples",
+          "content": "<ul><li>Image classification: cat/dog/bird (one per image)</li><li>Sentiment: positive/negative/neutral (one feeling)</li><li>Digit recognition: 0-9 (one digit)</li></ul>"
         }
       ]
     },
     "multi-label": {
       "title": "Multi-label Classification",
-      "color": "#ec4899",
+      "color": "#16a34a",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:multi-label:Multi-label} classification allows MULTIPLE labels per sample (e.g., a movie can be 'action' AND 'comedy'). Unlike multi-class where labels are mutually exclusive, here each label is treated as an independent binary classification."
+          "content": "{term:multi-label:Multi-label} asks <strong>MULTIPLE independent yes/no questions</strong>:<br><ul><li>'Is it a car?' → 95% yes</li><li>'Is it red?' → 87% yes</li><li>'Is it German?' → 12% no</li></ul>Each answered <em>separately</em>!"
         },
         {
           "type": "divider"
@@ -508,455 +743,763 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Uses sigmoid activation (not softmax) so probabilities are independent. Loss is BCEWithLogitsLoss which applies sigmoid internally. Targets are multi-hot vectors.",
-          "formula": "{term:loss:L} = BCEWithLogitsLoss(logits, multi_hot_labels)"
+          "content": "Uses {term:sigmoid-activation:sigmoid} per label (independent outputs) and {term:bce-loss:BCE} per label.",
+          "formula": "Output: {term:sigmoid-activation:σ}(logits) → [p₁, p₂, ..., pₖ] each pᵢ ∈ (0,1)"
         },
         {
           "type": "example",
-          "title": "Real Example",
-          "content": "<strong>Movie genre classification:</strong><br><code class=\"code-block\"># Labels: action=0, comedy=1, drama=2, horror=3\n\nMovie: \"Scary Movie\" → [1, 1, 0, 1]  # action, comedy, horror\nMovie: \"The Notebook\" → [0, 0, 1, 0]  # just drama\n\n# Output: sigmoid([0.8, 0.9, 0.1, 0.7])\n# Each probability independent!</code>"
+          "title": "Movie Genre Example",
+          "content": "<strong>Labels:</strong> [action, comedy, romance, horror]<br><strong>Predictions:</strong> <code>[0.92, 0.85, 0.15, 0.03]</code><br><strong>Result:</strong> action <em>AND</em> comedy!<br><br>Multi-class would force ONE choice - <strong>wrong!</strong>"
+        }
+      ]
+    },
+    "token-classification": {
+      "title": "Token Classification",
+      "color": "#7c3aed",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:token-classification:Token classification} assigns a label to <strong>EACH {term:token:token}</strong>:<br><code>John→PERSON, works→O, at→O, Google→ORG</code>"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Classification head applied to every {term:hidden-state:hidden state}, not just {term:cls-token:[CLS]}.",
+          "formula": "Output shape: [batch, seq_len, num_labels]"
+        },
+        {
+          "type": "example",
+          "title": "Shape Comparison",
+          "content": "<ul><li>Regression: <code>[batch, 1]</code></li><li>Classification: <code>[batch, K]</code></li><li><strong>Token Classification:</strong> <code>[batch, seq_len, K]</code></li></ul>"
+        }
+      ]
+    },
+    "lm-head": {
+      "title": "LM Head - Language Model Head",
+      "color": "#0891b2",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The {term:lm-head:LM head} is the <strong>final layer</strong>: converts {term:hidden-state:hidden states} to next-{term:token:token} {term:logits:logits}. LLaMA-7B: <code>4096 → 32000</code> (vocab size)!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Linear projection from hidden dimension to {term:vocabulary:vocabulary} size.",
+          "formula": "{term:logits:logits} = {term:hidden-state:h} × W where W ∈ ℝ^{hidden × vocab}"
+        },
+        {
+          "type": "example",
+          "title": "Standard vs Modified",
+          "content": "<strong>Standard (generation):</strong> Hidden → LM Head → Vocab {term:logits:logits}<br><br><strong>[ADVANCED] Modified (classification):</strong> Hidden → <em>Replace</em> LM Head → Custom Head (4096→3)"
+        }
+      ]
+    },
+    "hidden-state": {
+      "title": "Hidden State",
+      "color": "#6366f1",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The {term:hidden-state:hidden state} is a {term:token:token}'s <strong>internal representation</strong> after transformer layers. Encodes meaning <em>in context</em>: 'bank' has different representations in 'river bank' vs 'money bank'!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Output vector at each position. Used by downstream heads for predictions.",
+          "formula": "{term:hidden-state:h} = TransformerLayers(Embedding(tokens)) ∈ ℝ^{batch × seq_len × hidden}"
+        },
+        {
+          "type": "example",
+          "title": "Common Dimensions",
+          "content": "<ul><li>BERT-base: <code>768</code></li><li>BERT-large: <code>1024</code></li><li>LLaMA-7B: <code>4096</code></li><li>LLaMA-70B: <code>8192</code></li></ul>"
+        }
+      ]
+    },
+    "ner": {
+      "title": "NER - Named Entity Recognition",
+      "color": "#059669",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:ner:NER} finds and classifies 'named things' in text: <strong>people, organizations, locations, dates</strong>."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "A {term:token-classification:token classification} task using <strong>BIO tagging</strong>: B-TYPE (begin), I-TYPE (inside), O (outside)."
+        },
+        {
+          "type": "example",
+          "title": "BIO Tagging Example",
+          "content": "<code>Elon</code> → B-PER (Begin Person)<br><code>Musk</code> → I-PER (Inside Person)<br><code>works</code> → O (Outside)<br><code>at</code> → O<br><code>Tesla</code> → B-ORG (Begin Organization)"
+        }
+      ]
+    },
+    "pos-tagging": {
+      "title": "POS - Part-of-Speech Tagging",
+      "color": "#0d9488",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:pos-tagging:POS tagging} labels each word with its <strong>grammatical role</strong>: noun, verb, adjective, etc."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "A {term:token-classification:token classification} task with grammatical category labels. Common tagsets: Penn Treebank (45 tags), Universal Dependencies (17 tags)."
+        },
+        {
+          "type": "example",
+          "title": "Example",
+          "content": "<code>The</code> → DET (Determiner)<br><code>quick</code> → ADJ (Adjective)<br><code>fox</code> → NOUN<br><code>jumps</code> → VERB"
+        }
+      ]
+    },
+    "extractive-qa": {
+      "title": "Extractive QA - Span Extraction",
+      "color": "#7c3aed",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:extractive-qa:Extractive QA} finds the answer <strong>WITHIN</strong> the passage. It doesn't generate - just <em>highlights the span</em>."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Predicts START and END positions. Each {term:token:token} gets two scores: 'is this the start?' and 'is this the end?'",
+          "formula": "Output shape: 2 × [batch, seq_len]"
+        },
+        {
+          "type": "example",
+          "title": "Span Prediction",
+          "content": "<strong>Context:</strong> 'Paris is the capital of France'<br><strong>Question:</strong> 'What is the capital?'<br><strong>Prediction:</strong> Start=0, End=0 → <strong>'Paris'</strong>"
+        }
+      ]
+    },
+    "mask-token": {
+      "title": "[MASK] - Mask Token",
+      "color": "#f59e0b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The {term:mask-token:[MASK]} token is BERT's 'fill in the blank'. Replace the word you want to predict with {term:mask-token:[MASK]}, the {term:model:model} predicts what should go there."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Special {term:token:token} (typically ID 103 in BERT). Output at this position is a {term:probability:distribution} over entire {term:vocabulary:vocabulary}."
+        },
+        {
+          "type": "example",
+          "title": "Fill-in-the-Blank",
+          "content": "<strong>Input:</strong> 'The [MASK] of France is Paris'<br><strong>Output:</strong><ul><li>capital: <code>0.85</code></li><li>city: <code>0.06</code></li><li>heart: <code>0.02</code></li></ul>"
+        }
+      ]
+    },
+    "preference-data": {
+      "title": "Preference Data - Human Judgment in Data Form",
+      "color": "#f59e0b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:preference-data:Preference data} captures human judgment: 'Response A is better than Response B for this prompt.' It's the fuel for training {term:reward-model:reward models} and direct preference optimization. Without it, we can't teach {term:model:models} what 'better' means to humans."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Pairs of (prompt, chosen_response, rejected_response). Used with Bradley-Terry model to train {term:reward-model:reward model}: R(chosen) > R(rejected). The {term:reward-model:reward model} then guides {term:policy:policy} optimization.",
+          "formula": "{term:probability:P}(A > B) = σ({term:reward:R}(A) − {term:reward:R}(B))"
+        },
+        {
+          "type": "example",
+          "title": "How It's Collected",
+          "content": "<strong>Step 1:</strong> Generate 4 responses to same prompt<br><strong>Step 2:</strong> Human ranks: Response 3 > Response 1 > Response 2 > Response 4<br><strong>Step 3:</strong> Create pairs:<br><code class=\"code-block\">(prompt, chosen=3, rejected=4)\n(prompt, chosen=3, rejected=2)\n(prompt, chosen=1, rejected=4)\n...</code><br><br><strong>Criteria:</strong> Helpfulness, harmlessness, honesty"
+        }
+      ]
+    },
+    "system-prompt": {
+      "title": "System Prompt - The Model's Operating Instructions",
+      "color": "#0891b2",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The {term:system-prompt:system prompt} sets the stage for the entire conversation. It defines the {term:model:model}'s persona, capabilities, constraints, and behavior. Think of it as the 'job description' given to the {term:model:model} before any conversation begins."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Prepended to every conversation. Unlike user messages, system prompts are designed to persist and influence ALL subsequent responses. Typically marked with special {term:token:tokens} or placed in a reserved position in the {term:chat-template:chat template}."
+        },
+        {
+          "type": "example",
+          "title": "Example System Prompts",
+          "content": "<strong>Simple:</strong><br><code>You are a helpful assistant.</code><br><br><strong>Complex:</strong><br><code class=\"code-block\">You are a Python expert. Rules:\n1. Always explain before coding\n2. Use type hints\n3. Never use deprecated APIs\n4. If unsure, say so</code><br><br><strong>Key:</strong> The {term:model:model} references this for EVERY response!"
+        }
+      ]
+    },
+    "chat-template": {
+      "title": "Chat Template - Conversation → Tokens",
+      "color": "#db2777",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Why It Exists",
+          "content": "LLMs don't understand 'conversations' - they only see a flat sequence of {term:token:tokens}. The {term:chat-template:chat template} is the 'grammar' that converts structured messages (system, user, assistant) into a single string the {term:model:model} was TRAINED on.<br><br><strong>Problem:</strong> You have: <code>[{role: user, content: 'Hi'}]</code><br><strong>Model needs:</strong> A specific token sequence like <code>&lt;|im_start|&gt;user\\nHi&lt;|im_end|&gt;</code><br><br><strong>Without correct template:</strong> The model sees garbage and performance collapses!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "A Jinja2 template stored in <code>tokenizer.chat_template</code>. The method <code>tokenizer.apply_chat_template(messages)</code> processes the message list and outputs a tokenizable string with proper special {term:token:tokens} for role boundaries.",
+          "formula": "apply_chat_template([messages]) → 'formatted_string' → tokenize() → [token_ids]"
+        },
+        {
+          "type": "example",
+          "title": "Transformation: JSON → Tokens",
+          "content": "<strong>Input (Python list of dicts):</strong><br><code class=\"code-block\">[{\"role\": \"system\", \"content\": \"Be helpful\"},\n {\"role\": \"user\", \"content\": \"Hi\"},\n {\"role\": \"assistant\", \"content\": \"Hello!\"}]</code><br><br><strong>After apply_chat_template (ChatML format):</strong><br><code class=\"code-block\">&lt;|im_start|&gt;system\nBe helpful&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\nHi&lt;|im_end|&gt;\n&lt;|im_start|&gt;assistant\nHello!&lt;|im_end|&gt;</code><br><br><strong>Then tokenized:</strong> [32001, 1587, 10, 1763, ...] → ready for model!"
+        },
+        {
+          "type": "llm",
+          "title": "Common Formats",
+          "content": "<strong>ChatML</strong> (Mistral, Qwen, many OSS):<br><code>&lt;|im_start|&gt;{role}\\n{content}&lt;|im_end|&gt;</code><br><br><strong>LLaMA-2 Chat:</strong><br><code>&lt;s&gt;[INST] &lt;&lt;SYS&gt;&gt;\\n{system}\\n&lt;&lt;/SYS&gt;&gt;\\n\\n{user} [/INST] {assistant} &lt;/s&gt;</code><br><br><strong>Alpaca:</strong><br><code>### Instruction:\\n{input}\\n\\n### Response:\\n{output}</code><br><br><strong>Golden rule:</strong> Use the template the model was trained with. Check <code>tokenizer.chat_template</code>!"
+        }
+      ]
+    },
+    "reward-model": {
+      "title": "Reward Model - The Preference Scorer",
+      "color": "#ea580c",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "A {term:reward-model:reward model} is a neural network trained to predict 'how much would a human like this response?' Given a prompt and response, it outputs a single number (the {term:reward:reward} score). It's the automated judge that enables RLHF at scale."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Trained on {term:preference-data:preference data} using Bradley-Terry pairwise ranking {term:loss:loss}. Input: (prompt, response). Output: scalar {term:reward:reward}. Often initialized from SFT {term:model:model} with a linear head added.",
+          "formula": "{term:loss:L}_{RM} = −log σ({term:reward:R}(chosen) − {term:reward:R}(rejected))"
+        },
+        {
+          "type": "example",
+          "title": "How It Works",
+          "content": "<strong>Input 1:</strong> (prompt, 'Helpful detailed answer') → {term:reward:R} = 0.85<br><strong>Input 2:</strong> (prompt, 'I don't know') → {term:reward:R} = 0.12<br><strong>Input 3:</strong> (prompt, 'Harmful response') → {term:reward:R} = -0.94<br><br><strong>Training:</strong> ~50K-100K preference pairs<br><strong>Architecture:</strong> LLM backbone + Linear(hidden→1)"
+        }
+      ]
+    },
+    "transfer-learning": {
+      "title": "Transfer Learning - Knowledge Reuse",
+      "color": "#7c3aed",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "Transfer learning takes knowledge learned on one task (usually with massive {term:data:data}) and applies it to a different, related task. Instead of training from scratch, you 'transfer' what the {term:model:model} already knows. Like a chef who learned French cuisine can quickly adapt to Italian - the core skills transfer!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Initialize {term:model:model} with {term:pre-training:pre-trained} {term:weights:weights} instead of random values. Then {term:fine-tuning:fine-tune} on target task. The {term:pre-training:pre-trained} representations provide a strong starting point, requiring far less task-specific {term:data:data}."
+        },
+        {
+          "type": "example",
+          "title": "Example",
+          "content": "<strong>Without transfer learning:</strong><br>Train from scratch → Need 1M examples, weeks of training<br><br><strong>With transfer learning:</strong><br>Start from pre-trained → Need 1K examples, hours of training<br><br><strong>Why it works:</strong> Language understanding transfers across tasks!"
+        }
+      ]
+    },
+    "full-finetuning": {
+      "title": "Full Fine-tuning - Train Everything",
+      "color": "#059669",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:full-finetuning:Full fine-tuning} updates ALL {term:weights:parameters} of the {term:model:model} - every single weight in every layer gets adjusted. It's like sending a student to a completely new school where everything they learned gets refined. Maximum flexibility but maximum cost."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "All {term:weights:parameters} θ in the {term:model:model} are {term:trainable-layer:trainable} and updated via gradient descent. Nothing is {term:frozen-layer:frozen}. This allows the {term:model:model} to maximally adapt but requires storing full optimizer states for every parameter.",
+          "formula": "{term:weights:θ}_new = {term:weights:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}"
+        },
+        {
+          "type": "example",
+          "title": "Resource Comparison",
+          "content": "<strong>LLaMA-7B Full Fine-tuning:</strong><br><ul><li><strong>Trainable params:</strong> 7 billion (100%)</li><li><strong>GPU VRAM needed:</strong> ~28 GB (FP16 weights) + ~56 GB (optimizer states)</li><li><strong>Total:</strong> ~84 GB → Need 2-4 A100 GPUs</li><li><strong>Storage per task:</strong> ~14 GB checkpoint</li></ul><strong>When to use:</strong> Large diverse dataset, high budget, maximum customization needed."
+        }
+      ]
+    },
+    "partial-finetuning": {
+      "title": "Partial Fine-tuning - Selective Layer Training",
+      "color": "#2563eb",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:partial-finetuning:Partial fine-tuning} freezes some layers and only trains others. Think of it like a musician who's mastered scales (keep those frozen) but needs to learn a new song (train the output layers). You preserve foundational knowledge while adapting for the task."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Selected layers have {term:trainable-layer:requires_grad=True}, others are {term:frozen-layer:frozen} (requires_grad=False). Common patterns: freeze all but last N transformer blocks, or freeze embedding + early layers while training attention/FFN in later layers.",
+          "formula": "{term:gradient:∇}{term:loss:L} computed only for {term:trainable-layer:unfrozen} {term:weights:θ}"
+        },
+        {
+          "type": "example",
+          "title": "Example Configuration",
+          "content": "<strong>LLaMA-7B (32 layers):</strong><br><ul><li>Freeze layers 0-24 (embedding + first 25 transformer blocks)</li><li>Train layers 25-31 (last 7 blocks) + LM head</li><li><strong>Trainable:</strong> ~1.5B params (21% of model)</li><li><strong>VRAM saved:</strong> ~60% reduction vs full</li></ul><strong>Trade-off:</strong> Less expressive than full fine-tuning, but much cheaper."
+        }
+      ]
+    },
+    "peft": {
+      "title": "PEFT - Parameter-Efficient Fine-Tuning",
+      "color": "#7c3aed",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:peft:PEFT} is a family of techniques that achieve fine-tuning by training only a tiny fraction of parameters - often less than 1% - while keeping the original {term:model:model} completely {term:frozen-layer:frozen}. It's like adding sticky notes to a textbook instead of rewriting it."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Keep all pretrained {term:weights:weights} {term:frozen-layer:frozen}. Add small {term:trainable-layer:trainable} modules (adapters, low-rank matrices, or soft prompts). Only new parameters are updated. Original model is preserved completely.",
+          "formula": "output = f_{term:frozen-layer:frozen}({term:input:x}) + g_{term:trainable-layer:adapter}({term:input:x})"
+        },
+        {
+          "type": "example",
+          "title": "PEFT Methods",
+          "content": "<ul><li><strong>{term:lora:LoRA}:</strong> Add low-rank matrices to attention layers</li><li><strong>{term:prefix-tuning:Prefix Tuning}:</strong> Learnable vectors in K/V attention</li><li><strong>{term:prompt-tuning:Prompt Tuning}:</strong> Learnable soft prompts before input</li><li><strong>{term:adapter:Adapters}:</strong> Small neural networks inserted between layers</li></ul><strong>Benefit:</strong> Same base model, different adapters for different tasks!"
+        }
+      ]
+    },
+    "lora": {
+      "title": "LoRA - Low-Rank Adaptation",
+      "color": "#db2777",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:lora:LoRA} is the most popular {term:peft:PEFT} technique. Instead of updating a huge weight matrix W (say 4096×4096 = 16M params), it learns two small matrices A and B whose product approximates the weight change. It's like finding a shortcut that captures 99% of the improvement with 1% of the parameters."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "<strong>Example: Single attention layer (4096×4096):</strong><br><ul><li><strong>Full:</strong> 16,777,216 params</li><li><strong>LoRA (r=8):</strong> (4096×8) + (8×4096) = 65,536 params</li><li><strong>Savings:</strong> 99.6% fewer parameters!</li></ul><strong>LLaMA-7B with LoRA:</strong><ul><li>Original: 7B params → <strong>~4M trainable</strong> (0.06%)</li><li>Storage: 7B checkpoint → <strong>~32 MB adapter</strong></li></ul><br><em>Implementation note: Matrix A is initialized with scaled random values (÷√r), Matrix B is initialized to zeros so ΔW starts at zero. This ensures the model starts exactly as pretrained.</em>",
+          "formula": "h = W₀·{term:input:x} + ({term:lora-alpha:α}/{term:lora-rank:r}) × B·A·{term:input:x}"
+        },
+        {
+          "type": "example",
+          "title": "Parameter Savings",
+          "content": "<strong>Example: Single attention layer (4096×4096):</strong><br><ul><li><strong>Full:</strong> 16,777,216 params</li><li><strong>LoRA (r=8):</strong> (4096×8) + (8×4096) = 65,536 params</li><li><strong>Savings:</strong> 99.6% fewer parameters!</li></ul><strong>LLaMA-7B with LoRA:</strong><ul><li>Original: 7B params → <strong>~4M trainable</strong> (0.06%)</li><li>Storage: 7B checkpoint → <strong>~32 MB adapter</strong></li></ul>"
+        }
+      ]
+    },
+    "lora-rank": {
+      "title": "r - LoRA Rank",
+      "color": "#f59e0b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The rank {term:lora-rank:r} controls how 'expressive' the {term:lora:LoRA} adaptation can be. Higher rank = more capacity to learn complex changes, but more parameters. Lower rank = less capacity but cheaper. Think of it like choosing brush size when painting - bigger brush covers more but less precise."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Rank {term:lora-rank:r} is the inner dimension of the low-rank decomposition. For B ∈ ℝ^{d×r} and A ∈ ℝ^{r×k}, trainable parameters = r×(d+k). Based on the hypothesis that weight updates during fine-tuning have low 'intrinsic rank' - they can be expressed in a much smaller dimensional space.",
+          "formula": "Trainable params = {term:lora-rank:r} × (d + k)"
+        },
+        {
+          "type": "example",
+          "title": "Choosing Rank",
+          "content": "<strong>Guidelines:</strong><ul><li><strong>r = 4-8:</strong> Simple tasks (style, basic classification)</li><li><strong>r = 16-32:</strong> Standard fine-tuning, instruction following</li><li><strong>r = 64-128:</strong> Complex domains (legal, medical, coding)</li></ul><strong>Experiment:</strong> Many studies show r=16 is often sufficient even for complex tasks. Increasing r beyond 16-32 yields diminishing returns."
+        }
+      ]
+    },
+    "lora-alpha": {
+      "title": "α (alpha) - LoRA Scaling Factor",
+      "color": "#0891b2",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "The {term:lora-alpha:alpha} parameter controls how much the {term:lora:LoRA} adaptation 'contributes' to the output. Higher alpha = stronger adaptation effect. It's like a volume knob for the fine-tuning signal."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The scaling factor multiplies the LoRA update before adding to the frozen weight output. The effective scaling is {term:lora-alpha:α}/{term:lora-rank:r}. Common practice: set {term:lora-alpha:α} = 2×{term:lora-rank:r} or {term:lora-alpha:α} = {term:lora-rank:r}.",
+          "formula": "h = W₀·x + ({term:lora-alpha:α}/{term:lora-rank:r}) × B·A·x"
+        },
+        {
+          "type": "example",
+          "title": "Practical Settings",
+          "content": "<strong>Common configurations:</strong><ul><li><strong>r=8, α=16:</strong> Effective scale = 2.0 (stronger adaptation)</li><li><strong>r=16, α=16:</strong> Effective scale = 1.0 (balanced)</li><li><strong>r=32, α=16:</strong> Effective scale = 0.5 (subtle adaptation)</li></ul><strong>Rule of thumb:</strong> α = 2×r keeps consistent 'strength' regardless of rank choice."
+        }
+      ]
+    },
+    "frozen-layer": {
+      "title": "Frozen Layers",
+      "color": "#64748b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "A {term:frozen-layer:frozen} layer has its {term:weights:weights} fixed during training - {term:data:data} flows through it, but {term:gradient:gradients} don't update it. Like reading a textbook without highlighting - you use the knowledge but don't modify the book."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Set requires_grad=False on {term:weights:parameters}. The forward pass proceeds normally, but during backward pass, {term:gradient:gradients} are not computed for these {term:weights:weights}, and optimizer ignores them.",
+          "formula": "for param in frozen_layers: param.requires_grad = False"
+        },
+        {
+          "type": "example",
+          "title": "Code Example",
+          "content": "<code class=\"code-block\">for name, param in model.named_parameters():\n    if 'embed' in name or 'layers.0' in name:\n        param.requires_grad = False  # Frozen\n    else:\n        param.requires_grad = True   # Trainable</code>"
+        }
+      ]
+    },
+    "trainable-layer": {
+      "title": "Trainable Layers",
+      "color": "#16a34a",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:trainable-layer:Trainable} layers have their {term:weights:weights} updated during training based on {term:gradient:gradients}. These are the layers that 'learn' and adapt to your specific task."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Layers with requires_grad=True. {term:gradient:Gradients} are computed during backward pass and optimizer updates these {term:weights:weights}. Memory for optimizer states (momentum, variance in AdamW) is allocated only for {term:trainable-layer:trainable} parameters."
+        },
+        {
+          "type": "example",
+          "title": "Memory Impact",
+          "content": "<strong>AdamW optimizer per trainable parameter:</strong><ul><li>Momentum (1st moment): 4 bytes (FP32)</li><li>Variance (2nd moment): 4 bytes (FP32)</li><li><strong>Optimizer states total: 8 bytes per param</strong></li></ul><strong>Full training memory per param:</strong><ul><li>Weight: 2 bytes (FP16/BF16)</li><li>Gradient: 2-4 bytes</li><li>Optimizer states: 8 bytes</li><li><strong>Total: ~12-14 bytes per trainable param</strong></li></ul>Fewer {term:trainable-layer:trainable} params = less VRAM!"
+        }
+      ]
+    },
+    "prefix-tuning": {
+      "title": "Prefix Tuning",
+      "color": "#8b5cf6",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:prefix-tuning:Prefix tuning} adds learnable vectors to the Key and Value matrices of attention across multiple layers. It's like giving the {term:model:model} a 'learned context' that steers its attention without changing any original {term:weights:weights}."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Insert learnable prefix embeddings P_k, P_v into the Key and Value sequences at each transformer layer. Only prefix parameters are trained. The model learns what 'context' to provide that guides generation.",
+          "formula": "K = [P_k; K_original], V = [P_v; V_original]"
+        },
+        {
+          "type": "example",
+          "title": "Comparison",
+          "content": "More control than {term:prompt-tuning:prompt tuning} (affects all layers, not just input). Less popular than {term:lora:LoRA} because it changes attention patterns in complex ways. Good for generation tasks."
+        }
+      ]
+    },
+    "prompt-tuning": {
+      "title": "Prompt Tuning",
+      "color": "#0d9488",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:prompt-tuning:Prompt tuning} adds learnable 'soft prompt' embeddings at the INPUT layer only (before the first transformer block). These are continuous vectors that guide the frozen {term:model:model} toward the desired behavior."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Learn continuous embeddings [v₁, v₂, ..., vₙ] prepended to input embeddings. Only these soft prompt vectors are trained. The frozen {term:model:model} then processes [soft_prompt; input] as one sequence."
+        },
+        {
+          "type": "example",
+          "title": "Comparison",
+          "content": "Simplest {term:peft:PEFT} method. Fewest parameters (~10K-100K). Best for tasks close to pretraining distribution. Less effective for tasks requiring deep model adaptation."
+        }
+      ]
+    },
+    "adapter": {
+      "title": "Adapter Layers",
+      "color": "#ea580c",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "What It Does",
+          "content": "{term:adapter:Adapter} layers are small neural network modules inserted between transformer layers. They have a bottleneck architecture: project down to small dimension, apply nonlinearity, project back up. Like adding specialized filters to a camera lens."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Insert adapter module: h' = h + f(h×W_down)×W_up where W_down ∈ ℝ^{d×r}, W_up ∈ ℝ^{r×d}. The bottleneck dimension r is small (8-256). Adapters are placed after attention and/or FFN sublayers.",
+          "formula": "h' = h + W_up·σ(W_down·h)"
+        },
+        {
+          "type": "example",
+          "title": "Architecture",
+          "content": "<ul><li>Bottleneck: 768 → 64 → 768 (for BERT-base)</li><li>Adds ~2% extra params per layer</li><li>Can be swapped for different tasks</li></ul>Predates LoRA but less popular now because LoRA is simpler and often more efficient."
         }
       ]
     }
   },
   "slides": [
     {
-      "id": "slide-1-1",
+      "id": "slide-0-1",
       "sectionIndex": 0,
-      "title": "What is Fine-tuning?",
+      "title": "What Does It Mean to Train a Model?",
       "content": [
         {
           "type": "insight-box",
           "title": "The Core Idea",
-          "content": "<strong>Fine-tuning = </strong>Take a {term:model:pre-trained model} that already 'knows' language and adapt it for YOUR specific task.<br><br>Instead of training billions of {term:weights:parameters} from scratch, you start from a {term:model:model} that already understands grammar, facts, reasoning—and just teach it your particular use case."
-        },
-        {
-          "type": "html",
-          "content": "<strong>This is {term:transfer-learning:Transfer Learning}:</strong> Knowledge from pre-training transfers to your task. A model trained on trillions of {term:token:tokens} has learned patterns that apply broadly."
+          "content": "<strong>Training</strong> = adjusting the {term:model:model}'s {term:weights:parameters} (billions of numbers) so that it produces useful outputs. Like adjusting the knobs on a radio until you get clear sound - except there are billions of knobs!"
         },
         {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
             "Aspect",
-            "Training From Scratch",
-            "Fine-tuning"
+            "{term:pre-training:Pre-training}",
+            "{term:fine-tuning:Fine-tuning}"
           ],
           "rows": [
             [
-              "<strong>Starting Point</strong>",
-              "Random {term:weights:weights}",
-              "Pre-trained {term:weights:weights}"
+              "<strong>Purpose</strong>",
+              "Learn language fundamentals",
+              "Adapt to YOUR specific task"
             ],
             [
-              "<strong>Data Required</strong>",
-              "Trillions of {term:token:tokens}",
+              "<strong>Starting Point</strong>",
+              "Random {term:weights:weights}",
+              "{term:pre-training:Pre-trained} {term:weights:weights}"
+            ],
+            [
+              "<strong>{term:data:Data}</strong>",
+              "Trillions of {term:token:tokens} (internet, books)",
               "Thousands to millions of examples"
             ],
             [
-              "<strong>Compute Cost</strong>",
-              "$1M+ (GPT-3 scale)",
+              "<strong>Labels</strong>",
+              "Self-supervised (no humans needed)",
+              "Human-curated task-specific {term:data:data}"
+            ],
+            [
+              "<strong>Cost</strong>",
+              "$1M - $100M+ (GPT-4 scale)",
               "$100 - $10K"
             ],
             [
               "<strong>Time</strong>",
               "Weeks on 1000s of GPUs",
               "Hours on 1-8 GPUs"
-            ],
-            [
-              "<strong>Risk</strong>",
-              "May not converge",
-              "Almost always works"
             ]
           ]
+        },
+        {
+          "type": "insight-box",
+          "title": "What Does the Model Actually Learn?",
+          "content": "We don't know <em>exactly</em> what's stored in those billions of {term:weights:parameters}, but research suggests:<br><br>• <strong>Grammar & Syntax:</strong> Sentence structure, word order rules<br>• <strong>Semantics:</strong> Word meanings, relationships, synonyms<br>• <strong>World Knowledge:</strong> Facts about entities, events, history<br>• <strong>Reasoning Patterns:</strong> Logical inference, cause-effect relationships<br><br>The {term:model:model} learns from <em>statistical patterns</em> in the {term:data:data} - it sees 'Paris' following 'capital of France' millions of times!"
+        },
+        {
+          "type": "html",
+          "content": "<strong>The Training Loop (same for both!):</strong><br><code class=\"code-block\">for batch in data:\n    predictions = model(batch.input)        # Forward pass\n    loss = compute_loss(predictions, batch.target)  # How wrong?\n    gradients = loss.backward()             # Which direction to improve?\n    optimizer.step(gradients)               # Update weights</code>"
         }
       ]
     },
     {
-      "id": "slide-1-2",
+      "id": "slide-0-2",
       "sectionIndex": 0,
-      "title": "Types of Fine-tuning",
+      "title": "How Encoder-only Training Works (BERT)",
       "content": [
         {
-          "type": "html",
-          "content": "Not all fine-tuning is equal. You can update <em>all</em> {term:weights:parameters} or just a small subset:"
-        },
-        {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Method",
-            "What's Trained",
-            "% of Params",
-            "Use Case"
-          ],
-          "rows": [
-            [
-              "{term:full-finetuning:Full Fine-tuning}",
-              "ALL layers",
-              "100%",
-              "Max flexibility, domain shift"
-            ],
-            [
-              "<strong>Last Layer Only</strong>",
-              "Classification head",
-              "< 0.1%",
-              "Simple classification tasks"
-            ],
-            [
-              "<strong>{term:frozen-layers:Freeze} + Unfreeze Top N</strong>",
-              "Top N transformer layers",
-              "~10-30%",
-              "Balance of flexibility & speed"
-            ],
-            [
-              "{term:adapter:Adapters}",
-              "Small bottleneck modules",
-              "0.1-1%",
-              "Multi-task, memory-constrained"
-            ],
-            [
-              "{term:lora:LoRA}",
-              "Low-rank decomposition matrices",
-              "0.1-1%",
-              "Most popular PEFT method"
-            ]
-          ]
+          "type": "insight-box",
+          "title": "{term:encoder-only:Encoder-only} Models = Understanding Machines",
+          "content": "Models like BERT, RoBERTa, and sentence transformers use <strong>bidirectional attention</strong>. Each {term:token:token} sees ALL other {term:token:tokens} (past AND future). Great for understanding text, NOT for generating it."
         },
         {
           "type": "insight-box",
-          "title": "Why Not Always Full Fine-tuning?",
-          "content": "• <strong>Memory:</strong> Need to store {term:gradient:gradients} for ALL {term:weights:parameters} (3× params in FP16)<br>• <strong>Catastrophic Forgetting:</strong> {term:model:Model} 'forgets' pre-trained knowledge when fine-tuned too aggressively on new {term:data:data}<br>• <strong>Storage:</strong> Each task = full {term:model:model} copy (14GB for 7B {term:model:model})<br>• <strong>Speed:</strong> More {term:weights:params} = slower training"
+          "title": "{term:pre-training:Pre-training}: Masked Language Modeling ({term:mlm:MLM})",
+          "content": "<strong>The Game:</strong> Mask 15% of {term:token:tokens}, predict the originals!<br><br><strong>Masking strategy (of the 15% selected):</strong><ul><li>80% → [MASK] token</li><li>10% → Random word (\"dog\", \"blue\", etc.)</li><li>10% → Unchanged (prevents overfitting to [MASK])</li></ul><strong>Example:</strong><ul><li>Original: \"The cat sat on the mat\"</li><li>Input: \"The [MASK] sat on the [MASK]\"</li><li>Model predicts: \"cat\" (89% confident), \"mat\" (72% confident)</li></ul>"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Also: Next Sentence Prediction (NSP)</strong><br>Given sentence A, is sentence B the actual next sentence or a random one?<br>The {term:cls-token:[CLS]} token's output is used for this binary classification during {term:pre-training:pre-training}."
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:fine-tuning:Fine-tuning}: Add a Head on Top",
+          "content": "<strong>For Classification:</strong><ol><li>Input: <code>[CLS] I love this movie! [SEP]</code></li><li>Extract [CLS] embedding (768-dim vector)</li><li>Add: <code>Linear(768, num_classes)</code></li><li>Output: [0.08, 0.92] → Positive!</li></ol><strong>For Token Classification (NER):</strong><ol><li>Input: <code>[CLS] John works at Google [SEP]</code></li><li>Extract ALL token embeddings</li><li>Add: <code>Linear(768, num_labels)</code> per token</li><li>Output per token: [\"O\", \"B-PER\", \"O\", \"O\", \"B-ORG\"]</li></ol><strong>Alternative:</strong> Use pooled output (mean of all tokens) instead of just [CLS]."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Insight:</strong> The {term:cls-token:[CLS]} token learns to aggregate sequence information through self-attention during {term:pre-training:pre-training} (via NSP). During {term:fine-tuning:fine-tuning}, backpropagation teaches it to aggregate information relevant to YOUR task."
         }
       ]
     },
     {
-      "id": "slide-1-3",
+      "id": "slide-0-3",
       "sectionIndex": 0,
-      "title": "Full vs Parameter-Efficient Fine-tuning",
+      "title": "How Decoder-only Training Works (LLMs)",
       "content": [
         {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Aspect",
-            "{term:full-finetuning:Full Fine-tuning}",
-            "{term:lora:LoRA} / {term:adapter:Adapters}"
-          ],
-          "rows": [
-            [
-              "<strong>Trainable Params</strong>",
-              "7B (100%)",
-              "~10-50M (0.1-0.7%)"
-            ],
-            [
-              "<strong>GPU Memory</strong>",
-              "~100-120GB (model + grads + optimizer)",
-              "~16GB (frozen base + small adapters)"
-            ],
-            [
-              "<strong>Training Speed</strong>",
-              "Slower (more grads)",
-              "Faster"
-            ],
-            [
-              "<strong>Storage per Task</strong>",
-              "14GB full checkpoint",
-              "10-100MB adapter only"
-            ],
-            [
-              "<strong>Catastrophic Forgetting</strong>",
-              "High risk",
-              "Low risk (base frozen)"
-            ],
-            [
-              "<strong>Performance</strong>",
-              "Often best",
-              "Often matches full FT"
-            ]
-          ]
+          "type": "insight-box",
+          "title": "{term:decoder-only:Decoder-only} Models = Generation Machines",
+          "content": "Models like GPT, LLaMA, Mistral use <strong>causal (autoregressive) attention</strong>. Each {term:token:token} can ONLY see previous {term:token:tokens} - enabling generation one {term:token:token} at a time."
         },
         {
           "type": "insight-box",
-          "title": "The LoRA Revolution",
-          "content": "{term:lora:LoRA} showed you can get 90-99% of {term:full-finetuning:full fine-tuning} performance while training only 0.1% of {term:weights:parameters}!<br><br><strong>How?</strong> Instead of updating W directly, learn ΔW = B × A where B and A are tiny low-rank matrices. At inference, merge: W_new = W + B × A."
+          "title": "{term:pre-training:Pre-training}: Next Token Prediction",
+          "content": "<strong>The Objective:</strong> Given all previous {term:token:tokens}, predict the next one!<br><br><strong>Example:</strong><ul><li>Input: \"The capital of France is\"</li><li>Target: \"Paris\"</li></ul><strong>Model outputs a probability distribution over the ENTIRE vocabulary (~50K tokens):</strong><ul><li>P(\"Paris\") = 0.92</li><li>P(\"Lyon\") = 0.03</li><li>P(\"the\") = 0.01</li><li>... 49,996 other tokens ...</li></ul>"
+        },
+        {
+          "type": "insight-box",
+          "title": "How Labels Are Created (Auto-Shifted!)",
+          "content": "<strong>The Ground Truth is self-generated!</strong> Just shift input by 1 token:<br><br><strong>Sequence:</strong> \"The cat sat on mat\"<ul><li>Input: <code>[BOS, The, cat, sat, on, mat]</code></li><li>Labels: <code>[The, cat, sat, on, mat, EOS]</code></li></ul><strong>What each position predicts:</strong><ul><li>Position 0 (BOS) → predicts \"The\"</li><li>Position 1 (The) → predicts \"cat\"</li><li>Position 5 (mat) → predicts EOS (end!)</li></ul><strong>Important:</strong> HuggingFace's <code>DataCollatorForLanguageModeling</code> handles this shifting automatically! You just copy <code>input_ids</code> to <code>labels</code>."
         },
         {
           "type": "html",
-          "content": "<strong>Practical Recommendation:</strong><br>• Start with {term:lora:LoRA} (rank 8-32) for most tasks<br>• Use {term:full-finetuning:full fine-tuning} only if LoRA underperforms significantly<br>• For multi-task: one base model + multiple {term:adapter:adapters}"
+          "content": "<strong>Why {term:causal-mask:Causal Mask}?</strong><br>Without it, position 3 could 'cheat' by looking at position 4 when predicting what comes after position 3. The mask adds -∞ to future positions → exp(-∞) = 0 after {term:softmax:softmax} → zero attention to future."
         }
       ]
     },
     {
-      "id": "slide-2-1",
-      "sectionIndex": 1,
-      "title": "Same Backbone, Different Heads: The Universal Pattern",
+      "id": "slide-0-4",
+      "sectionIndex": 0,
+      "title": "Complete Training Step (Batch of 2)",
       "content": [
         {
-          "type": "insight-box",
-          "title": "The Core Insight",
-          "content": "Classification, regression, NER, text generation—they ALL use the <strong>same transformer backbone</strong>. The ONLY difference is:<br><br>1. <strong>Output Head:</strong> What linear layer(s) sit on top<br>2. <strong>{term:loss:Loss} Function:</strong> How we measure error<br>3. <strong>Which Embedding Feeds the Head:</strong> CLS, last token, or all tokens"
-        },
-        {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Task",
-            "Head Architecture",
-            "{term:loss:Loss} Function",
-            "Which Embedding?"
-          ],
-          "rows": [
-            [
-              "<strong>Multi-class Classification</strong>",
-              "Linear(hidden, num_classes)",
-              "CrossEntropyLoss",
-              "[CLS] or last token"
-            ],
-            [
-              "<strong>Multi-label Classification</strong>",
-              "Linear(hidden, num_classes)",
-              "BCEWithLogitsLoss (sigmoid)",
-              "[CLS] or last token"
-            ],
-            [
-              "<strong>Binary Classification</strong>",
-              "Linear(hidden, 1) or 2",
-              "BCEWithLogitsLoss or CE",
-              "[CLS] or last token"
-            ],
-            [
-              "<strong>Regression</strong>",
-              "Linear(hidden, 1)",
-              "MSELoss",
-              "[CLS] or last token"
-            ],
-            [
-              "<strong>Token Classification (NER)</strong>",
-              "Linear(hidden, num_labels) per token",
-              "CrossEntropyLoss per token",
-              "ALL token embeddings"
-            ],
-            [
-              "<strong>Next Token Prediction</strong>",
-              "Linear(hidden, vocab_size)",
-              "CrossEntropyLoss over vocab",
-              "ALL token embeddings"
-            ]
-          ]
-        },
-        {
-          "type": "insight-box",
-          "title": "Encoder (BERT) vs Decoder (GPT) for Classification",
-          "content": "<code class=\"code-block\">ENCODER (BERT):                      DECODER (GPT):\n┌─────────────────────┐              ┌─────────────────────┐\n│ [CLS] tok1 tok2 ... │              │ tok1 tok2 ... [LAST]│\n│   ↓                 │              │                  ↓  │\n│ [CLS] embedding     │              │ [LAST] embedding    │\n│   ↓                 │              │   ↓                 │\n│ Linear → logits     │              │ Linear → logits     │\n└─────────────────────┘              └─────────────────────┘\n\nWhy LAST for decoder?\nCausal attention means LAST token\nhas 'seen' ALL previous tokens!</code>"
+          "type": "html",
+          "content": "<strong>Step 1: Raw {term:data:Data}</strong><ul><li>Sentence 1: \"The cat sat\" (from a book)</li><li>Sentence 2: \"Hello world\" (from the web)</li></ul>"
         },
         {
           "type": "html",
-          "content": "<strong>Multi-class vs Multi-label:</strong><br>• <strong>Multi-class:</strong> One label per sample (dog OR cat OR bird) → Softmax → probs sum to 1<br>• <strong>Multi-label:</strong> Multiple labels per sample (action AND comedy) → Sigmoid per class → independent probs"
+          "content": "<strong>Step 2: Tokenize</strong><ul><li>Sentence 1: [\"The\", \"cat\", \"sat\"] → <code>[464, 3797, 3332]</code></li><li>Sentence 2: [\"Hello\", \"world\"] → <code>[15496, 995]</code></li></ul>Vocabulary size: 50,257 (GPT-2)"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Step 3: Add Special {term:token:Tokens} ({term:bos-token:BOS}, {term:eos-token:EOS})</strong><ul><li>Seq 1: <code>[1, 464, 3797, 3332, 2]</code> = [BOS, The, cat, sat, EOS]</li><li>Seq 2: <code>[1, 15496, 995, 2]</code> = [BOS, Hello, world, EOS]</li></ul>"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Step 4: Pad to Same Length (LEFT Padding for Decoders)</strong><br><br>Max length = 5, pad on LEFT for decoder models:<ul><li>Seq 1: <code>[1, 464, 3797, 3332, 2]</code> (no padding needed)</li><li>Seq 2: <code>[PAD, 1, 15496, 995, 2]</code> (padded on left)</li></ul>Input tensor shape: <code>(batch=2, seq_len=5)</code><br><br><strong>Why LEFT padding?</strong> So the LAST token (most important for generation) is always at the same position!"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Step 5: Create {term:attention-mask:Attention Mask}</strong><ul><li>Seq 1: <code>[1, 1, 1, 1, 1]</code> (all real tokens)</li><li>Seq 2: <code>[0, 1, 1, 1, 1]</code> (first is PAD, ignored)</li></ul>"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Step 6: Create {term:causal-mask:Causal Mask} (Applied Internally)</strong><br><br>For each sequence, lower triangular matrix:<br><code class=\"code-block\">       pos0  pos1  pos2  pos3  pos4\npos0 [  0,   -∞,   -∞,   -∞,   -∞  ]\npos1 [  0,    0,   -∞,   -∞,   -∞  ]\npos2 [  0,    0,    0,   -∞,   -∞  ]\npos3 [  0,    0,    0,    0,   -∞  ]\npos4 [  0,    0,    0,    0,    0  ]</code><br><br>This is combined with the attention mask for padding!"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Step 7: Forward Pass → Output Shape</strong><br><code class=\"code-block\">output = model(input_ids, attention_mask)\noutput.shape = (batch=2, seq_len=5, vocab_size=50257)</code><br><br>At EACH position, the model outputs a probability distribution over the ENTIRE vocabulary!<ul><li>For position 3 of Seq 1 (\"sat\"): P(\"on\") = 0.15, P(\"down\") = 0.12, P(\"EOS\") = 0.08, ...</li></ul>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step 8: Compute {term:loss:Loss} (Cross-Entropy)",
+          "content": "<strong>Labels (shifted ground truth):</strong><ul><li>Seq 1: <code>[464, 3797, 3332, 2, -100]</code> (-100 = ignore last position)</li><li>Seq 2: <code>[-100, 15496, 995, 2, -100]</code> (-100 for PAD positions)</li></ul><strong>Loss at each position:</strong> L = -log(P(correct_token))<ul><li>If P(\"cat\") = 0.85 at position 1: L = -log(0.85) = 0.16 (low = good!)</li><li>If P(\"cat\") = 0.10 at position 1: L = -log(0.10) = 2.30 (high = bad!)</li></ul><strong>Total Loss</strong> = mean over all non-ignored positions"
+        },
+        {
+          "type": "insight-box",
+          "title": "This is {term:teacher-forcing:Teacher Forcing}!",
+          "content": "Notice: We process ALL positions in ONE forward pass using ground truth at each position. The {term:causal-mask:causal mask} ensures each position only 'sees' previous tokens. This is what makes transformer training so fast!"
         }
       ]
     },
     {
-      "id": "slide-2-2",
-      "sectionIndex": 1,
-      "title": "What Training Data Actually Looks Like",
+      "id": "slide-0-5",
+      "sectionIndex": 0,
+      "title": "The Confusion: Same Loss Function!",
       "content": [
         {
           "type": "insight-box",
-          "title": "The Backbone + Head Pattern",
-          "content": "<code class=\"code-block\">+---------------------------+\n|   Base Transformer        |  <- Same backbone for ALL tasks!\n|   (BERT, GPT, LLaMA)      |  <- Pre-trained {term:weights:weights}\n+---------------------------+\n            |\n            v\n   [Task-Specific Head]       <- THIS changes per task!\n            |\n            v\n      Output Shape            <- Depends on task\n</code>"
-        },
-        {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Task",
-            "Data Format",
-            "Head",
-            "Output Shape"
-          ],
-          "rows": [
-            [
-              "<strong>Sequence Classification</strong>",
-              "<code>{\"text\": \"I love it!\", \"label\": 1}</code>",
-              "Linear(hidden, num_classes)",
-              "(batch, num_classes)"
-            ],
-            [
-              "<strong>Token Classification (NER)</strong>",
-              "<code>{\"tokens\": [\"John\", \"works\"], \"labels\": [\"B-PER\", \"O\"]}</code>",
-              "Linear per token",
-              "(batch, seq_len, num_labels)"
-            ],
-            [
-              "<strong>Regression</strong>",
-              "<code>{\"features\": [...], \"target\": 350.0}</code>",
-              "Linear(hidden, 1)",
-              "(batch, 1)"
-            ],
-            [
-              "<strong>LLM (Next Token)</strong>",
-              "<code>\"The quick brown fox...\"</code>",
-              "Linear(hidden, vocab_size)",
-              "(batch, seq_len, vocab_size)"
-            ],
-            [
-              "<strong>Embedding Model</strong>",
-              "<code>\"Find similar sentences\"</code>",
-              "No head! Just pooled hidden states",
-              "(batch, hidden_size)"
-            ]
-          ]
-        },
-        {
-          "type": "html",
-          "content": "<strong>Key Insight:</strong> The same transformer backbone can do classification, NER, regression, generation, OR embeddings—just by changing the final layer!"
-        }
-      ]
-    },
-    {
-      "id": "slide-2-3",
-      "sectionIndex": 1,
-      "title": "What HuggingFace AutoModel Classes Actually Do",
-      "content": [
-        {
-          "type": "insight-box",
-          "title": "AutoModelForSequenceClassification",
-          "content": "<code class=\"code-block\"># What happens when you call:\nmodel = AutoModelForSequenceClassification.from_pretrained(\"bert-base\")\n\n# 1. Load BERT backbone (all transformer layers)\n# 2. DISCARD any existing head\n# 3. Add: self.classifier = Linear(768, num_labels)\n# 4. Which embedding feeds the head?\n#    - BERT: [CLS] token (position 0)\n#    - GPT: LAST token (causal attention = last saw ALL)</code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "AutoModelForTokenClassification (NER, POS Tagging)",
-          "content": "<code class=\"code-block\"># For Named Entity Recognition:\nmodel = AutoModelForTokenClassification.from_pretrained(\"bert-base\")\n\n# Architecture:\n# self.classifier = Linear(768, num_labels)  <- SAME head\n# BUT applied to EVERY token position!\n\n# Input:  [\"John\", \"works\", \"at\", \"Google\"]\n# Output: (batch, 4, 9)  <- 9 NER labels per token\n# Labels: [\"B-PER\", \"O\", \"O\", \"B-ORG\"]</code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "AutoModelForCausalLM (Text Generation)",
-          "content": "<code class=\"code-block\"># The LM head you already know:\nmodel = AutoModelForCausalLM.from_pretrained(\"gpt2\")\n\n# self.lm_head = Linear(768, 50257)  <- vocab_size!\n# Applied at EVERY position\n# Output: (batch, seq_len, 50257)\n\n# This is the DEFAULT head for decoder models.\n# Classification/Regression REPLACES this head!</code>"
-        },
-        {
-          "type": "html",
-          "content": "<strong>The Pattern:</strong> Same backbone, swap the head, change the {term:loss:loss}. That's it!"
-        }
-      ]
-    },
-    {
-      "id": "slide-2-4",
-      "sectionIndex": 1,
-      "title": "Base Model → Instruction-Tuned → Chat Model",
-      "content": [
-        {
-          "type": "insight-box",
-          "title": "What's the Difference?",
-          "content": "These are NOT different architectures—they're the SAME {term:model:model} at different training stages! The only difference is the {term:data:data} used after pre-training."
-        },
-        {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Model Type",
-            "Training",
-            "Behavior",
-            "Example"
-          ],
-          "rows": [
-            [
-              "<strong>Base Model</strong>",
-              "Pre-training only (raw text)",
-              "Autocomplete machine. Prompts like 'The capital of France is' → 'Paris'. May not follow instructions.",
-              "LLaMA-2-7B, GPT-3 base"
-            ],
-            [
-              "<strong>Instruction-Tuned</strong>",
-              "Base + SFT on instruction-response pairs",
-              "Follows instructions. 'Translate Hello to French' → 'Bonjour'",
-              "LLaMA-2-7B-Instruct, Mistral-7B-Instruct"
-            ],
-            [
-              "<strong>Chat Model</strong>",
-              "Instruction-tuned + multi-turn conversation {term:data:data} + RLHF (RL from Human Feedback)",
-              "Maintains conversation context. Has system prompts, user/assistant roles.",
-              "ChatGPT, Claude, LLaMA-2-7B-Chat"
-            ]
-          ]
-        },
-        {
-          "type": "html",
-          "content": "<strong>Key Insight:</strong> A 'chat model' is just an instruction-tuned model trained on <em>conversation-formatted</em> {term:data:data}. The {term:model:model} learns to recognize patterns like '&lt;|user|&gt;' and '&lt;|assistant|&gt;' {term:token:tokens}."
-        },
-        {
-          "type": "insight-box",
-          "title": "Which Should You Fine-tune?",
-          "content": "• <strong>Large dataset (1000+ examples):</strong> Fine-tune the BASE model<br>• <strong>Medium dataset (300-1000):</strong> Either works<br>• <strong>Small dataset (<300):</strong> Fine-tune the INSTRUCT model<br><br>Base models are blank canvases; instruct models already 'know' how to follow instructions."
-        }
-      ]
-    },
-    {
-      "id": "slide-2-5",
-      "sectionIndex": 1,
-      "title": "Single-Turn vs Multi-Turn SFT: What's the Difference?",
-      "content": [
-        {
-          "type": "insight-box",
-          "title": "The Simple Truth",
-          "content": "Both single-turn and multi-turn SFT use the <strong>exact same training objective</strong> (next {term:token:token} prediction). The {term:model:model} doesn't 'know' about turns—it just sees {term:token:tokens}.<br><br><strong>The ONLY difference:</strong> {term:data:Data} format and which {term:token:tokens} contribute to {term:loss:loss}."
-        },
-        {
-          "type": "table",
-          "class": "uncertainty-table",
-          "headers": [
-            "Aspect",
-            "Single-Turn SFT",
-            "Multi-Turn SFT"
-          ],
-          "rows": [
-            [
-              "<strong>{term:data:Data} Format</strong>",
-              "<code>{prompt: '...', response: '...'}</code>",
-              "<code>[{user: '...'}, {assistant: '...'}, ...]</code>"
-            ],
-            [
-              "<strong>What {term:model:Model} Sees</strong>",
-              "<code>[prompt {term:token:tokens}] + [response {term:token:tokens}]</code>",
-              "<code>[&lt;user&gt; tokens] [&lt;assistant&gt; tokens] [&lt;user&gt; ...] ...</code>"
-            ],
-            [
-              "<strong>{term:loss:Loss} Masking</strong>",
-              "Compute {term:loss:loss} on response {term:token:tokens} only",
-              "Compute {term:loss:loss} on ALL assistant {term:token:tokens} across ALL turns"
-            ],
-            [
-              "<strong>Context Handling</strong>",
-              "Each example independent",
-              "Earlier turns provide context for later responses"
-            ],
-            [
-              "<strong>Use Case</strong>",
-              "Q&A, summarization, translation",
-              "Chatbots, conversational agents"
-            ]
-          ]
-        },
-        {
-          "type": "insight-box",
-          "title": "Example: Multi-Turn {term:loss:Loss} Masking",
-          "content": "<code class=\"code-block\">Tokens:  [&lt;user&gt;  'Hi' &lt;/user&gt;  &lt;assistant&gt; 'Hello!' &lt;/assistant&gt;  &lt;user&gt;  'How are you?' ...]\nLabels:  [ -100    -100   -100     -100        'Hello!'    -100         -100    -100  -100        ...]\n           ↑ masked (user turn)    ↑ trained (assistant response)    ↑ masked (user turn)\n\n{term:model:Model} learns to generate assistant responses,\nnot to predict user messages.</code>"
-        },
-        {
-          "type": "html",
-          "content": "<strong>Key Insight:</strong> Multi-turn training teaches the {term:model:model} to handle conversation patterns—remembering context from earlier turns and generating coherent responses. But mechanically, it's still just next {term:token:token} prediction with strategic {term:prompt-masking:loss masking}."
-        }
-      ]
-    },
-    {
-      "id": "slide-3-1",
-      "sectionIndex": 2,
-      "title": "The Big Reveal: Pre-training = SFT = Instruction Tuning",
-      "content": [
-        {
-          "type": "insight-box",
-          "title": "The Truth Nobody Tells You",
-          "content": "<strong>Pre-training, SFT, and Instruction Tuning use the EXACT SAME {term:loss:loss function}!</strong><br><br>The computational mechanism is identical. The only difference is in the {term:data:data} format and optionally which {term:token:tokens} contribute to the {term:loss:loss}."
+          "title": "The Truth that gets Vague in Technical Jargon",
+          "content": "<strong>{term:pre-training:Pre-training}, {term:sft:SFT}, and Instruction Tuning use the EXACT SAME {term:loss:loss} function!</strong><br><br>The computational mechanism is identical. The only difference is the {term:data:data} format and optionally which {term:token:tokens} contribute to the {term:loss:loss}."
         },
         {
           "type": "equation",
@@ -1033,316 +1576,1099 @@
           ],
           "explanation": {
             "prefix": "<strong>In plain English:</strong> ",
-            "template": "For EACH {term:token:token}, compute the negative log {term:probability:probability} of predicting it correctly given all previous {term:token:tokens}. Sum across the sequence. <strong>This is used in Pre-training, SFT, AND Instruction Tuning!</strong>"
+            "template": "For EACH {term:token:token}, compute the negative log {term:probability:probability} of predicting it correctly given all previous {term:token:tokens}. Sum across the sequence."
           }
         },
         {
-          "type": "html",
-          "content": "<br><strong>So what IS different?</strong> The DATA format and optionally, {term:prompt-masking:prompt masking}. Let's explore..."
-        }
-      ]
-    },
-    {
-      "id": "slide-3-2",
-      "sectionIndex": 2,
-      "title": "The ONLY Difference: Data Format",
-      "content": [
-        {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
-            "Training Type",
-            "Data Format",
-            "Example"
+            "Stage",
+            "{term:data:Data} Format",
+            "Which tokens in {term:loss:loss}?"
           ],
           "rows": [
             [
-              "<strong>Pre-training</strong>",
-              "Raw text chunks",
-              "\"The Eiffel Tower is a wrought-iron lattice tower in Paris...\""
+              "<strong>{term:pre-training:Pre-training}</strong>",
+              "Raw text chunks from books, web, code",
+              "ALL {term:token:tokens}"
             ],
             [
-              "<strong>SFT</strong>",
-              "Instruction-Response pairs",
-              "\"Translate to French: Hello\" → \"Bonjour\""
+              "<strong>{term:sft:SFT}</strong>",
+              "Instruction → Response pairs",
+              "Response {term:token:tokens} only (prompt masked)"
             ],
             [
               "<strong>Instruction Tuning</strong>",
-              "Task + Input + Output",
-              "\"Summarize: [article]\" → \"[summary]\""
-            ],
-            [
-              "<strong>Chat Fine-tuning</strong>",
-              "Multi-turn conversations",
-              "User: Hi → Assistant: Hello! → User: ..."
+              "Many task formats (QA, translation, etc.)",
+              "Output {term:token:tokens} only"
             ]
           ]
         },
         {
           "type": "insight-box",
-          "title": "Same Loss, Different Patterns",
-          "content": "The {term:model:model} doesn't care about your fancy formatting. To the {term:model:model}, it's ALL just a sequence of {term:token:tokens}. The 'structure' in SFT/Instruction {term:data:data} creates patterns that teach the {term:model:model} to respond in specific ways."
+          "title": "For LLMs: EVERYTHING is Text Generation!",
+          "content": "<strong>TRAINING = prompt + answer as ONE sequence (one go, parallel in a batch):</strong><ul><li><strong>Classification:</strong> <code>Review: Great movie! Sentiment: positive</code></li><li><strong>Translation:</strong> <code>English: Hello → French: Bonjour</code></li><li><strong>Question Answering:</strong> <code>Capital of France? Answer: Paris</code></li><li><strong>Code Generation:</strong> <code>Write a function to add two numbers: def add(a, b): return a + b</code></li></ul><strong>No separate \"target\" text:</strong> it's the same sequence - training just predicts the <em>next token</em> everywhere (labels = input shifted by 1).<br><br><strong>INFERENCE = send only what you have, model completes in a LOOP (sequential):</strong><ul><li>Send: <code>Review: Great movie! Sentiment:</code> - model generates: <code>positive</code></li><li>Send: <code>English: Hello → French:</code> - model generates: <code>Bonjour</code></li></ul><strong>SAME mechanism for ALL tasks!</strong>"
         },
         {
           "type": "html",
-          "content": "<strong>Think of it this way:</strong><br>• <strong>Pre-training:</strong> 'Learn how language works in general'<br>• <strong>SFT:</strong> 'Learn to follow this specific format'<br>• <strong>Instruction Tuning:</strong> 'Learn to generalize across many task formats'"
+          "content": "<strong>Prompt Masking in {term:sft:SFT}:</strong><ul><li>Input: <code>[Translate, :, Hello, →, Bon, jour]</code></li><li>Labels: <code>[-100, -100, -100, -100, Bon, jour]</code></li><li>↑ prompt (ignored) | ↑ response (trained)</li></ul><strong>Labels = -100</strong> tells PyTorch CrossEntropyLoss to SKIP these positions. Loss only on response tokens!"
         }
       ]
     },
     {
-      "id": "slide-3-3",
-      "sectionIndex": 2,
-      "title": "Chat Templates: Not Magic, Just Tokens",
+      "id": "slide-1-1",
+      "sectionIndex": 1,
+      "title": "Classification & Regression: Encoder vs LLM",
       "content": [
         {
           "type": "insight-box",
-          "title": "What You Write (Human Format)",
-          "content": "<code class=\"code-block\">[System]: You are a helpful assistant.\n[User]: What is 2+2?\n[Assistant]: </code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "What the Model Actually Sees (Tokens)",
-          "content": "<code class=\"code-block\">{term:bos-token:BOS} &lt;|system|&gt; You are a helpful assistant &lt;|end|&gt;\n&lt;|user|&gt; What is 2 + 2 ? &lt;|end|&gt;\n&lt;|assistant|&gt;</code><br><br>Just special {term:token:tokens}! The {term:bos-token:BOS}, &lt;|system|&gt;, &lt;|user|&gt;, &lt;|assistant|&gt;, and &lt;|end|&gt; are all in the {term:vocabulary:vocabulary}."
-        },
-        {
-          "type": "html",
-          "content": "<strong>Key Insight:</strong> Chat templates are just <em>formatting conventions</em>. The {term:model:model} learns that after seeing '&lt;|assistant|&gt;', it should generate helpful responses—because that's the pattern in the training {term:data:data}."
+          "title": "The Core Difference: How Data and Output Look",
+          "content": "<strong>{term:encoder-only:Encoder-only} (BERT):</strong><br>• Training {term:data:data} = <code>(input, numeric_label)</code> pairs<br>• Output = {term:probability:probability} vector from linear layer<br>• Example: <code>'I love this movie'</code> → <code>[0.02, 0.95, 0.03]</code><br><br><strong>{term:decoder-only:Decoder-only} (LLM):</strong><br>• Training {term:data:data} = <strong>FULL TEXT</strong> with answer included<br>• Output = generates the actual <strong>WORD</strong> as {term:token:tokens}<br>• Example: <code>'Sentiment: I love this movie → positive'</code> (generates 'positive')"
         },
         {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
-            "Special Token",
-            "Purpose"
+            "Task",
+            "{term:encoder-only:Encoder-only} Data",
+            "LLM Training Data (<em>FULL TEXT</em>)"
           ],
           "rows": [
             [
-              "{term:bos-token:BOS}",
-              "Marks sequence start"
+              "<strong>Binary</strong>",
+              "<code>{text, label: 0/1}</code>",
+              "<code>\"Is this spam? [text] Answer: spam\"</code>"
             ],
             [
-              "{term:eos-token:EOS}",
-              "Marks sequence end (stops generation)"
+              "<strong>{term:multi-class:Multi-class}</strong>",
+              "<code>{text, label: class_id}</code>",
+              "<code>\"Sentiment: [text] → positive\"</code>"
             ],
             [
-              "&lt;|system|&gt;",
-              "System instructions follow"
+              "<strong>{term:multi-label:Multi-label}</strong>",
+              "<code>{text, labels: [0,1,1,0]}</code>",
+              "<code>\"Genres: [text] → action, comedy\"</code>"
             ],
             [
-              "&lt;|user|&gt;",
-              "User message follows"
-            ],
-            [
-              "&lt;|assistant|&gt;",
-              "Model should respond"
+              "<strong>Regression</strong>",
+              "<code>{text, label: 3.5}</code>",
+              "<code>\"Rate 1-5: [text] → 4\"</code>"
             ]
           ]
-        }
-      ]
-    },
-    {
-      "id": "slide-3-4",
-      "sectionIndex": 2,
-      "title": "Loss Masking: The Optional Optimization",
-      "content": [
+        },
         {
           "type": "insight-box",
-          "title": "{term:prompt-masking:Prompt Masking} Explained",
-          "content": "In SFT, we often DON'T want the {term:model:model} to compute {term:loss:loss} on the prompt/instruction—only on the response. Why? The prompt is given; we're training the {term:model:model} to generate good RESPONSES."
+          "title": "LLM Training: Input = TASK + PREDICTION, Labels = Shifted by 1",
+          "content": "During {term:sft:SFT}, the LLM sees the <strong>COMPLETE text including the answer</strong>. The input {term:token:tokens} are the full sequence, and the labels are the <em>SAME sequence shifted by 1 position</em> (standard next-{term:token:token} prediction).<br><br><strong>Example:</strong><br><ol><li><strong>Full text:</strong> <code>\"Is this spam? 'Buy now!' Answer: spam\"</code></li><li><strong>Input tokens:</strong> <code>[Is, this, spam, ?, ', Buy, now, !', Answer, :, spam]</code></li><li><strong>Label tokens:</strong> <code>[this, spam, ?, ', Buy, now, !', Answer, :, spam, {term:eos-token:EOS}]</code></li></ol>The {term:model:model} learns to predict each next {term:token:token}. At inference, you stop at <code>':'</code> and let it generate!"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Insight: LLM Outputs are WORDS, Not Probabilities!",
+          "content": "The LLM doesn't output <code>[0.95, 0.03, 0.02]</code>. It <strong>generates the actual text</strong>!<br><ul><li><strong>Classification</strong> → generates <code>'positive'</code> or <code>'negative'</code></li><li><strong>Regression</strong> → generates <code>'4'</code> or <code>'3.5'</code> as text</li><li><strong>{term:multi-label:Multi-label}</strong> → generates <code>'action, comedy, romance'</code></li></ul><strong>EVERYTHING is text generation!</strong>"
         },
         {
           "type": "html",
-          "content": "<strong>Example with Masking:</strong><br><code class=\"code-block\">Input:  \"Translate: Hello → Bonjour\"\nTokens: [Trans, late, :, Hello, →, Bon, jour, {term:eos-token:EOS}]\nLabels: [-100, -100, -100, -100, -100, Bon, jour, {term:eos-token:EOS}]\n         ↑ prompt (ignored in loss)    ↑ response (trained)</code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "Is Masking Required?",
-          "content": "<strong>No!</strong> Research shows masking is optional and sometimes unnecessary:<br><br>• For <strong>long responses</strong> (completion ≥ prompt length): masking has minimal impact<br>• For <strong>short responses</strong>: masking can act as helpful regularization<br>• Many successful models train on FULL sequences without masking"
+          "content": "<strong>{term:encoder-only:Encoder-only}: Losses and Equations</strong>"
         },
         {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
-            "With Prompt Masking",
-            "Without Prompt Masking"
+            "Task",
+            "Activation",
+            "{term:loss:Loss}",
+            "Output Shape"
           ],
           "rows": [
             [
-              "Loss on response {term:token:tokens} only",
-              "Loss on ALL {term:token:tokens}"
+              "Binary",
+              "{term:sigmoid-activation:Sigmoid}",
+              "{term:bce-loss:BCE} = −[y·log(p) + (1−y)·log(1−p)]",
+              "<code>(batch, 1)</code>"
             ],
             [
-              "Model won't 'memorize' prompts",
-              "Model may learn prompts too"
+              "{term:multi-class:Multi-class}",
+              "{term:softmax:Softmax}",
+              "{term:cce-loss:CCE} = −log(p_{true})",
+              "<code>(batch, K)</code>"
             ],
             [
-              "Standard in many SFT implementations",
-              "Valid alternative, simpler"
+              "{term:multi-label:Multi-label}",
+              "{term:sigmoid-activation:Sigmoid}/label",
+              "{term:bce-loss:BCE}/label",
+              "<code>(batch, K)</code>"
             ],
             [
-              "PyTorch: labels = -100 for prompt",
-              "PyTorch: labels = input_ids"
+              "Regression",
+              "Linear",
+              "{term:mse-loss:MSE} = (y − ŷ)²",
+              "<code>(batch, 1)</code>"
             ]
           ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Multi-class vs Multi-label: The Critical Difference",
+          "content": "<strong>{term:multi-class:Multi-class} ({term:softmax:Softmax}):</strong> 'Out of ALL these, which <em>ONE</em> is it?'<br>→ {term:probability:Probabilities} sum to 1. Mutually exclusive.<br><br><strong>{term:multi-label:Multi-label} ({term:sigmoid-activation:Sigmoid}):</strong> Ask each label <strong>INDEPENDENTLY</strong>:<ul><li>'Is it a car?' → 95% yes</li><li>'Is it red?' → 87% yes</li><li>'Is it German?' → 12% no</li><li>'Is it sporty?' → 78% yes</li></ul>Each output is its own yes/no decision - that's why we use {term:sigmoid-activation:Sigmoid}!"
         }
       ]
     },
     {
-      "id": "slide-4-1",
-      "sectionIndex": 3,
-      "title": "Training is PARALLEL (Not Token-by-Token!)",
+      "id": "slide-1-2",
+      "sectionIndex": 1,
+      "title": "3 Tasks in ONE Batch: The Beauty of SFT",
       "content": [
         {
           "type": "insight-box",
-          "title": "The Misconception vs Reality",
-          "content": "<strong>Misconception:</strong> During training, the {term:model:model} generates one {term:token:token}, uses it to generate the next, and so on...<br><br><strong>Reality:</strong> ALL {term:token:tokens} in a sequence are processed in ONE forward pass using {term:teacher-forcing:teacher forcing}!"
+          "title": "The Power of {term:sft:SFT}: Train on ANY mix of tasks in ONE batch!",
+          "content": "With {term:sft:SFT}, you can throw Binary Classification, {term:multi-class:Multi-class}, {term:multi-label:Multi-label}, Regression, {term:ner:NER}, {term:extractive-qa:QA} - <strong>ALL in the SAME padded batch!</strong> The {term:model:model} learns from ALL of them together. That's the beauty of treating everything as text generation!"
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:encoder-only:Encoder-only}: Each task needs separate head",
+          "content": "<strong>Task 1 (Binary):</strong> <code>{text: 'Congrats! You won!', label: 1}</code><br><strong>Task 2 ({term:multi-class:Multi-class}):</strong> <code>{text: 'Terrible movie', label: 1}</code> (neg)<br><strong>Task 3 ({term:multi-label:Multi-label}):</strong> <code>{text: 'Action comedy', labels: [1,1,0,0]}</code><br><br>Each needs a <strong>DIFFERENT classification head</strong>. Can't mix in one batch easily!"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Training: 3 DIFFERENT tasks in ONE padded batch!",
+          "content": "<strong>Sample 1 (Binary - Spam):</strong><br><ul><li><strong>Full text:</strong> <code>\"Is this spam? 'Congrats! You won!' Answer: spam\"</code></li><li><strong>Input:</strong> <code>[Is, this, spam, ..., Answer, :, spam]</code></li><li><strong>Labels:</strong> <code>[this, spam, ..., Answer, :, spam, {term:eos-token:EOS}]</code> (shifted by 1)</li></ul><strong>Sample 2 ({term:multi-class:Multi-class} - Sentiment):</strong><br><ul><li><strong>Full text:</strong> <code>\"Sentiment: 'The movie was terrible' → negative\"</code></li><li><strong>Input/Labels:</strong> Same pattern - full text, shifted labels</li></ul><strong>Sample 3 ({term:multi-label:Multi-label} - Genre):</strong><br><ul><li><strong>Full text:</strong> <code>\"List genres: 'A hilarious action movie' → action, comedy\"</code></li></ul><strong>All 3 samples padded to same length, trained in ONE batch!</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "At Inference: Provide up to the trigger, let model generate",
+          "content": "<strong>Spam:</strong><br>You give: <code>\"Is this spam? 'Buy pills cheap!' Answer:\"</code><br>Model generates: <code>\"spam\"</code><br><br><strong>Sentiment:</strong><br>You give: <code>\"Sentiment: 'I love this!' →\"</code><br>Model generates: <code>\"positive\"</code><br><br><strong>Genre:</strong><br>You give: <code>\"List genres: 'Scary thriller' →\"</code><br>Model generates: <code>\"thriller, horror\"</code><br><br>The {term:model:model} learned the <strong>PATTERN</strong> from training. With enough diverse {term:data:data}, it generalizes!"
         },
         {
           "type": "html",
-          "content": "<strong>Why Parallelization Works:</strong><br><br>1. We KNOW the ground truth sequence during training<br>2. {term:causal-mask:Causal masking} prevents future {term:token:tokens} from being 'seen'<br>3. Each position predicts its next {term:token:token} independently<br>4. {term:loss:Loss} is computed for ALL positions at once"
+          "content": "<strong>Training {term:data:Data} Format:</strong>"
+        },
+        {
+          "type": "html",
+          "content": "<code class=\"code-block\">[\n  {\"text\": \"Is this spam? 'Congrats! You won!' Answer: spam\"},\n  {\"text\": \"Sentiment: 'Movie was terrible' → negative\"},\n  {\"text\": \"List genres: 'Action comedy film' → action, comedy\"},\n  {\"text\": \"Rate 1-5: 'Great product!' → 5\"}\n]</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Takeaway",
+          "content": "<strong>{term:encoder-only:Encoder-only}:</strong> Separate <code>(input, label)</code>, different heads per task type<br><br><strong>LLM ({term:sft:SFT}):</strong> ALL tasks as text completion in same batch, <strong>ONE {term:model:model} handles everything</strong>. The {term:model:model} generates the answer as {term:token:tokens}!"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-3",
+      "sectionIndex": 1,
+      "title": "Token Classification: Every Token Gets a Label",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is {term:token-classification:Token Classification}?",
+          "content": "Instead of ONE label for whole sequence, label <strong>EACH {term:token:token}</strong>:<br><ul><li><strong>{term:ner:NER}:</strong> <code>John→B-PER, works→O, at→O, Google→B-ORG</code></li><li><strong>{term:pos-tagging:POS}:</strong> <code>John→NOUN, works→VERB, at→PREP</code></li><li><strong>{term:extractive-qa:Extractive QA}:</strong> Each {term:token:token} → START/END/NONE</li></ul>"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Task Type",
+            "Output Shape",
+            "What's Predicted"
+          ],
+          "rows": [
+            [
+              "Regression",
+              "<code>[batch, 1]</code>",
+              "Single number per sequence"
+            ],
+            [
+              "Classification",
+              "<code>[batch, K]</code>",
+              "Distribution over K classes"
+            ],
+            [
+              "<strong>{term:token-classification:Token Classification}</strong>",
+              "<code><strong>[batch, seq_len, K]</strong></code>",
+              "<strong>Label for EACH {term:token:token}</strong>"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:encoder-only:Encoder-only} {term:ner:NER}: 2 batches, 5 labels",
+          "content": "<strong>Labels:</strong> <code>[O, B-PER, I-PER, B-ORG, I-ORG]</code><br><br><strong>Batch 1:</strong> <code>tokens=['John','works','at','Google']</code>, <code>labels=[1,0,0,3]</code><br><strong>Batch 2:</strong> <code>tokens=['Elon','Musk','founded','Tesla']</code>, <code>labels=[1,2,0,3]</code><br><br><strong>Processing:</strong><ol><li>{term:hidden-state:Hidden states}: <code>(batch=2, seq_len=4, hidden=768)</code></li><li><code>Linear(768, 5)</code> applied to EACH position</li><li>Output: <code>(batch=2, seq_len=4, num_labels=5)</code></li><li>{term:loss:Loss}: CrossEntropy <strong>PER TOKEN</strong>, averaged</li></ol>"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM: Again, EVERYTHING is text generation!",
+          "content": "For LLMs, {term:token-classification:token classification} becomes text completion. Train on full text with answer!<br><br><strong>Same pattern as classification - input = FULL TEXT, labels = shifted by 1.</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM Training: 3 Token Classification tasks in ONE batch",
+          "content": "<strong>Sample 1 ({term:ner:NER}):</strong><br><code>\"Extract entities: 'John works at Google' → [PER]John[/PER] works at [ORG]Google[/ORG]\"</code><br><br><strong>Sample 2 ({term:pos-tagging:POS}):</strong><br><code>\"POS tags: 'The quick fox' → The/DET quick/ADJ fox/NOUN\"</code><br><br><strong>Sample 3 ({term:extractive-qa:Extractive QA}):</strong><br><code>\"Context: 'Paris is capital of France' Q: 'What is capital?' A: Paris\"</code><br><br><strong>All padded, trained together!</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Inference: Provide prompt, model generates annotations",
+          "content": "<strong>{term:ner:NER}:</strong><br>You give: <code>\"Extract entities: 'Sundar works at Google' →\"</code><br>Model generates: <code>\"[PER]Sundar[/PER] works at [ORG]Google[/ORG]\"</code><br><br><strong>{term:pos-tagging:POS}:</strong><br>You give: <code>\"POS tags: 'Dogs run fast' →\"</code><br>Model generates: <code>\"Dogs/NOUN run/VERB fast/ADV\"</code><br><br><strong>{term:extractive-qa:QA}:</strong><br>You give: <code>\"Context: 'Berlin is in Germany' Q: 'Where is Berlin?' A:\"</code><br>Model generates: <code>\"Germany\"</code>"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-4",
+      "sectionIndex": 1,
+      "title": "Fill-in-the-Blank & [ADVANCED] Replacing the LM Head",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Fill-in-the-Blank: Two Approaches",
+          "content": "<strong>Approach 1: {term:mask-token:[MASK]} Token ({term:encoder-only:Encoder-only})</strong><br>Replace target with {term:mask-token:[MASK]}, {term:model:model} predicts from {term:vocabulary:vocabulary} at that position.<br><br><strong>Approach 2: Generation ({term:decoder-only:Decoder-only})</strong><br>Just complete the text! No special {term:token:token} needed - it's text generation!"
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:encoder-only:Encoder-only} {term:mask-token:[MASK]} Approach",
+          "content": "<strong>Input:</strong> <code>'The [MASK] of France is Paris'</code><br><strong>Output shape:</strong> <code>(batch, seq_len, vocab_size=30522)</code><br><strong>At {term:mask-token:[MASK]} position:</strong> {term:logits:logits} over entire {term:vocabulary:vocabulary}<br><br><strong>Top predictions:</strong><ul><li>capital: <code>0.85</code></li><li>city: <code>0.06</code></li><li>heart: <code>0.02</code></li></ul>"
+        },
+        {
+          "type": "insight-box",
+          "title": "LLM: Just text generation!",
+          "content": "<strong>Training:</strong><br><code>\"Fill blank: 'The ___ of France is Paris' → capital\"</code><br>Input: <code>[Fill, blank, ..., →, capital]</code><br>Labels: <code>[blank, ..., →, capital, {term:eos-token:EOS}]</code><br><br><strong>Inference:</strong><br>You give: <code>\"Fill blank: 'The ___ of France is Paris' →\"</code><br>Model generates: <code>\"capital\"</code><br><br>No {term:mask-token:[MASK]} {term:token:token} needed - just next-{term:token:token} prediction!"
+        },
+        {
+          "type": "insight-box",
+          "title": "🔬 [ADVANCED] Replacing the {term:lm-head:LM Head}",
+          "content": "<strong>This is NOT the normal approach!</strong> But you CAN make a {term:decoder-only:decoder-only} LLM behave like an {term:encoder-only:encoder-only} {term:model:model} by <strong>replacing</strong> the {term:lm-head:LM head} with a custom classification/regression head."
+        },
+        {
+          "type": "insight-box",
+          "title": "Normal LLM vs Modified LLM",
+          "content": "<strong>Normal LLM (text generation):</strong><br>{term:hidden-state:Hidden} (4096) → {term:lm-head:LM Head} (4096→32000) → Next {term:token:token} {term:logits:logits} → {term:vocabulary:Vocabulary} {term:probability:probabilities}<br><br><strong>Modified LLM (classification):</strong><br>{term:hidden-state:Hidden} (4096) → <em>REMOVE</em> {term:lm-head:LM Head} → <strong>Classification Head</strong> (4096→3) → Class {term:probability:probabilities}<br><br><strong>This is NOT generation anymore!</strong> It's discriminative classification like {term:encoder-only:encoder-only}."
+        },
+        {
+          "type": "insight-box",
+          "title": "Why the LAST Token?",
+          "content": "Due to {term:causal-mask:causal attention}, only the <strong>LAST {term:token:token}</strong> has seen ALL previous {term:token:tokens}:<ul><li>Position 0 sees: only position 0</li><li>Position 1 sees: positions 0-1</li><li>Position 2 sees: positions 0-2</li><li>...</li><li><strong>LAST {term:token:token} sees: ALL {term:token:tokens}!</strong></li></ul>So we extract last {term:token:token}'s {term:hidden-state:hidden state} and attach custom head. This is how HuggingFace's <code>AutoModelForSequenceClassification</code> works with {term:decoder-only:decoder} {term:model:models}!"
+        },
+        {
+          "type": "insight-box",
+          "title": "When to Use Each Approach",
+          "content": "<strong>Use Text Generation (keep {term:lm-head:LM head}):</strong><ul><li>Zero-shot / few-shot scenarios</li><li>When you want reasoning in output</li><li>Training on mixed tasks easily</li></ul><strong>Use Custom Head (ADVANCED):</strong><ul><li>Fixed set of classes</li><li>Need exact {term:probability:probabilities}</li><li>Faster inference (no autoregressive)</li><li>HuggingFace <code>AutoModelForSequenceClassification</code></li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-1",
+      "sectionIndex": 2,
+      "title": "The Foundation: LLMs Only See Tokens",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Universal Truth About LLMs",
+          "content": "<strong>No matter the task - classification, QA, chat, code, translation - an LLM does exactly ONE thing:</strong><br><br>See {term:token:tokens} → Predict next {term:token:token}.<br><br>That's it. EVERYTHING else is just clever formatting of the input text."
+        },
+        {
+          "type": "insight-box",
+          "title": "What Does the Model Actually See?",
+          "content": "<strong>You type:</strong> 'What is the capital of France?'<br><br><strong>Model sees:</strong><br><code class=\"code-block\">[1, 1824, 338, 278, 7483, 310, 3444, 29973]</code><br>(Just numbers! Token IDs from the {term:vocabulary:vocabulary})<br><br><strong>Model outputs:</strong> A {term:probability:probability} distribution over ~50,000 possible next {term:token:tokens}<br><br><strong>Top predictions:</strong><br><code class=\"code-block\">{'Paris': 0.89, 'The': 0.03, 'France': 0.02, ...49997 others}</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Every Task = Text Completion",
+          "content": "<strong>Classification:</strong> 'Sentiment: Great movie! → ' → generates 'positive'<br><br><strong>Translation:</strong> 'English: Hello → French: ' → generates 'Bonjour'<br><br><strong>Code:</strong> 'def add(a, b): ' → generates 'return a + b'<br><br><strong>Chat:</strong> '[User] Hi! [Assistant] ' → generates 'Hello! How can I help?'<br><br><strong>The ONLY difference between model types is HOW they were trained (what {term:data:data} format)!</strong>"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Insight:</strong> Understanding this reveals why different training stages exist - they're all about teaching the {term:model:model} different <em>patterns</em> of input→output formatting, NOT different mechanisms."
+        }
+      ]
+    },
+    {
+      "id": "slide-2-2",
+      "sectionIndex": 2,
+      "title": "Base Models: Raw Language Understanding",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is a <strong>Base Model</strong>?",
+          "content": "A <strong>Base Model</strong> is the foundational LLM trained ONLY on next-{term:token:token} prediction from massive, unstructured text. It learns:<br><br>• <strong>Grammar & Syntax:</strong> How language is structured<br>• <strong>Semantics:</strong> What words mean and how they relate<br>• <strong>World Knowledge:</strong> Facts about entities, events, history<br>• <strong>Reasoning Patterns:</strong> Logical inference from statistical patterns<br><br><strong>BUT it has NO concept of 'instructions' or 'responses'!</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Training Data: What Does It Look Like?",
+          "content": "<strong>Sources:</strong><br>• Web (Common Crawl, Wikipedia)<br>• Books (Project Gutenberg, BookCorpus)<br>• Code (GitHub, StackOverflow)<br>• Scientific papers (arXiv, PubMed)<br><br><strong>Format:</strong> Just raw text chunks. No structure, no labels.<br><code class=\"code-block\">The quick brown fox jumps over the lazy dog.\nParis is the capital of France. The Eiffel Tower...\ndef fibonacci(n):\n    if n <= 1: return n\n    return fibonacci(n-1) + fibonacci(n-2)</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: How Base Model Training Works",
+          "content": "<strong>Step 1:</strong> Take raw text: 'The cat sat on the mat'<br><br><strong>Step 2:</strong> Create input-label pairs (shifted by 1):<br><code class=\"code-block\">Input:  [{term:bos-token:BOS}, The, cat, sat, on, the, mat]\nLabels: [The, cat, sat, on, the, mat, {term:eos-token:EOS}]</code><br><br><strong>Step 3:</strong> At each position, predict next {term:token:token}<br><br><strong>Step 4:</strong> Compute {term:loss:loss}: How wrong was the prediction?<br><code>{term:loss:L} = −log {term:probability:P}(correct)</code><br><br><strong>Step 5:</strong> Update {term:weights:weights} via {term:gradient:gradients}<br><br><strong>Repeat</strong> for trillions of {term:token:tokens}!"
         },
         {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
             "Aspect",
-            "Training",
-            "Inference"
+            "<strong>Base Model</strong>"
           ],
           "rows": [
             [
-              "<strong>Input at pos i</strong>",
-              "Ground truth {term:token:token}[i]",
-              "{term:model:Model}'s prediction[i-1]"
+              "<strong>Training Objective</strong>",
+              "Next {term:token:token} prediction on raw text"
             ],
             [
-              "<strong>Parallelism</strong>",
-              "ALL positions at once",
-              "One position at a time"
+              "<strong>Training Data</strong>",
+              "Trillions of {term:token:tokens} (books, web, code)"
             ],
             [
-              "<strong>Forward Passes</strong>",
-              "1 per sequence",
-              "N per sequence (N = length)"
+              "<strong>Data Format</strong>",
+              "Unstructured text chunks"
             ],
             [
-              "<strong>Speed</strong>",
-              "Fast (parallel)",
-              "Slow (sequential)"
+              "<strong>{term:loss:Loss} Function</strong>",
+              "Cross-entropy on ALL {term:token:tokens}"
+            ],
+            [
+              "<strong>CAN do</strong>",
+              "Complete text, has world knowledge"
+            ],
+            [
+              "<strong>CANNOT do</strong>",
+              "Follow instructions, have conversations"
+            ],
+            [
+              "<strong>Examples</strong>",
+              "GPT-2, LLaMA-base, Mistral-base"
             ]
           ]
-        },
-        {
-          "type": "insight-box",
-          "title": "This is why Transformers scale!",
-          "content": "The ability to parallelize training is why Transformers replaced RNNs. A 1000-{term:token:token} sequence needs 1 forward pass during training, not 1000!"
         }
       ]
     },
     {
-      "id": "slide-4-2",
-      "sectionIndex": 3,
-      "title": "The Causal Mask: Preventing Cheating",
+      "id": "slide-2-3",
+      "sectionIndex": 2,
+      "title": "Instruction-Tuned Models: Learning to Follow Commands",
       "content": [
         {
           "type": "insight-box",
-          "title": "{term:causal-mask:Causal Mask} Purpose",
-          "content": "If we process all {term:token:tokens} in parallel, how do we prevent position 3 from 'seeing' position 4 when predicting {term:token:token} 4?<br><br><strong>Answer:</strong> Add -∞ to attention scores for future positions. After {term:softmax:softmax}, exp(-∞) → 0, so future {term:token:tokens} get zero attention."
-        },
-        {
-          "type": "html",
-          "content": "<strong>Visual: Attention Mask (seq_len=4)</strong><br><code class=\"code-block\">        pos0  pos1  pos2  pos3\npos0 [   0,   -∞,   -∞,   -∞  ]  ← can only see pos0\npos1 [   0,    0,   -∞,   -∞  ]  ← can see pos0, pos1\npos2 [   0,    0,    0,   -∞  ]  ← can see pos0, pos1, pos2\npos3 [   0,    0,    0,    0  ]  ← can see all</code>"
-        },
-        {
-          "type": "html",
-          "content": "<strong>After Softmax (example attention weights):</strong><br><code class=\"code-block\">        pos0  pos1  pos2  pos3\npos0 [ 1.0,  0.0,  0.0,  0.0 ]  ← attends only to self\npos1 [ 0.4,  0.6,  0.0,  0.0 ]  ← split between pos0,1\npos2 [ 0.2,  0.3,  0.5,  0.0 ]  ← split between pos0,1,2\npos3 [ 0.1,  0.2,  0.3,  0.4 ]  ← attends to ALL</code>"
+          "title": "What is an <strong>Instruction-Tuned Model</strong>?",
+          "content": "Take a <strong>base model</strong>, fine-tune it on <strong>(instruction, response)</strong> pairs, and now it UNDERSTANDS commands. <strong>Same {term:loss:loss} function, different {term:data:data}!</strong><br><br>The {term:model:model} learns patterns like:<br>• 'When asked to translate, I should output the translation'<br>• 'When asked to summarize, I should be concise'<br>• 'After the instruction ends, I should respond'"
         },
         {
           "type": "insight-box",
-          "title": "Key Insight",
-          "content": "Each row sums to 1.0 after {term:softmax:softmax}. The -∞ values force future {term:token:token} attention to exactly 0, ensuring each position only sees past + self."
-        }
-      ]
-    },
-    {
-      "id": "slide-4-3",
-      "sectionIndex": 3,
-      "title": "Complete Training Step Example",
-      "content": [
-        {
-          "type": "html",
-          "content": "<strong>Batch of 2 examples:</strong><br><code class=\"code-block\">Example 1: \"The cat sat\"\nExample 2: \"Hello world!\"</code>"
+          "title": "Training Data: Instruction→Response Pairs",
+          "content": "<strong>Format:</strong><br><code class=\"code-block\">{\"instruction\": \"Translate to Spanish\",\n \"input\": \"Hello, how are you?\",\n \"output\": \"Hola, ¿cómo estás?\"}\n\n{\"instruction\": \"Summarize this text\",\n \"input\": \"Long article about climate change...\",\n \"output\": \"Climate change is accelerating due to...\"}\n\n{\"instruction\": \"Write a haiku about programming\",\n \"input\": \"\",\n \"output\": \"Code flows like water\\nBugs appear then disappear\\nShip it on Friday\"}</code>"
         },
         {
           "type": "insight-box",
-          "title": "Step 1: Tokenize",
-          "content": "<code class=\"code-block\">Example 1: [464, 3797, 3332]        # len=3\nExample 2: [15496, 995, 0]          # len=3</code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "Step 2: Add Special Tokens",
-          "content": "<code class=\"code-block\">Example 1: [{term:bos-token:BOS}, 464, 3797, 3332, {term:eos-token:EOS}]   # [1, 464, 3797, 3332, 2]\nExample 2: [{term:bos-token:BOS}, 15496, 995, 0, {term:eos-token:EOS}]  # [1, 15496, 995, 0, 2]</code>"
-        },
-        {
-          "type": "insight-box",
-          "title": "Step 3: Pad to Same Length (Left Padding)",
-          "content": "<code class=\"code-block\"># If max_len=6, pad on LEFT:\nExample 1: [PAD, 1, 464, 3797, 3332, 2]\nExample 2: [PAD, 1, 15496, 995, 0, 2]\n\n# Batch shape: (2, 6)</code><br><br><strong>Why LEFT padding?</strong> For autoregressive models, we generate from the END. Left padding keeps the rightmost (latest) {term:token:tokens} aligned."
-        },
-        {
-          "type": "insight-box",
-          "title": "Step 4: Create Labels (shift by 1)",
-          "content": "<code class=\"code-block\">Input:  [PAD, {term:bos-token:BOS}, 464, 3797, 3332, {term:eos-token:EOS}]\nLabels: [{term:bos-token:BOS}, 464, 3797, 3332, {term:eos-token:EOS}, PAD]\n\n# Model at position i predicts token at position i+1</code>"
-        }
-      ]
-    },
-    {
-      "id": "slide-4-4",
-      "sectionIndex": 3,
-      "title": "Output Shape & Cross-Entropy",
-      "content": [
-        {
-          "type": "insight-box",
-          "title": "Output Tensor Shape",
-          "content": "<code class=\"code-block\"># For batch_size=2, seq_len=6, vocab_size=50000:\nOutput shape: (2, 6, 50000)\n              ↑  ↑   ↑\n         batch seq  vocab\n\n# Each position outputs {term:logits:logits} for ENTIRE {term:vocabulary:vocabulary}!</code>"
-        },
-        {
-          "type": "html",
-          "content": "<strong>Why this shape?</strong> At each of the 6 positions, the {term:model:model} predicts a {term:probability:probability distribution} over 50K {term:token:tokens}. During training, we use ALL these predictions; during inference, we only use the last position."
-        },
-        {
-          "type": "insight-box",
-          "title": "Cross-Entropy Calculation",
-          "content": "<code class=\"code-block\"># Ground truth labels (one-hot would be [0,0,...,1,...,0])\nlabels = [1, 464, 3797, 3332, 2, 0]  # token IDs\n\n# Model outputs logits for each position\n# We don't argmax during training!\n\nfor pos in range(seq_len):\n    logits_pos = output[:, pos, :]     # (batch, vocab)\n    target = labels[:, pos]             # (batch,)\n    loss += CrossEntropy(logits_pos, target)</code>"
-        },
-        {
-          "type": "html",
-          "content": "<strong>Key Insight:</strong> During training, we NEVER call argmax. We compute {term:loss:loss} directly on the {term:logits:logits} vs one-hot targets. argmax is only for inference when we need an actual {term:token:token}."
+          "title": "Step-by-Step: How It's Trained",
+          "content": "<strong>Step 1:</strong> Format instruction-response pair as text:<br><code class=\"code-block\">Translate to French: Hello → Bonjour</code><br><br><strong>Step 2:</strong> Full text becomes input, shifted by 1 for labels (just like base!)<br><br><strong>Step 3:</strong> <strong>OPTIONAL but common:</strong> Mask prompt {term:token:tokens}<br><code class=\"code-block\">Input:  [Translate, to, French, :, Hello, →, Bonjour]\nLabels: [-100, -100, -100, -100, -100, -100, Bonjour, {term:eos-token:EOS}]</code><br>↑ -100 = ignore in {term:loss:loss}<br><br><strong>Step 4:</strong> {term:loss:loss} computed ONLY on response {term:token:tokens}!<br><br><strong>Result:</strong> {term:model:Model} learns: 'After → generate the answer'"
         },
         {
           "type": "table",
           "class": "uncertainty-table",
           "headers": [
-            "Training",
-            "Inference"
+            "Aspect",
+            "<strong>Base Model</strong>",
+            "<strong>Instruction-Tuned</strong>"
           ],
           "rows": [
             [
-              "Use {term:logits:logits} → {term:loss:loss}",
-              "Use {term:logits:logits} → argmax → {term:token:token}"
+              "<strong>Starting Point</strong>",
+              "Random {term:weights:weights}",
+              "<strong><strong>Base model</strong> {term:weights:weights}</strong>"
             ],
             [
-              "Compare to one-hot target",
-              "No target, just generate"
+              "<strong>Training Data</strong>",
+              "Raw text",
+              "<strong>Instruction→Response pairs</strong>"
             ],
             [
-              "All positions at once",
-              "One position at a time"
+              "<strong>{term:loss:Loss} Function</strong>",
+              "CE on all {term:token:tokens}",
+              "<strong>CE on response only (optional)</strong>"
             ],
             [
-              "No sampling needed",
-              "Apply temperature, top-k, nucleus"
+              "<strong>What It Learns</strong>",
+              "Language patterns",
+              "<strong>Task patterns: 'When X, do Y'</strong>"
+            ],
+            [
+              "<strong>Cost</strong>",
+              "$1M-$100M+",
+              "<strong>$100-$10K</strong>"
+            ],
+            [
+              "<strong>Data Size</strong>",
+              "Trillions of {term:token:tokens}",
+              "<strong>10K-100K examples</strong>"
+            ],
+            [
+              "<strong>Examples</strong>",
+              "GPT-2, LLaMA-base",
+              "<strong>Alpaca, Vicuna, FLAN-T5</strong>"
             ]
           ]
+        }
+      ]
+    },
+    {
+      "id": "slide-2-4",
+      "sectionIndex": 2,
+      "title": "Chat Models: Masters of Conversation",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is a <strong>Chat Model</strong>?",
+          "content": "A <strong>Chat model</strong> is trained on <strong>MULTI-TURN conversations</strong> with <strong>role markers</strong> (system, user, assistant). It learns:<br><br>• <strong>Turn-taking:</strong> When to speak vs when to wait<br>• <strong>Context accumulation:</strong> Remember ALL prior turns<br>• <strong>Role adherence:</strong> Follow {term:system-prompt:system prompt} consistently<br>• <strong>Conversation ending:</strong> Know when conversation is complete"
+        },
+        {
+          "type": "insight-box",
+          "title": "Training Data: Multi-Turn Conversations",
+          "content": "<strong>Format (JSONL):</strong><br><code class=\"code-block\">{\"messages\": [\n  {\"role\": \"system\", \"content\": \"You are a math tutor.\"},\n  {\"role\": \"user\", \"content\": \"What is 2+2?\"},\n  {\"role\": \"assistant\", \"content\": \"The answer is 4.\"},\n  {\"role\": \"user\", \"content\": \"Now multiply by 10\"},\n  {\"role\": \"assistant\", \"content\": \"4 × 10 = 40\"}\n]}</code><br><br><strong>Key insight:</strong> The {term:model:model} sees the ENTIRE history at each turn!"
+        },
+        {
+          "type": "insight-box",
+          "title": "The {term:chat-template:Chat Template}: How Turns Become Tokens",
+          "content": "Each {term:model:model} has its own {term:chat-template:template}. <strong>Using wrong template = broken {term:model:model}!</strong><br><br><strong>LLaMA-2 Format:</strong><br><code class=\"code-block\">&lt;s&gt;[INST] &lt;&lt;SYS&gt;&gt;\nYou are a math tutor.\n&lt;&lt;/SYS&gt;&gt;\n\nWhat is 2+2? [/INST] The answer is 4. &lt;/s&gt;\n&lt;s&gt;[INST] Now multiply by 10 [/INST] 4 × 10 = 40 &lt;/s&gt;</code><br><br><strong>ChatML Format (Mistral, many OSS):</strong><br><code class=\"code-block\">&lt;|im_start|&gt;system\nYou are a math tutor.&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\nWhat is 2+2?&lt;|im_end|&gt;\n&lt;|im_start|&gt;assistant\nThe answer is 4.&lt;|im_end|&gt;</code>"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Aspect",
+            "<strong>Instruction-Tuned</strong>",
+            "<strong>Chat Model</strong>"
+          ],
+          "rows": [
+            [
+              "<strong>Turns</strong>",
+              "Single turn only",
+              "<strong>Multi-turn conversations</strong>"
+            ],
+            [
+              "<strong>Roles</strong>",
+              "Implicit or none",
+              "<strong>system, user, assistant</strong>"
+            ],
+            [
+              "<strong>{term:system-prompt:System Prompt}</strong>",
+              "Rare/none",
+              "<strong>Standard - sets persona</strong>"
+            ],
+            [
+              "<strong>Context</strong>",
+              "Just this instruction",
+              "<strong>Full conversation history</strong>"
+            ],
+            [
+              "<strong>Special Tokens</strong>",
+              "Minimal",
+              "<strong>{term:chat-template:Chat template} specific</strong>"
+            ],
+            [
+              "<strong>Examples</strong>",
+              "Alpaca, FLAN",
+              "<strong>ChatGPT, Claude, LLaMA-Chat</strong>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-2-5",
+      "sectionIndex": 2,
+      "title": "RL-Aligned (Reasoning) Models: Learning Human Preferences",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is an <strong>RL-Aligned Model</strong>?",
+          "content": "An <strong>RL-aligned model</strong> goes BEYOND following instructions - it learns <strong>WHAT KIND of responses humans PREFER</strong>. This is Reinforcement Learning from Human Feedback (RLHF).<br><br><strong>Why?</strong> A {term:model:model} can follow instructions but still be:<br>• Verbose when brevity is wanted<br>• Harmful when asked dangerous things<br>• Sycophantic (just agreeing with user)<br>• Missing nuance in complex answers<br><br>RLHF teaches: 'Not just HOW to respond, but WHAT makes a GOOD response.'"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: The RLHF Pipeline",
+          "content": "<strong>Step 1: Collect {term:preference-data:Preference Data}</strong><br>• Generate multiple responses per prompt<br>• Humans rank: 'A is better than B'<br><br><strong>Step 2: Train {term:reward-model:Reward Model}</strong><br>• Input: (prompt, response) → Output: score<br>• Learns to predict human preference<br><code class=\"code-block\">{term:reward:R}('Helpful answer') = 0.85\n{term:reward:R}('Harmful answer') = -0.94</code><br><br><strong>Step 3: Optimize {term:policy:Policy} (the LLM)</strong><br>• Generate responses<br>• {term:reward-model:Reward model} scores them<br>• Update {term:weights:weights} to increase {term:reward:reward}<br>• {term:kl:KL} penalty prevents drifting too far from SFT"
+        },
+        {
+          "type": "equation",
+          "id": "rlhf_objective",
+          "label": "RLHF Training Objective",
+          "parts": [
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "subscript",
+              "content": [
+                {
+                  "type": "raw",
+                  "text": "RLHF"
+                }
+              ]
+            },
+            {
+              "type": "operator",
+              "symbol": "="
+            },
+            {
+              "type": "term",
+              "key": "expectation",
+              "text": "E"
+            },
+            {
+              "type": "raw",
+              "text": "["
+            },
+            {
+              "type": "term",
+              "key": "reward",
+              "text": "R"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "term",
+              "key": "input",
+              "text": "x"
+            },
+            {
+              "type": "raw",
+              "text": ","
+            },
+            {
+              "type": "term",
+              "key": "output",
+              "text": "y"
+            },
+            {
+              "type": "raw",
+              "text": ")]"
+            },
+            {
+              "type": "operator",
+              "symbol": "−"
+            },
+            {
+              "type": "raw",
+              "text": "β × "
+            },
+            {
+              "type": "term",
+              "key": "kl",
+              "text": "KL"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "term",
+              "key": "policy",
+              "text": "π"
+            },
+            {
+              "type": "raw",
+              "text": " || "
+            },
+            {
+              "type": "term",
+              "key": "reference",
+              "text": "π_ref"
+            },
+            {
+              "type": "raw",
+              "text": ")"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "Maximize {term:reward:reward} from human preferences, but don't drift too far from the SFT {term:model:model} (controlled by {term:kl:KL} penalty)."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:preference-data:Preference Data} Format",
+          "content": "<code class=\"code-block\">{\"prompt\": \"Explain gravity to a 5-year-old\",\n \"chosen\": \"Gravity is like invisible glue that...\",\n \"rejected\": \"Gravitational force is the curvature...\"}</code><br><br><strong>Why 'chosen' wins:</strong> Audience-appropriate, simple language<br><br><strong>Training creates pairs:</strong> (prompt, A, B) where A is preferred"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Alternatives to PPO:</strong><br>• <strong>DPO (Direct Preference Optimization):</strong> Skip reward model, optimize directly on preferences<br>• <strong>GRPO (Group Relative Policy Optimization):</strong> Used by DeepSeek, more efficient"
+        },
+        {
+          "type": "insight-box",
+          "title": "Reasoning Models: Same Architecture, Different Training",
+          "content": "<strong>Reasoning models (DeepSeek-R1, o1) are NOT architecturally different!</strong> They're trained to generate <strong>intermediate reasoning steps</strong> before the final answer.<br><br><strong>What makes them 'reasoning' models:</strong><br>• <strong>CoT Data Format:</strong> Training data includes <code>&lt;think&gt;</code> tags with step-by-step reasoning<br>• <strong>Verifiable Rewards:</strong> RL uses accuracy rewards (compiler checks, math verification) + format rewards (ensure reasoning in <code>&lt;think&gt;</code> tags)<br>• <strong>NOT human preference rewards</strong> - but deterministic verification!<br><br><strong>3 ways to build reasoning models:</strong><br>• <strong>Pure RL:</strong> RL directly on base model with verifiable rewards (DeepSeek-R1-Zero showed reasoning 'emerges'!)<br>• <strong>SFT + RL:</strong> {term:sft:SFT} on CoT data → RL with verifiable rewards (typical pipeline)<br>• <strong>Distillation:</strong> {term:sft:SFT} on CoT outputs from larger reasoning models<br><br><strong>Key insight:</strong> The verbose, step-by-step responses you see? That's learned behavior from training data format + rewards, not a magical architecture change!<br><a href=\"https://cameronrwolfe.substack.com/p/demystifying-reasoning-models\">Read more about Reasoning models here</a>"
+        }
+      ]
+    },
+    {
+      "id": "slide-2-6",
+      "sectionIndex": 2,
+      "title": "The Evolution: From Raw to Refined",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Full Picture: What Changes, What Stays Same",
+          "content": "<strong>ALWAYS THE SAME:</strong><br>• Architecture (Transformer decoder)<br>• Tokenizer ({term:vocabulary:vocabulary})<br>• Fundamental mechanism (next {term:token:token} prediction)<br>• {term:causal-mask:Causal attention} structure<br><br><strong>WHAT CHANGES:</strong><br>• Training {term:data:data} format<br>• {term:loss:loss} computation (which {term:token:tokens} count)<br>• Optimization objective (CE vs {term:reward:reward})<br>• Capabilities and behaviors"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Stage",
+            "Training Data",
+            "Objective",
+            "Result"
+          ],
+          "rows": [
+            [
+              "<strong>Base Model</strong>",
+              "Raw text (trillions of {term:token:tokens})",
+              "Predict next {term:token:token}",
+              "Knows language + facts"
+            ],
+            [
+              "<strong>Instruction-Tuned</strong>",
+              "Instruction→Response pairs",
+              "Predict response {term:token:tokens}",
+              "Follows commands"
+            ],
+            [
+              "<strong>Chat Model</strong>",
+              "Multi-turn conversations",
+              "Predict assistant turns",
+              "Has conversations"
+            ],
+            [
+              "<strong>RL-Aligned</strong>",
+              "{term:preference-data:Preference pairs}",
+              "Maximize {term:reward:reward}",
+              "Human-preferred responses"
+            ],
+            [
+              "<strong>Reasoning Model</strong>",
+              "CoT data + verifiable problems",
+              "Verifiable {term:reward:rewards} (accuracy, format)",
+              "Step-by-step reasoning"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "The Training Pipeline (Typical Modern LLM)",
+          "content": "<strong>Phase 1: {term:pre-training:Pre-training}</strong> (~months, $millions)<br>Random {term:weights:weights} → Train on trillions of {term:token:tokens} → <strong>Base Model</strong><br><br><strong>Phase 2: {term:sft:SFT}</strong> (~days, $thousands)<br><strong>Base Model</strong> → Train on instruction {term:data:data} → <strong>Instruction Model</strong><br><br><strong>Phase 3: RLHF/DPO</strong> (~days, $thousands)<br><strong>Instruction Model</strong> → Train on {term:preference-data:preferences} → <strong>RL-Aligned Model</strong><br><br><strong>Result:</strong> ChatGPT, Claude, Gemini, LLaMA-Chat, etc."
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Takeaway:</strong> All these stages use the SAME architecture doing the SAME thing (predicting {term:token:tokens}). The magic is in how we <em>format the training {term:data:data}</em> to teach different behaviors!"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-1",
+      "sectionIndex": 3,
+      "title": "The Fine-tuning Spectrum: How Much to Train?",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "One Question, Many Answers",
+          "content": "When you want to adapt a pre-trained {term:model:model} for your task, you have choices:<br><br>• <strong>{term:full-finetuning:Full Fine-tuning}:</strong> Train EVERYTHING<br>• <strong>{term:partial-finetuning:Partial Fine-tuning}:</strong> Freeze some, train some<br>• <strong>{term:peft:PEFT}:</strong> Freeze all, add tiny {term:trainable-layer:trainable} modules<br><br><strong>Which is best?</strong> It depends on your data, compute budget, and task!"
+        },
+        {
+          "type": "insight-box",
+          "title": "These Techniques Work for ANY Deep Learning Model!",
+          "content": "While we're discussing LLMs, these approaches apply to:<br><ul><li><strong>Vision models:</strong> ResNet, ViT, CLIP</li><li><strong>Encoder-only:</strong> BERT, RoBERTa, Sentence Transformers</li><li><strong>Decoder-only:</strong> GPT, LLaMA, Mistral</li><li><strong>Encoder-Decoder:</strong> T5, BART</li><li><strong>Multimodal:</strong> LLaVA, Flamingo</li></ul><strong>The principles are universal!</strong> Freeze vs train, add adapters, low-rank decomposition - all work across architectures."
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Approach",
+            "Trainable Params",
+            "Compute Cost",
+            "Storage/Task",
+            "Flexibility"
+          ],
+          "rows": [
+            [
+              "<strong>{term:full-finetuning:Full Fine-tuning}</strong>",
+              "100% (all)",
+              "Highest",
+              "Full model copy",
+              "Maximum"
+            ],
+            [
+              "<strong>{term:partial-finetuning:Partial (Layer Freezing)}</strong>",
+              "10-50%",
+              "Moderate",
+              "Full model copy",
+              "High"
+            ],
+            [
+              "<strong>{term:peft:PEFT} ({term:lora:LoRA}, etc.)</strong>",
+              "<1%",
+              "Lowest",
+              "Small adapter file",
+              "Task-specific"
+            ]
+          ]
+        },
+        {
+          "type": "html",
+          "content": "<strong>Key Question:</strong> How much of the {term:model:model}'s knowledge do you need to change? The answer guides your choice."
+        }
+      ]
+    },
+    {
+      "id": "slide-3-2",
+      "sectionIndex": 3,
+      "title": "Full Fine-tuning: Maximum Power, Maximum Cost",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "How {term:full-finetuning:Full Fine-tuning} Works",
+          "content": "Update ALL {term:weights:parameters} in the {term:model:model}:<br><br><code class=\"code-block\">for param in model.parameters():\n    param.requires_grad = True  # Everything is trainable!\n\n# Standard training loop\nfor batch in data:\n    loss = model(batch)\n    loss.backward()     # Gradients for ALL 7B params\n    optimizer.step()    # Update ALL 7B params</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Adding New Layers on Top",
+          "content": "Sometimes you need MORE than what the pretrained {term:model:model} offers:<br><br><code class=\"code-block\"># Add new layers on top of pretrained model\nclass CustomModel(nn.Module):\n    def __init__(self, base_model):\n        self.base = base_model          # 7B params (pretrained)\n        self.custom_head = nn.Sequential(\n            nn.Linear(4096, 1024),       # New layer 1\n            nn.ReLU(),\n            nn.Linear(1024, 256),        # New layer 2\n            nn.Linear(256, num_classes)  # Output\n        )\n    \n    def forward(self, x):\n        hidden = self.base(x).last_hidden_state[:, -1, :]\n        return self.custom_head(hidden)</code><br><br><strong>Now train EVERYTHING:</strong> base model + new layers together."
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: What Happens to Data",
+          "content": "<strong>Step 1:</strong> Input batch → Tokenized IDs<br><code class=\"code-block\">[\"Classify: Great movie!\"] → [345, 2883, 32, 1893, 999]</code><br><br><strong>Step 2:</strong> Forward pass through ALL layers (7B params active)<br>Input → Embeddings → 32 Transformer blocks → Hidden states<br><br><strong>Step 3:</strong> Compute {term:loss:loss}<br><code class=\"code-block\">loss = CrossEntropy(logits, labels)</code><br><br><strong>Step 4:</strong> Backward pass → {term:gradient:Gradients} for ALL 7B params!<br><br><strong>Step 5:</strong> {term:weights:Weights} updated everywhere:<br><code class=\"code-block\">θ_new = θ_old - lr × ∇L  # For all 7 billion params</code>"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "✅ Pros",
+            "❌ Cons"
+          ],
+          "rows": [
+            [
+              "Maximum adaptability to new domain",
+              "Requires multi-GPU setup (A100s)"
+            ],
+            [
+              "Best performance if done right",
+              "Risk of catastrophic forgetting"
+            ],
+            [
+              "Can learn entirely new patterns",
+              "Full checkpoint per task (~14GB)"
+            ],
+            [
+              "Works for highly different domains",
+              "Slow training, high cost"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "When to Use {term:full-finetuning:Full Fine-tuning}",
+          "content": "<ul><li>✅ <strong>Large, diverse training dataset</strong> (100K+ examples)</li><li>✅ <strong>Target domain is very different</strong> from pretraining</li><li>✅ <strong>Maximum accuracy required</strong> (production systems)</li><li>✅ <strong>Have the compute budget</strong> (multi-GPU, days of training)</li><li>❌ Avoid if: Small dataset (risk of overfitting), limited compute</li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-3",
+      "sectionIndex": 3,
+      "title": "Partial Fine-tuning: Freeze the Foundation, Train the Top",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Key Insight",
+          "content": "{term:partial-finetuning:Partial fine-tuning} freezes early layers (general language knowledge) and only trains later layers (task-specific adaptation). This is ALSO called a {term:peft:PEFT} technique!<br><br><strong>Why it works:</strong> Research shows early layers learn general features (word meanings, syntax) while later layers learn task-specific patterns. For many tasks, you only need to adapt the 'top' of the model."
+        },
+        {
+          "type": "insight-box",
+          "title": "How to Freeze Layers",
+          "content": "<code class=\"code-block\"># Freeze first 24 of 32 transformer layers\nfor name, param in model.named_parameters():\n    # Freeze embeddings and early layers\n    if 'embed' in name:\n        param.requires_grad = False\n    elif 'layers.' in name:\n        layer_num = int(name.split('layers.')[1].split('.')[0])\n        if layer_num < 24:  # Freeze layers 0-23\n            param.requires_grad = False\n        else:\n            param.requires_grad = True  # Train layers 24-31\n    elif 'lm_head' in name:\n        param.requires_grad = True  # Train output layer\n\n# Count trainable vs frozen\ntrainable = sum(p.numel() for p in model.parameters() if p.requires_grad)\ntotal = sum(p.numel() for p in model.parameters())\nprint(f\"Training {trainable/total:.1%} of parameters\")</code><br><br>Output: <code>Training 25.0% of parameters</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: Data Flow",
+          "content": "<strong>Step 1:</strong> Input passes through {term:frozen-layer:frozen} layers 0-23<br>• Forward pass: Normal computation<br>• Backward pass: No {term:gradient:gradient} computation (faster!)<br><br><strong>Step 2:</strong> Input reaches {term:trainable-layer:trainable} layers 24-31<br>• Forward pass: Normal computation<br>• Backward pass: {term:gradient:Gradients} computed, {term:weights:weights} updated<br><br><strong>Memory saved:</strong> Optimizer states only for trainable layers:<ul><li>Full: 7B × 12 bytes = 84 GB optimizer states</li><li>Partial (25%): 1.75B × 12 bytes = 21 GB optimizer states</li></ul>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Adding New Layers + Freezing Base",
+          "content": "You can ALSO attach new layers while freezing the entire pretrained {term:model:model}:<br><br><code class=\"code-block\"># Freeze ENTIRE pretrained model\nfor param in pretrained_model.parameters():\n    param.requires_grad = False\n\n# Add new trainable layers\nclassifier = nn.Sequential(\n    nn.Linear(4096, 512),\n    nn.ReLU(),\n    nn.Dropout(0.1),\n    nn.Linear(512, num_classes)\n)\n\n# Only classifier is trainable!</code><br><br>This is like using the LLM as a powerful 'feature extractor' and training only your custom head."
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "✅ Pros",
+            "❌ Cons"
+          ],
+          "rows": [
+            [
+              "Faster training (fewer params)",
+              "Less expressive than full fine-tuning"
+            ],
+            [
+              "Lower memory requirements",
+              "Still needs full model in memory"
+            ],
+            [
+              "Reduces catastrophic forgetting",
+              "Choosing which layers is an art"
+            ],
+            [
+              "Works well for related tasks",
+              "May underperform on distant domains"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "When to Use {term:partial-finetuning:Partial Fine-tuning}",
+          "content": "<ul><li>✅ <strong>Medium-sized dataset</strong> (10K-100K examples)</li><li>✅ <strong>Task is related to pretraining</strong> (e.g., sentiment from general LLM)</li><li>✅ <strong>Want faster training</strong> than full fine-tuning</li><li>✅ <strong>GPU memory is limited</strong> (can fit partial but not full)</li><li>❌ Avoid if: Task requires fundamentally new patterns</li></ul>"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-4",
+      "sectionIndex": 3,
+      "title": "PEFT: The Efficiency Revolution",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "What is {term:peft:Parameter-Efficient Fine-Tuning}?",
+          "content": "{term:peft:PEFT} methods keep the ENTIRE pretrained {term:model:model} {term:frozen-layer:frozen} and add tiny {term:trainable-layer:trainable} components. Train <1% of parameters, achieve 90-100% of full fine-tuning performance!<br><br><strong>The insight:</strong> Weight updates during fine-tuning have low 'intrinsic dimensionality' - they can be represented efficiently in a much smaller space."
+        },
+        {
+          "type": "insight-box",
+          "title": "The PEFT Family Tree",
+          "content": "<strong>1. {term:prompt-tuning:Prompt Tuning}</strong><br>• Add learnable vectors at INPUT only<br>• Fewest parameters (~10K)<br>• Simplest, works for simple tasks<br><br><strong>2. {term:prefix-tuning:Prefix Tuning}</strong><br>• Add learnable vectors to K/V in ALL attention layers<br>• More parameters (~100K-1M)<br>• Better for generation tasks<br><br><strong>3. {term:adapter:Adapter Layers}</strong><br>• Insert small networks between transformer layers<br>• Bottleneck architecture (project down, then up)<br>• Good but adds inference latency<br><br><strong>4. {term:lora:LoRA} (Low-Rank Adaptation)</strong> ⭐<br>• Add low-rank matrices parallel to attention weights<br>• Most popular PEFT method today<br>• No inference latency (can merge weights)"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Method",
+            "Where Modified",
+            "Params Added",
+            "Inference Latency"
+          ],
+          "rows": [
+            [
+              "{term:prompt-tuning:Prompt Tuning}",
+              "Input embeddings only",
+              "~10K",
+              "None"
+            ],
+            [
+              "{term:prefix-tuning:Prefix Tuning}",
+              "K/V in all attention layers",
+              "~100K-1M",
+              "Small"
+            ],
+            [
+              "{term:adapter:Adapters}",
+              "Between transformer sublayers",
+              "~1-5M",
+              "Moderate"
+            ],
+            [
+              "<strong>{term:lora:LoRA}</strong>",
+              "Parallel to attention weights",
+              "~1-10M",
+              "<strong>None (mergeable)</strong>"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Why LoRA Won",
+          "content": "{term:lora:LoRA} became the most popular because:<br><ul><li><strong>No inference overhead:</strong> Merge B·A back into W → same inference speed!</li><li><strong>Simple implementation:</strong> Just add two matrices per layer</li><li><strong>Flexible:</strong> Choose which layers to apply (usually attention Q, K, V)</li><li><strong>Swappable:</strong> Load different LoRA adapters for different tasks</li></ul>"
+        },
+        {
+          "type": "html",
+          "content": "<strong>Next slide:</strong> Deep dive into how {term:lora:LoRA} works mathematically!"
+        }
+      ]
+    },
+    {
+      "id": "slide-3-5",
+      "sectionIndex": 3,
+      "title": "LoRA Deep Dive: The Math Behind the Magic",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Core Idea",
+          "content": "Instead of updating a huge weight matrix W directly, {term:lora:LoRA} learns a 'delta' ΔW that can be represented as the product of two much smaller matrices:<br><br><strong>Original:</strong> W ∈ ℝ^{d×k} (e.g., 4096×4096 = 16M params)<br><strong>LoRA:</strong> ΔW = B·A where B ∈ ℝ^{d×{term:lora-rank:r}}, A ∈ ℝ^{{term:lora-rank:r}×k}<br><br>With {term:lora-rank:r}=8: (4096×8) + (8×4096) = 65,536 params → <strong>99.6% reduction!</strong>"
+        },
+        {
+          "type": "equation",
+          "id": "lora_equation",
+          "label": "LoRA Forward Pass",
+          "parts": [
+            {
+              "type": "raw",
+              "text": "h"
+            },
+            {
+              "type": "operator",
+              "symbol": "="
+            },
+            {
+              "type": "raw",
+              "text": "W₀"
+            },
+            {
+              "type": "raw",
+              "text": "·"
+            },
+            {
+              "type": "term",
+              "key": "input",
+              "text": "x"
+            },
+            {
+              "type": "operator",
+              "symbol": "+"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "term",
+              "key": "lora-alpha",
+              "text": "α"
+            },
+            {
+              "type": "raw",
+              "text": "/"
+            },
+            {
+              "type": "term",
+              "key": "lora-rank",
+              "text": "r"
+            },
+            {
+              "type": "raw",
+              "text": ") × B·A·"
+            },
+            {
+              "type": "term",
+              "key": "input",
+              "text": "x"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>In plain English:</strong> ",
+            "template": "Output = {term:frozen-layer:frozen} pretrained portion + scaled {term:lora:LoRA} adaptation. The α/r scaling controls the 'strength' of the adaptation."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: How LoRA Transforms Data",
+          "content": "<strong>Original Attention (no LoRA):</strong><br><code class=\"code-block\">Q = x @ W_Q   # x: (batch, seq, 4096), W_Q: (4096, 4096)\n              # Q shape: (batch, seq, 4096)</code><br><br><strong>With LoRA (r=8):</strong><br><code class=\"code-block\"># Frozen pretrained path\nQ_frozen = x @ W_Q          # (batch, seq, 4096)\n\n# LoRA adaptation path\nx_proj = x @ A              # A: (4096, 8) → (batch, seq, 8)\nQ_lora = x_proj @ B         # B: (8, 4096) → (batch, seq, 4096)\n\n# Combined output\nQ = Q_frozen + (α/r) * Q_lora   # Same shape: (batch, seq, 4096)</code><br><br><strong>Training:</strong> Only A and B receive {term:gradient:gradients}. W_Q stays {term:frozen-layer:frozen}!"
+        },
+        {
+          "type": "insight-box",
+          "title": "Initialization Matters!",
+          "content": "<strong>Matrix A:</strong> Initialized from Gaussian, scaled by 1/√r<br><strong>Matrix B:</strong> Initialized to ZEROS<br><br><strong>Why?</strong> At the start of training, ΔW = B·A = 0 → The model starts exactly as the pretrained model! No 'shock' to the model at beginning of training.<br><br><code class=\"code-block\"># From typical implementation\nscaling_factor = 1 / np.sqrt(rank)\nA = np.random.randn(input_dim, rank) * scaling_factor\nB = np.zeros((rank, output_dim))  # Starts at zero!</code><br><br><strong>Result:</strong> Initial output = W₀·x + 0 = pretrained behavior. Training gradually adapts."
+        },
+        {
+          "type": "insight-box",
+          "title": "After Training: Merge for Zero Latency",
+          "content": "Once trained, you can merge {term:lora:LoRA} back into the original weights:<br><br><code class=\"code-block\"># During inference, merge LoRA into original weights\nW_merged = W_Q + (α/r) * B @ A\n\n# Now use W_merged like normal - no extra computation!\nQ = x @ W_merged</code><br><br><strong>Result:</strong> Same inference speed as original model, but with fine-tuned behavior!"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Component",
+            "Shape (d=4096, r=8)",
+            "Parameters"
+          ],
+          "rows": [
+            [
+              "Original W_Q",
+              "(4096, 4096)",
+              "16,777,216 ({term:frozen-layer:frozen})"
+            ],
+            [
+              "LoRA A",
+              "(4096, 8)",
+              "32,768 ({term:trainable-layer:trainable})"
+            ],
+            [
+              "LoRA B",
+              "(8, 4096)",
+              "32,768 ({term:trainable-layer:trainable})"
+            ],
+            [
+              "<strong>Total LoRA</strong>",
+              "",
+              "<strong>65,536</strong> (0.4%)"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "slide-3-6",
+      "sectionIndex": 3,
+      "title": "Choosing Your Fine-tuning Strategy",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Decision Flowchart",
+          "content": "<strong>1. How much data do you have?</strong><br>• <strong><1K examples:</strong> Use {term:lora:LoRA} (prevents overfitting)<br>• <strong>1K-100K examples:</strong> {term:lora:LoRA} or {term:partial-finetuning:partial fine-tuning}<br>• <strong>>100K examples:</strong> Consider {term:full-finetuning:full fine-tuning}<br><br><strong>2. How different is your domain?</strong><br>• <strong>Similar to pretraining:</strong> {term:lora:LoRA} is usually enough<br>• <strong>Very different domain:</strong> {term:full-finetuning:Full fine-tuning} may be needed<br><br><strong>3. What's your compute budget?</strong><br>• <strong>Single consumer GPU (16-24GB):</strong> {term:lora:LoRA} only option<br>• <strong>Multi-GPU (80GB+):</strong> Any approach works"
+        },
+        {
+          "type": "table",
+          "class": "uncertainty-table",
+          "headers": [
+            "Scenario",
+            "Recommended Approach",
+            "Why"
+          ],
+          "rows": [
+            [
+              "Chatbot for your company",
+              "{term:lora:LoRA} (r=16)",
+              "Style adaptation, not new knowledge"
+            ],
+            [
+              "Medical diagnosis LLM",
+              "{term:full-finetuning:Full} or high-rank {term:lora:LoRA}",
+              "New domain knowledge needed"
+            ],
+            [
+              "Code assistant (from general LLM)",
+              "{term:lora:LoRA} (r=32-64)",
+              "Moderate domain shift"
+            ],
+            [
+              "Sentiment classifier",
+              "{term:partial-finetuning:Partial} or {term:lora:LoRA} (r=8)",
+              "Simple task, few patterns"
+            ],
+            [
+              "Translate to rare language",
+              "{term:full-finetuning:Full fine-tuning}",
+              "Entirely new patterns required"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Practical LoRA Configuration (Recommended Defaults)",
+          "content": "<code class=\"code-block\">from peft import LoraConfig, get_peft_model\n\nconfig = LoraConfig(\n    r=16,                     # Rank (start here, increase if needed)\n    lora_alpha=32,            # Scaling factor (2×r is common)\n    target_modules=[\"q_proj\", \"k_proj\", \"v_proj\", \"o_proj\"],\n    lora_dropout=0.05,        # Small dropout for regularization\n    bias=\"none\",              # Usually don't train biases\n    task_type=\"CAUSAL_LM\"\n)\n\nmodel = get_peft_model(base_model, config)\nmodel.print_trainable_parameters()\n# Output: \"trainable params: 4,194,304 || all params: 6,742,609,920 || trainable%: 0.0622\"</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Key Takeaways",
+          "content": "<strong>1. Start with LoRA:</strong> It's the default choice for most fine-tuning tasks today<br><br><strong>2. Rank matters:</strong> r=8-16 for simple tasks, r=32-64 for complex domains<br><br><strong>3. Full fine-tuning is rare:</strong> Most practitioners use PEFT unless they have massive datasets and compute<br><br><strong>4. You can stack:</strong> LoRA on top of partially frozen model for maximum control<br><br><strong>5. Experiment:</strong> The 'optimal' approach varies by task - always validate on held-out data!"
         }
       ]
     }

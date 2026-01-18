@@ -145,6 +145,8 @@ const Renderer = {
                 return this.renderInsightBox(block);
             case 'equation':
                 return this.renderEquation(block);
+            case 'term-grid':
+                return this.renderTermGrid(block);
             default:
                 console.warn(`Unknown block type: ${block.type}`);
                 return null;
@@ -337,6 +339,65 @@ const Renderer = {
             default:
                 return null;
         }
+    },
+
+    /**
+     * Render a grid of all terms as clickable colored boxes
+     * Used for glossary/dictionary view
+     */
+    renderTermGrid(block) {
+        const container = document.createElement('div');
+        container.className = 'term-grid-container';
+        if (block.columns) {
+            container.style.gridTemplateColumns = `repeat(${block.columns}, 1fr)`;
+        }
+
+        // Get all terms that have popup definitions
+        const termEntries = [];
+        for (const [key, termData] of Object.entries(this.terms)) {
+            // Only include terms that have popup definitions
+            const popupKey = termData.popupKey || key;
+            if (this.popups[popupKey]) {
+                termEntries.push({
+                    key: key,
+                    display: termData.display,
+                    colorKey: termData.colorKey || key,
+                    popupKey: popupKey,
+                    popupTitle: this.popups[popupKey].title || termData.display
+                });
+            }
+        }
+
+        // Sort alphabetically by popup title (the full name)
+        termEntries.sort((a, b) => a.popupTitle.localeCompare(b.popupTitle));
+
+        // Render each term as a colored box
+        for (const term of termEntries) {
+            const box = document.createElement('div');
+            box.className = 'term-grid-box';
+            box.dataset.popup = term.popupKey;
+
+            const color = this.colorPalette[term.colorKey] || '#667eea';
+            box.style.borderColor = color;
+            box.style.setProperty('--term-color', color);
+
+            // Symbol/display
+            const symbol = document.createElement('span');
+            symbol.className = 'term-grid-symbol';
+            symbol.style.color = color;
+            symbol.textContent = term.display;
+            box.appendChild(symbol);
+
+            // Title (from popup)
+            const title = document.createElement('span');
+            title.className = 'term-grid-title';
+            title.textContent = term.popupTitle.replace(/^[^-]+ - /, ''); // Remove symbol prefix if present
+            box.appendChild(title);
+
+            container.appendChild(box);
+        }
+
+        return container;
     },
 
     /**

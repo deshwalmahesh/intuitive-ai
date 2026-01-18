@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scientific Blog</title>
+    <title>Hype Free AI/ML Blogs</title>
     <link rel="stylesheet" href="styles/style_1.css" />
     <style>
       /* Topic Picker Styles */
@@ -82,7 +82,7 @@
   <body>
     <!-- Topic Picker (shows initially) -->
     <div class="topic-picker" id="topic-picker">
-      <h1>Scientific Blog Topics</h1>
+      <h1>Intuitive AI Concepts</h1>
       <div class="topics-grid" id="topics-grid">
         <!-- Loaded from topics/index.json -->
       </div>
@@ -143,15 +143,40 @@
         }
       }
 
+      // Load ALL topic definitions for glossary view
+      async function loadAllTopicDefinitions() {
+        const allTerms = {};
+        const allPopups = {};
+        const allColors = {};
+
+        for (const topic of TOPICS) {
+          if (topic.id === "ml_ai_glossary") continue; // Skip glossary itself
+          try {
+            const resp = await fetch(topic.path);
+            if (!resp.ok) continue;
+            const data = await resp.json();
+            if (data.terms) Object.assign(allTerms, data.terms);
+            if (data.popups) Object.assign(allPopups, data.popups);
+            if (data.colorPalette) Object.assign(allColors, data.colorPalette);
+          } catch (e) {
+            console.warn("Skip topic:", topic.path, e);
+          }
+        }
+        return { allTerms, allPopups, allColors };
+      }
+
       // Render topic cards
       function showTopicPicker() {
+        // Reset navigation state to prevent stale variables
+        Navigation.reset();
+
         topicsGrid.innerHTML = TOPICS.map(
           (t) => `
                 <div class="topic-card" onclick="loadTopic('${t.path}')">
                     <h2>${t.title}</h2>
                     <p>${t.description}</p>
                 </div>
-            `
+            `,
         ).join("");
 
         topicPicker.classList.remove("hidden");
@@ -163,11 +188,19 @@
         try {
           // 1. Load shared definitions first (single source of truth)
           const shared = await Renderer.loadSharedDefinitions();
-          
+
           // 2. Load topic-specific data
           const response = await fetch(topicPath);
           if (!response.ok) throw new Error("Topic not found: " + topicPath);
           const data = await response.json();
+
+          // 3. For glossary: load ALL topic definitions
+          if (data.meta?.loadAllTerms) {
+            const all = await loadAllTopicDefinitions();
+            Object.assign(shared.terms, all.allTerms);
+            Object.assign(shared.popups, all.allPopups);
+            Object.assign(shared.colorPalette, all.allColors);
+          }
 
           // Hide picker, show viewer
           topicPicker.classList.add("hidden");
@@ -175,13 +208,13 @@
 
           // Set title
           document.getElementById("page-title").textContent = data.meta?.title || "Topic";
-          document.title = data.meta?.title || "Scientific Blog";
+          document.title = data.meta?.title || "Intuitive AI Concepts";
 
-          // 3. Initialize with merged definitions (shared + topic)
+          // 4. Initialize with merged definitions (shared + topic)
           Renderer.init(data, shared);
           Renderer.renderAllSlides(document.getElementById("slide-content-area"));
-          
-          // 4. Popup uses merged popups from Renderer
+
+          // 5. Popup uses merged popups from Renderer
           Popup.init(Renderer.popups);
           Navigation.init(data.navigation);
         } catch (err) {

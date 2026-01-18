@@ -3,16 +3,9 @@
   "colorPalette": {
     "loss": "#dc2626",
     "gradient": "#16a34a",
-    "weights": "#7c3aed",
     "data": "#854d0e",
     "token": "#db2777",
     "probability": "#0891b2",
-    "reward": "#f59e0b",
-    "policy": "#4f46e5",
-    "value": "#0d9488",
-    "kl": "#be185d",
-    "advantage": "#2563eb",
-    "reference": "#64748b",
     "vocabulary": "#65a30d",
     "softmax": "#ea580c",
     "logits": "#0284c7",
@@ -25,12 +18,12 @@
     "posterior": "#7c3aed",
     "expectation": "#172554",
     "entropy": "#0891b2",
-    "mutual-info": "#9333ea",
-    "epistemic-var": "#2563eb",
-    "aleatoric-var": "#dc2626",
-    "epistemic-info": "#4f46e5",
-    "aleatoric-info": "#e11d48",
-    "total": "#7e22ce"
+    "reward": "#f59e0b",
+    "policy": "#4f46e5",
+    "kl": "#be185d",
+    "reference": "#64748b",
+    "advantage": "#10b981",
+    "value": "#8b5cf6"
   },
   "terms": {
     "loss": {
@@ -44,9 +37,9 @@
       "popupKey": "gradient"
     },
     "weights": {
-      "display": "θ",
-      "colorKey": "weights",
-      "popupKey": "weights"
+      "display": "W",
+      "colorKey": "theta",
+      "popupKey": "theta"
     },
     "data": {
       "display": "D",
@@ -63,53 +56,23 @@
       "colorKey": "probability",
       "popupKey": "probability"
     },
-    "reward": {
-      "display": "R",
-      "colorKey": "reward",
-      "popupKey": "reward"
-    },
-    "policy": {
-      "display": "π",
-      "colorKey": "policy",
-      "popupKey": "policy"
-    },
-    "value": {
-      "display": "V",
-      "colorKey": "value",
-      "popupKey": "value"
-    },
-    "kl": {
-      "display": "KL",
-      "colorKey": "kl",
-      "popupKey": "kl"
-    },
-    "advantage": {
-      "display": "A",
-      "colorKey": "advantage",
-      "popupKey": "advantage"
-    },
-    "reference": {
-      "display": "π_ref",
-      "colorKey": "reference",
-      "popupKey": "reference"
-    },
     "vocabulary": {
-      "display": "vocab",
+      "display": "Vocab",
       "colorKey": "vocabulary",
       "popupKey": "vocabulary"
     },
     "softmax": {
-      "display": "softmax",
+      "display": "Softmax",
       "colorKey": "softmax",
       "popupKey": "softmax"
     },
     "logits": {
-      "display": "logits",
+      "display": "Logits",
       "colorKey": "logits",
       "popupKey": "logits"
     },
     "model": {
-      "display": "model",
+      "display": "Model",
       "colorKey": "model",
       "popupKey": "model"
     },
@@ -119,7 +82,7 @@
       "popupKey": "summation"
     },
     "variance": {
-      "display": "Var",
+      "display": "Variance",
       "colorKey": "variance",
       "popupKey": "variance"
     },
@@ -153,35 +116,35 @@
       "colorKey": "entropy",
       "popupKey": "entropy"
     },
-    "mutual-info": {
-      "display": "I",
-      "colorKey": "mutual-info",
-      "popupKey": "mutual-info"
+    "reward": {
+      "display": "R",
+      "colorKey": "reward",
+      "popupKey": "reward"
     },
-    "epistemic-var": {
-      "display": "Epistemic",
-      "colorKey": "epistemic-var",
-      "popupKey": "epistemic-var"
+    "policy": {
+      "display": "π",
+      "colorKey": "policy",
+      "popupKey": "policy"
     },
-    "aleatoric-var": {
-      "display": "Aleatoric",
-      "colorKey": "aleatoric-var",
-      "popupKey": "aleatoric-var"
+    "kl": {
+      "display": "KL",
+      "colorKey": "kl",
+      "popupKey": "kl"
     },
-    "epistemic-info": {
-      "display": "Epistemic",
-      "colorKey": "epistemic-info",
-      "popupKey": "epistemic-info"
+    "reference": {
+      "display": "π_ref",
+      "colorKey": "reference",
+      "popupKey": "reference"
     },
-    "aleatoric-info": {
-      "display": "Aleatoric",
-      "colorKey": "aleatoric-info",
-      "popupKey": "aleatoric-info"
+    "advantage": {
+      "display": "A",
+      "colorKey": "advantage",
+      "popupKey": "advantage"
     },
-    "total-uncertainty": {
-      "display": "Total",
-      "colorKey": "total",
-      "popupKey": "total-uncertainty"
+    "value": {
+      "display": "V",
+      "colorKey": "value",
+      "popupKey": "value"
     }
   },
   "popups": {
@@ -236,42 +199,12 @@
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> Current {term:weights:weights} θ = [2.0, 3.0, 1.5]<br><strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br><strong>Step 3:</strong> Calculate {term:gradient:gradient}: {term:gradient:∇}L = [0.1, -0.2, 0.05]<br><strong>Step 4:</strong> Apply learning rate (lr = 0.001):<br>θ_new = θ − lr × {term:gradient:∇}L<br>θ_new = [2.0, 3.0, 1.5] − [0.0001, -0.0002, 0.00005]<br><strong>Step 5:</strong> New {term:weights:weights} = [1.9999, 3.0002, 1.49995]<br><strong>Result:</strong> {term:loss:Loss} should be slightly lower now!"
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Step-by-Step Example</div>\n<strong>Step 1:</strong> Current {term:weights:weights} θ:<br>\n<code class=\"code-block\">\n[2.0, 3.0, 1.5]\n</code>\n<strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br>\n<strong>Step 3:</strong> Calculate {term:gradient:gradient} (for these weights):<br>\n<code class=\"code-block\">\n[0.1, -0.2, 0.05]\n</code>\n<strong>Step 4:</strong> Apply learning rate <code>lr = 0.001</code>:<br>\n<code class=\"code-block\">\nθ_new = θ − lr × ∇L\n</code>\n<strong>Step 5:</strong> Updated {term:weights:weights}:<br>\n<code class=\"code-block\">\n[1.9999, 3.0002, 1.49995]\n</code>\n<strong>Result:</strong> {term:loss:Loss} should be slightly lower now!\n</div>"
         },
         {
           "type": "llm",
           "title": "In LLMs",
           "content": "<strong>What the gradient looks like:</strong><br>\nFor LLaMA-7B, {term:gradient:∇L} has the <strong>same shape</strong> as {term:weights:θ}: 7 billion numbers!<br><br>\n<code class=\"code-block\">\n# Gradient for one attention layer (simplified)\n∇W_Q = [[0.001, -0.003, ...],  # 4096 × 4096 matrix\n        [0.002,  0.001, ...],\n        ...]\n</code>\n<strong>Gradient accumulation:</strong> With large {term:model:models}, we often can't fit the full batch in memory. We accumulate {term:gradient:gradients} over multiple mini-batches before applying the update."
-        }
-      ]
-    },
-    "weights": {
-      "title": "θ - Model Weights/Parameters",
-      "color": "#7c3aed",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "The 'brain' of the {term:model:model} - all the learned numbers that determine how it responds. Different {term:weights:θ} = different {term:model:model}."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "The set of all learnable parameters in a neural network. For LLMs, this includes embeddings, attention {term:weights:weights} (Q, K, V projections), FFN {term:weights:weights}, and layer norms.",
-          "formula": "{term:weights:θ} ∈ ℝⁿ where n = number of parameters"
-        },
-        {
-          "type": "llm",
-          "title": "In LLMs",
-          "content": "{term:weights:θ} represents <strong>billions of parameters</strong>: embedding matrices, attention weights, MLP weights. For GPT-4: ~1.7T {term:weights:parameters}. For LLaMA-7B: 7 billion {term:weights:parameters}."
-        },
-        {
-          "type": "example",
-          "title": "What Weights Look Like",
-          "content": "<strong>A single Linear layer (768 → 768):</strong><br>\n<code class=\"code-block\">\nW = [[ 0.023, -0.015,  0.087, ...],  # 768 columns\n     [ 0.042,  0.156, -0.034, ...],\n     [-0.008,  0.091,  0.023, ...],\n     ...                              # 768 rows\n    ]  # Shape: (768, 768) = 589,824 params\n</code>\n<strong>LLaMA-7B composition:</strong><br>\n• Token embeddings: 32,000 × 4,096 = 131M params<br>\n• Each of 32 layers: ~218M params<br>\n• Total: ~7 billion {term:weights:parameters} stored in ~14GB (FP16)"
         }
       ]
     },
@@ -325,7 +258,7 @@
         {
           "type": "example",
           "title": "Visual Example: Word → Token → ID",
-          "content": "<strong>Input text:</strong> 'Hello, world!'<br><br><strong>Step 1 - Tokenization:</strong><br>'Hello' → ['Hello'] → [{term:token:15496}]<br>',' → [','] → [{term:token:11}]<br>' world' → [' world'] → [{term:token:995}]<br>'!' → ['!'] → [{term:token:0}]<br><br><strong>Step 2 - What {term:model:model} sees:</strong><br>[15496, 11, 995, 0] ← Just numbers!<br><br><strong>Subword example:</strong><br>'Unbelievable' → ['Un', 'believ', 'able'] → [{term:token:1525}, {term:token:6975}, {term:token:540}]"
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Visual Example: Word → Token → ID</div>\n<strong>Input text:</strong> <code>Hello, world!</code><br><br>\n<strong>Step 1 - Tokenization (conceptual):</strong><br>\n<code>Hello</code> → <code>[Hello]</code> → <code>[{term:token:15496}]</code><br>\n<code>,</code> → <code>[,]</code> → <code>[{term:token:11}]</code><br>\n<code> world</code> → <code>[ world]</code> → <code>[{term:token:995}]</code><br>\n<code>!</code> → <code>[!]</code> → <code>[{term:token:0}]</code><br><br>\n<strong>Step 2 - What {term:model:model} sees (IDs):</strong><br>\n<code class=\"code-block\">\n[15496, 11, 995, 0]\n</code>\n<strong>Subword example:</strong><br>\n<code>Unbelievable</code> → <code>[Un, believ, able]</code> → <code>[{term:token:1525}, {term:token:6975}, {term:token:540}]</code>\n</div>"
         }
       ]
     },
@@ -351,161 +284,6 @@
           "type": "example",
           "title": "Step-by-Step Example",
           "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br>\n<strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits} for all 50K {term:vocabulary:vocab} entries<br>\n<strong>Step 2:</strong> Apply {term:softmax:softmax} to convert to {term:probability:probabilities}<br>\n<strong>Step 3:</strong> Result (showing top tokens):<br>\n<code class=\"code-block\">\n{\n  \"Paris\":  0.92,\n  \"Lyon\":   0.03,\n  \"Berlin\": 0.01,\n  \"Rome\":   0.005,\n  ...49,996 others share 0.035\n}\n</code>\n<strong>Key property:</strong> {term:summation:Σ} of ALL {term:probability:probabilities} = 1.0 (always!)"
-        }
-      ]
-    },
-    "reward": {
-      "title": "R - Reward",
-      "color": "#f59e0b",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "Think of {term:reward:reward} as a 'quality score' or 'star rating' for responses. Like rating restaurant reviews - 5 stars for helpful, accurate answers; 1 star for unhelpful or wrong ones. The {term:model:model} learns to get more stars!"
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "A scalar function trained on human preference {term:data:data}. Given pairs (response_A, response_B) where humans prefer A, the {term:reward:reward} {term:model:model} learns to assign higher scores to preferred responses. Training uses Bradley-Terry model with cross-entropy {term:loss:loss}.",
-          "formula": "{term:reward:R}: (prompt, response) → ℝ"
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> User asks: 'Explain gravity to a 5-year-old'<br><strong>Step 2:</strong> {term:model:Model} generates two responses:<br>  • Response A: 'Gravity is like invisible glue that pulls things down...'<br>  • Response B: 'Gravity is the curvature of spacetime caused by mass...'<br><strong>Step 3:</strong> {term:reward:Reward} {term:model:model} scores both:<br>  • {term:reward:R}(A) = 0.85 (appropriate for audience)<br>  • {term:reward:R}(B) = 0.32 (too complex)<br><strong>Step 4:</strong> {term:model:Model} {term:policy:policy} is updated via {term:gradient:gradients} to generate more A-like responses<br><strong>Result:</strong> {term:model:Model} learns to tailor responses to the audience!"
-        }
-      ]
-    },
-    "policy": {
-      "title": "π - Policy",
-      "color": "#4f46e5",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "The {term:policy:policy} IS the LLM - it's the 'decision maker'. Like a chef deciding what ingredients to add next, the {term:policy:policy} decides what {term:token:token} to generate next. It's the {term:model:model}'s 'personality' or 'strategy' for responding."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "A {term:policy:policy} maps prompts to {term:probability:probability} distributions over responses. In LLMs, it's the full {term:model:model} with {term:weights:weights} {term:weights:θ}. Each response's {term:probability:probability} is the product of {term:token:token} {term:probability:probabilities}.",
-          "formula": "{term:policy:π}_{term:weights:θ}(response|prompt) = ∏ᵢ {term:probability:P}({term:token:t}ᵢ|prompt, {term:token:t}₁...{term:token:t}ᵢ₋₁)"
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> User says 'Hi'<br><strong>Step 2:</strong> {term:policy:Policy π} considers possible responses:<br>  • 'Hello!' → {term:probability:P} = 0.05<br>  • 'Hi there!' → {term:probability:P} = 0.12<br>  • 'Hey!' → {term:probability:P} = 0.08<br><strong>Step 3:</strong> During RLHF, we discover 'Hi there!' gets higher {term:reward:reward}<br><strong>Step 4:</strong> Update {term:weights:θ} via {term:gradient:gradient} to increase {term:probability:P}('Hi there!')<br><strong>Step 5:</strong> After training, new {term:policy:policy} might give:<br>  • 'Hi there!' → {term:probability:P} = 0.25 (increased!)<br><strong>Result:</strong> {term:policy:Policy} now favors higher-{term:reward:reward} responses!"
-        }
-      ]
-    },
-    "value": {
-      "title": "V - Value Function",
-      "color": "#0d9488",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "The {term:value:value} function is like a 'fortune teller' for {term:reward:rewards}. Given where we are in generating a response, it predicts: 'How good will the final response probably be?' It helps the {term:model:model} know if it's on the right track mid-generation."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "The {term:expectation:expected} cumulative {term:reward:reward} from a given state. In RLHF, a 'critic' network estimates {term:value:V} to compute {term:advantage:advantages}.",
-          "formula": "{term:value:V}(s) = {term:expectation:E}[{term:summation:Σ} {term:reward:R}_t | s₀ = s]"
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> {term:model:Model} is mid-response: 'The answer is...'<br><strong>Step 2:</strong> {term:value:Value} function predicts: 'Based on this start, {term:expectation:expected} final {term:reward:reward} ≈ 0.6'<br><strong>Step 3:</strong> {term:model:Model} completes: 'The answer is 42'<br><strong>Step 4:</strong> Actual {term:reward:reward} = 0.8<br><strong>Step 5:</strong> {term:advantage:Advantage} = 0.8 - 0.6 = +0.2 (better than {term:expectation:expected}!)<br><strong>Step 6:</strong> This positive {term:advantage:advantage} encourages similar responses<br><br><strong>Note:</strong> GRPO eliminates the {term:value:value} function by using group statistics instead!"
-        }
-      ]
-    },
-    "kl": {
-      "title": "KL - KL Divergence",
-      "color": "#be185d",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "{term:kl:KL divergence} measures 'how different' two {term:probability:probability} distributions are. Think of it as a 'drift detector' - it alerts us when the RL-trained {term:model:model} strays too far from the original SFT {term:model:model}. It's like keeping a student on track so they don't learn bad habits while trying to get good grades."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "Measures how one {term:probability:probability} distribution differs from another. Properties: Always ≥ 0, equals 0 iff P = Q, asymmetric (KL(P||Q) ≠ KL(Q||P)). In RLHF, penalizes deviation from the SFT baseline.",
-          "formula": "{term:kl:KL}({term:probability:P}||{term:probability:Q}) = {term:summation:Σ}_x {term:probability:P}(x) log({term:probability:P}(x)/{term:probability:Q}(x))"
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Calculation",
-          "content": "<strong>Scenario:</strong> Reference model (SFT) vs RL policy responding to 'How are you?'<br><br>\n<strong>Token probabilities for 4 response options:</strong><br>\n<code class=\"code-block\">\n              SFT (π_ref)    RL (π)\n'I'm good'        0.4         0.1\n'Fine'            0.3         0.05\n'Great!'          0.2         0.05\n'AMAZING!!'       0.1         0.8   ← RL loves this!\n</code>\n<strong>KL divergence calculation:</strong><br>\n<code class=\"code-block\">\nKL(π || π_ref) = Σ π(x) × log(π(x) / π_ref(x))\n= 0.1×log(0.1/0.4) + 0.05×log(0.05/0.3) \n  + 0.05×log(0.05/0.2) + 0.8×log(0.8/0.1)\n= 0.1×(-1.39) + 0.05×(-1.79) + 0.05×(-1.39) + 0.8×(2.08)\n= -0.14 + -0.09 + -0.07 + 1.66\n≈ 1.36 bits  ← HIGH! RL drifted too far\n</code>\n<strong>Result:</strong> High KL → apply penalty to prevent reward hacking!"
-        }
-      ]
-    },
-    "advantage": {
-      "title": "A - Advantage",
-      "color": "#2563eb",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "The {term:advantage:advantage} tells you how much BETTER (or worse) a specific action is compared to what you'd typically expect from that situation. Think of it like a student's performance: if the class average is 70% and you scored 85%, your {term:advantage:advantage} is +15 points. In RL, we want to reinforce actions with positive {term:advantage:advantage} (better than usual) and discourage actions with negative {term:advantage:advantage} (worse than usual)."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "{term:advantage:A}(s,a) = Q(s,a) − {term:value:V}(s), where Q(s,a) is the action-value (expected return from taking action a in state s), and {term:value:V}(s) is the baseline (expected return from state s under the current {term:policy:policy}). In GRPO, we use group statistics: {term:advantage:A}_i = ({term:reward:R}_i − mean({term:reward:R})) / std({term:reward:R}).",
-          "formula": "{term:advantage:A}(s,a) = Q(s,a) − {term:value:V}(s)"
-        },
-        {
-          "type": "llm",
-          "title": "In LLMs (RLHF)",
-          "content": "During RLHF, for each generated response, we compute its {term:advantage:advantage} relative to the {term:value:value function}'s prediction. Responses with positive {term:advantage:advantage} (scored higher than expected by the {term:reward:reward} model) are reinforced; negative {term:advantage:advantage} responses are discouraged."
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Calculation (GRPO)",
-          "content": "<strong>Prompt:</strong> 'Explain photosynthesis simply'<br><br>\n<strong>Step 1 - Generate 4 responses and get rewards:</strong><br>\n<code class=\"code-block\">\nrewards = [0.2, 0.5, 0.8, 0.3]\n</code>\n<strong>Step 2 - Compute group statistics:</strong><br>\n<code class=\"code-block\">\nmean = (0.2 + 0.5 + 0.8 + 0.3) / 4 = 0.45\nstd  = 0.23\n</code>\n<strong>Step 3 - Calculate normalized advantages:</strong><br>\n<code class=\"code-block\">\nA₁ = (0.2 - 0.45) / 0.23 = -1.09  ← Discourage!\nA₂ = (0.5 - 0.45) / 0.23 = +0.22  ← Slightly reinforce\nA₃ = (0.8 - 0.45) / 0.23 = +1.52  ← Strongly reinforce!\nA₄ = (0.3 - 0.45) / 0.23 = -0.65  ← Discourage\n</code>\n<strong>Result:</strong> Response 3 (best in group) gets largest positive update!"
-        }
-      ]
-    },
-    "reference": {
-      "title": "π_ref - Reference Policy",
-      "color": "#64748b",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "The {term:reference:reference} {term:policy:policy} is your 'safety copy' - the well-behaved SFT {term:model:model} frozen in time. It's like having a responsible adult supervising a teenager (the RL {term:policy:policy}) who's trying new things. Keeps the {term:model:model} from going off the rails."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "A frozen copy of the {term:policy:policy} {term:weights:weights} from before RL training. The {term:kl:KL} penalty constrains how far the trained {term:policy:policy} can deviate from this baseline.",
-          "formula": "{term:reference:π_ref} = frozen({term:policy:π}_{SFT})"
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> Start with SFT {term:model:model} → Save copy as {term:reference:π_ref} (frozen)<br><strong>Step 2:</strong> Initialize RL {term:policy:policy} {term:policy:π} = copy of SFT {term:model:model} (trainable)<br><strong>Step 3:</strong> During RL, {term:model:model} learns responding 'ABSOLUTELY FANTASTIC!!!' gets high {term:reward:reward}<br><strong>Step 4:</strong> But {term:reference:π_ref} would say 'I'm doing well, thank you'<br><strong>Step 5:</strong> {term:kl:KL}({term:policy:π}||{term:reference:π_ref}) = HIGH (big difference)<br><strong>Step 6:</strong> High {term:kl:KL} penalty reduces the objective, discouraging this<br><strong>Result:</strong> {term:model:Model} improves but stays grounded in normal language!"
         }
       ]
     },
@@ -549,13 +327,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:softmax:softmax}(z)_i = exp(z_i) / {term:summation:Σ}_j exp(z_j). Properties: (1) Output ∈ (0,1), (2) {term:summation:Σ} outputs = 1, (3) Preserves order of inputs, (4) Amplifies differences between values.",
-          "formula": "{term:probability:P}({term:token:t}_i) = exp({term:logits:logit}_i) / {term:summation:Σ}_j exp({term:logits:logit}_j)"
+          "content": "{term:softmax:Softmax} converts {term:logits:logits} to {term:probability:probabilities}: each value is exponentiated, then divided by the sum of all exponentials.<br><br><strong>Properties:</strong><ul><li>Output ∈ (0, 1)</li><li>{term:summation:Σ} outputs = 1</li><li>Preserves order of inputs</li><li>Amplifies differences between values</li></ul>",
+          "formula": "{term:softmax:softmax}({term:logits:z})_i = exp({term:logits:z}_i) / {term:summation:Σ}_j exp({term:logits:z}_j)"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits}: [2.0, 1.0, 0.1]<br><strong>Step 2:</strong> Compute exp: [7.39, 2.72, 1.11]<br><strong>Step 3:</strong> Sum: 7.39 + 2.72 + 1.11 = 11.22<br><strong>Step 4:</strong> Divide each by sum:<br>  • {term:probability:P}_0 = 7.39/11.22 = 0.66<br>  • {term:probability:P}_1 = 2.72/11.22 = 0.24<br>  • {term:probability:P}_2 = 1.11/11.22 = 0.10<br><strong>Result:</strong> [0.66, 0.24, 0.10] - sums to 1.0!"
+          "content": "<strong>Step 1:</strong> {term:model:Model} outputs {term:logits:logits}:<br><code class=\"code-block\">[2.0, 1.0, 0.1]</code><br><strong>Step 2:</strong> Compute exp() for each:<br><code class=\"code-block\">[7.39, 2.72, 1.11]</code><br><strong>Step 3:</strong> Sum all: 7.39 + 2.72 + 1.11 = 11.22<br><strong>Step 4:</strong> Divide each by sum:<br><code class=\"code-block\">[0.66, 0.24, 0.10]</code><br><strong>Result:</strong> {term:probability:Probabilities} sum to 1.0!"
         }
       ]
     },
@@ -574,13 +352,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Raw unnormalized scores from the final linear layer. Higher {term:logits:logit} = {term:model:model} more favors that {term:token:token}. Apply {term:softmax:softmax} to convert to {term:probability:probabilities}.",
+          "content": "Raw unnormalized scores from the final linear layer. Higher {term:logits:logits} value = {term:model:model} more favors that {term:token:token}. Apply {term:softmax:softmax} to convert to {term:probability:probabilities}.",
           "formula": "{term:logits:logits} ∈ ℝ^|{term:vocabulary:V}| where shape = [batch_size, seq_len, vocab_size]"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> Text → {term:token:token} IDs → embeddings<br><strong>Step 2:</strong> Pass through transformer layers<br><strong>Step 3:</strong> Final layer outputs {term:logits:logits} for each {term:vocabulary:vocab} entry:<br>  • 'Paris' (ID 6342): {term:logits:logit} = 4.2 (high!)<br>  • 'London' (ID 4712): {term:logits:logit} = 1.1<br>  • 'the' (ID 262): {term:logits:logit} = -2.3<br><strong>Step 4:</strong> Apply {term:softmax:softmax} to get {term:probability:probabilities}"
+          "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> Text → {term:token:token} IDs → embeddings<br><strong>Step 2:</strong> Pass through transformer layers<br><strong>Step 3:</strong> Final layer outputs {term:logits:logits} for each {term:vocabulary:vocab} entry:<br>  • 'Paris' (ID 6342): logit = 4.2 (high!)<br>  • 'London' (ID 4712): logit = 1.1<br>  • 'the' (ID 262): logit = -2.3<br><strong>Step 4:</strong> Apply {term:softmax:softmax} to get {term:probability:probabilities}"
         }
       ]
     },
@@ -699,8 +477,8 @@
         },
         {
           "type": "example",
-          "title": "Example",
-          "content": "LLaMA-7B has {term:theta:θ} with 7 billion floats stored in ~14GB (FP16).<br><br>{term:theta:θ} includes:<br>• {term:token:Token} embeddings: [vocab_size × hidden_dim]<br>• 32 transformer layers, each with attention + FFN {term:weights:weights}<br>• Final classification head<br><br>Different checkpoints (epoch 1 vs epoch 10) have different {term:theta:θ} values."
+          "title": "What Parameters Look Like",
+          "content": "<strong>A single Linear layer (768 → 768):</strong><br><code class=\"code-block\">\nW = [[ 0.023, -0.015,  0.087, ...],  # 768 columns\n     [ 0.042,  0.156, -0.034, ...],\n     ...                              # 768 rows\n    ]  # Shape: (768, 768) = 589,824 params\n</code><br><strong>LLaMA-7B total:</strong> ~7B {term:theta:θ} stored in ~14GB (FP16)"
         }
       ]
     },
@@ -735,7 +513,7 @@
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>{term:input:Prompt}:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> {term:model:Model} processes {term:input:input}, outputs {term:logits:logits}<br><strong>Step 2:</strong> Apply {term:softmax:softmax} to get {term:output:y} = distribution:<br>  {Paris: 0.92, Lyon: 0.03, Berlin: 0.01, ...}<br><strong>Step 3:</strong> Decoding picks 'Paris' (highest prob)<br><strong>Step 4:</strong> This becomes context for next {term:output:y} prediction"
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Step-by-Step Example</div>\n<strong>{term:input:Prompt}:</strong> 'The capital of France is'<br><br><strong>Step 1:</strong> {term:model:Model} processes {term:input:input}, outputs {term:logits:logits}<br><strong>Step 2:</strong> Apply {term:softmax:softmax} to get {term:output:y} distribution:<br>\n<code class=\"code-block\">\n{\"Paris\": 0.92, \"Lyon\": 0.03, \"Berlin\": 0.01, ...}\n</code>\n<strong>Step 3:</strong> Decoding picks 'Paris' (highest prob)<br><strong>Step 4:</strong> This becomes context for next {term:output:y} prediction\n</div>"
         }
       ]
     },
@@ -770,7 +548,7 @@
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>User types:</strong> 'Translate to French: Good morning'<br><br><strong>Step 1 - Tokenization:</strong><br>{term:input:x} = ['Trans', 'late', ' to', ' French', ':', ' Good', ' morning']<br><strong>Step 2 - ID Conversion:</strong><br>{term:input:x} = [45023, 378, 284, 4141, 25, 4599, 3329]<br><strong>Step 3 - Embedding:</strong><br>Each ID → 4096-dim vector<br><strong>Step 4:</strong> {term:model:Model} predicts {term:output:y} conditioned on this {term:input:x}"
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Step-by-Step Example</div>\n<strong>User types:</strong> 'Translate to French: Good morning'<br><br><strong>Step 1 - Tokenization (tokens):</strong><br>\n<code class=\"code-block\">\n[\"Trans\", \"late\", \" to\", \" French\", \":\", \" Good\", \" morning\"]\n</code>\n<strong>Step 2 - ID Conversion (IDs):</strong><br>\n<code class=\"code-block\">\n[45023, 378, 284, 4141, 25, 4599, 3329]\n</code>\n<strong>Step 3 - Embedding:</strong> Each ID → 4096-dim vector<br><strong>Step 4:</strong> {term:model:Model} predicts {term:output:y} conditioned on this {term:input:x}\n</div>"
         }
       ]
     },
@@ -830,7 +608,7 @@
         {
           "type": "example",
           "title": "Example",
-          "content": "5 {term:model:models} predict {term:probability:P}('Paris') as: [0.82, 0.88, 0.79, 0.91, 0.85]<br><br>{term:expectation:E}[{term:probability:P}('Paris')] = (0.82+0.88+0.79+0.91+0.85)/5 = 0.85<br><br>This is the 'consensus' {term:probability:probability} across {term:model:models}."
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Example</div>\n5 {term:model:models} predict {term:probability:P}('Paris') as:<br>\n<code class=\"code-block\">\n[0.82, 0.88, 0.79, 0.91, 0.85]\n</code>\n{term:expectation:E}[{term:probability:P}('Paris')] = <code>(0.82+0.88+0.79+0.91+0.85)/5 = 0.85</code><br><br>This is the 'consensus' {term:probability:probability} across {term:model:models}.\n</div>"
         }
       ]
     },
@@ -858,24 +636,18 @@
           "content": "{term:entropy:H} measures <strong>{term:token:token}-level confidence</strong>. For each next-{term:token:token} prediction, compute {term:entropy:H} over the {term:vocabulary:vocabulary} distribution.<br><br>Range: 0 (one {term:token:token} has prob 1) to log(vocab_size) ≈ 15 bits (uniform over 50k {term:token:tokens})."
         },
         {
-          "type": "example",
-          "title": "Step-by-Step Calculation",
           "content": "<strong>Prompt:</strong> 'The capital of France is'<br><br>\n<strong>Model output distribution (top tokens):</strong><br>\n<code class=\"code-block\">\nP = {\"Paris\": 0.95, \"Lyon\": 0.03, \"Berlin\": 0.02}\n</code>\n<strong>Entropy calculation:</strong><br>\n<code class=\"code-block\">\nH = -[0.95×log₂(0.95) + 0.03×log₂(0.03) + 0.02×log₂(0.02)]\nH = -[0.95×(-0.074) + 0.03×(-5.06) + 0.02×(-5.64)]\nH = -[-0.07 + -0.15 + -0.11]\nH ≈ 0.33 bits  ← Very confident!\n</code>\n<strong>Compare to uncertain prompt:</strong> 'I feel ___'<br>\n<code class=\"code-block\">\nP = {\"good\": 0.15, \"bad\": 0.12, \"happy\": 0.10, \"sad\": 0.08, ...}\nH ≈ 4.2 bits  ← Much more uncertain!\n</code>"
         }
       ]
     },
-    "epistemic-var": {
-      "title": "Epistemic Uncertainty (Variance Form)",
-      "color": "#2563eb",
+    "reward": {
+      "title": "R - Reward",
+      "color": "#f59e0b",
       "sections": [
-        {
-          "type": "equation-display",
-          "content": "{term:variance:Var}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:expectation:E}({term:output:y}|{term:input:x}, {term:theta:θ})]"
-        },
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "How much do different {term:model:model} versions <em>disagree</em> on what the average answer should be?<br><br>Think of asking 5 different GPT checkpoints: \"What's the capital of Atlantis?\" If they each give a different confident answer, that disagreement is {term:epistemic-var:epistemic} uncertainty - the {term:model:models} don't have reliable knowledge."
+          "content": "The {term:reward:reward} is a scalar 'quality score' that tells the {term:model:model} how 'good' its response was. In RLHF, a dedicated {term:reward:reward} {term:model:model} (often an LLM itself) is trained to predict what humans would prefer. It outputs a single number: higher = better aligned with human preferences. This signal guides the {term:policy:policy} to generate more helpful, harmless, and honest responses."
         },
         {
           "type": "divider"
@@ -883,27 +655,29 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:variance:variance} computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:expectation:expected value} of {term:output:output y} given {term:input:input x} and a specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Reducible</em> - can be decreased with more {term:data:training data}, better architecture, or RAG."
+          "content": "The {term:reward:reward} {term:model:model} is trained on human preference {term:data:data} using the Bradley-Terry {term:model:model}. Given pairs (y_w, y_l) where humans prefer y_w over y_l, it learns: {term:probability:P}(y_w > y_l) = σ({term:reward:R}(y_w) - {term:reward:R}(y_l)). The resulting {term:model:model} outputs a scalar score for any (prompt, response) pair.",
+          "formula": "{term:reward:R}_{term:theta:θ}: (prompt, response) → ℝ"
         },
         {
           "type": "example",
-          "title": "Step-by-Step Calculation",
-          "content": "<strong>Prompt:</strong> 'What is the capital of Narnia?'<br><br>\n<strong>5 model checkpoints predict P('Cair Paravel'):</strong><br>\n<code class=\"code-block\">\nModel 1: P = 0.75  (confident it's 'Cair Paravel')\nModel 2: P = 0.12  (thinks it's something else)\nModel 3: P = 0.65\nModel 4: P = 0.08  (very uncertain)\nModel 5: P = 0.55\n</code>\n<strong>Step 1:</strong> Compute each model's mean prediction = [0.75, 0.12, 0.65, 0.08, 0.55]<br>\n<strong>Step 2:</strong> Take variance of these means:<br>\n<code class=\"code-block\">\nμ = 0.43\nEpistemic Var = Var([0.75, 0.12, 0.65, 0.08, 0.55]) = 0.076\n</code>\n<strong>Result:</strong> HIGH epistemic uncertainty! Models disagree → knowledge gap (fictional place)."
+          "title": "Step-by-Step Example",
+          "content": "<strong>Step 1:</strong> User asks: 'Explain gravity to a 5-year-old'<br><strong>Step 2:</strong> {term:model:Model} generates two responses:<br>  • Response A: 'Gravity is like invisible glue that pulls things down...'<br>  • Response B: 'Gravity is the curvature of spacetime caused by mass...'<br><strong>Step 3:</strong> {term:reward:Reward} {term:model:model} scores both:<br>  • {term:reward:R}(A) = 0.85 (appropriate for audience)<br>  • {term:reward:R}(B) = 0.32 (too complex)<br><strong>Step 4:</strong> During RL training, high {term:reward:R} reinforces generating A-like responses."
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs (RLHF/GRPO)",
+          "content": "<strong>In PPO/RLHF:</strong> A separate {term:reward:reward} {term:model:model} scores each response. The {term:policy:policy} is updated to maximize {term:reward:R} while staying close to {term:reference:π_ref} via {term:kl:KL} penalty.<br><br><strong>In GRPO:</strong> No dedicated {term:reward:reward} {term:model:model}! Instead, Python functions (format checks, correctness) directly compute scores. Multiple responses are compared within a group."
         }
       ]
     },
-    "aleatoric-var": {
-      "title": "Aleatoric Uncertainty (Variance Form)",
-      "color": "#dc2626",
+    "policy": {
+      "title": "π - Policy",
+      "color": "#4f46e5",
       "sections": [
-        {
-          "type": "equation-display",
-          "content": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:variance:Var}({term:output:y}|{term:input:x}, {term:theta:θ})]"
-        },
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "How spread-out is each {term:model:model}'s own prediction, on average?<br><br>Think of the prompt: \"Tell me a joke.\" Even a <em>perfect</em> {term:model:model} would have a flat {term:token:token} distribution - thousands of valid jokes exist! This internal spread is unavoidable because the {term:input:task itself} is ambiguous, not because the {term:model:model} lacks knowledge."
+          "content": "The {term:policy:policy} IS the LLM itself - the 'decision-making strategy' for generating text. In RL terms: the current context (prompt + tokens so far) is the 'state', and the next {term:token:token} to generate is the 'action'. The {term:policy:policy} outputs a {term:probability:probability} distribution over ALL possible next {term:token:tokens} in the {term:vocabulary:vocabulary}. During RLHF, we update the {term:policy:policy}'s {term:weights:weights} to favor {term:token:tokens} that lead to higher {term:reward:rewards}."
         },
         {
           "type": "divider"
@@ -911,50 +685,89 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:variance:variance} of {term:output:output y} given {term:input:input x} and that specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite {term:data:data} or a perfect {term:model:model}. It's intrinsic to the task."
+          "content": "A {term:policy:policy} {term:policy:π}_{term:theta:θ} maps (prompt, context) → {term:probability:probability} distribution over {term:vocabulary:vocabulary}. For full responses, the {term:probability:probability} is the product of autoregressive {term:token:token} {term:probability:probabilities}. In RLHF notation: {term:policy:π}_{term:theta:θ} is the current trainable {term:policy:policy}; {term:reference:π_ref} is the frozen SFT baseline.",
+          "formula": "{term:policy:π}_{term:theta:θ}(response|prompt) = ∏ᵢ {term:probability:P}({term:token:t}ᵢ | prompt, {term:token:t}₁...{term:token:t}ᵢ₋₁)"
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Example",
+          "content": "<strong>Step 1:</strong> User says 'Hi'<br><strong>Step 2:</strong> {term:policy:Policy π} outputs {term:probability:probabilities} for next {term:token:token}:<br><code class=\"code-block\">\n{'Hello': 0.15, 'Hi': 0.12, 'Hey': 0.08, ...49997 others}\n</code><br><strong>Step 3:</strong> Sampling picks 'Hello' → becomes context for next {term:token:token}<br><strong>Step 4:</strong> After RLHF, if 'Hello!' gets high {term:reward:reward}, {term:weights:θ} updates to increase {term:probability:P}('Hello')"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs (RLHF)",
+          "content": "<strong>Current policy {term:policy:π}_{term:theta:θ}:</strong> The LLM being trained. Its {term:weights:θ} change during RL.<br><br><strong>Reference policy {term:reference:π_ref}:</strong> Frozen copy of the SFT {term:model:model}. Used to compute {term:kl:KL} penalty.<br><br><strong>Old policy {term:policy:π}_{old}:</strong> In PPO/GRPO, the {term:policy:policy} from previous training step - used for importance sampling ratio."
+        }
+      ]
+    },
+    "kl": {
+      "title": "KL - KL Divergence",
+      "color": "#be185d",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "{term:kl:KL divergence} is the 'guardrail' in RLHF training. It measures how much the RL-trained {term:policy:policy} has drifted from the original SFT {term:model:model} ({term:reference:π_ref}). Without this guardrail, the {term:model:model} might learn bizarre outputs that 'hack' the {term:reward:reward} {term:model:model} (e.g., repeating 'AMAZING!!' forever to get high scores). The {term:kl:KL} penalty keeps the {term:policy:policy} grounded in normal, human-like language."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "{term:kl:KL} divergence measures the 'information lost' when approximating distribution Q with P.<br><br><strong>Properties:</strong><ul><li>Always ≥ 0</li><li>Equals 0 iff P = Q</li><li>Asymmetric: KL(P||Q) ≠ KL(Q||P)</li></ul>In RLHF, it's computed per-{term:token:token} between {term:policy:π}_θ and {term:reference:π_ref}.",
+          "formula": "{term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref}) = {term:summation:Σ}_t {term:policy:π}_θ({term:token:t}) log({term:policy:π}_θ({term:token:t}) / {term:reference:π_ref}({term:token:t}))"
         },
         {
           "type": "example",
           "title": "Step-by-Step Calculation",
-          "content": "<strong>Prompt:</strong> 'Tell me a joke about ___'<br><br>\n<strong>Each model's internal variance (spread in token probs):</strong><br>\n<code class=\"code-block\">\nModel 1: Variance of P(tokens) = 2.8  (many tokens equally valid)\nModel 2: Variance of P(tokens) = 2.5\nModel 3: Variance of P(tokens) = 2.7\nModel 4: Variance of P(tokens) = 2.9\nModel 5: Variance of P(tokens) = 2.6\n</code>\n<strong>Step 1:</strong> List each model's internal variance: [2.8, 2.5, 2.7, 2.9, 2.6]<br>\n<strong>Step 2:</strong> Take AVERAGE of these variances:<br>\n<code class=\"code-block\">\nAleatoric Var = E[Var] = (2.8+2.5+2.7+2.9+2.6)/5 = 2.7\n</code>\n<strong>Result:</strong> HIGH aleatoric! Task is inherently ambiguous (many valid jokes)."
+          "content": "<strong>Scenario:</strong> Comparing token distributions for next token after 'How are you?'<br><br><strong>Token probabilities:</strong><br><code class=\"code-block\">\n              SFT (π_ref)    RL (π_θ)\n'I'm good'        0.40         0.10\n'Fine'            0.30         0.05\n'Great!'          0.20         0.05\n'AMAZING!!'       0.10         0.80  ← RL loves this!\n</code><br><strong>KL calculation:</strong> Σ π_θ × log(π_θ/π_ref)<br>= 0.8 × log(0.8/0.1) + ... ≈ 1.66 (HIGH!)<br><br><strong>Result:</strong> High {term:kl:KL} → large penalty subtracted from {term:reward:reward}!"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs (RLHF/GRPO)",
+          "content": "<strong>The RLHF objective:</strong><br><code class=\"code-block\">\nmax {term:reward:R}(response) - β × {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref})\n</code><br><br><strong>β (beta) parameter:</strong> Controls how strongly the {term:policy:policy} is constrained. β=0 → no constraint (risk of mode collapse). β→∞ → {term:policy:policy} stays identical to SFT. Typical values: 0.01-0.1.<br><br><strong>Prevents:</strong> Reward hacking, mode collapse, loss of fluency."
         }
       ]
     },
-    "total-uncertainty": {
-      "title": "Total Uncertainty",
-      "color": "#7e22ce",
+    "reference": {
+      "title": "π_ref - Reference Policy",
+      "color": "#64748b",
       "sections": [
         {
           "type": "intuitive",
-          "title": "Intuition",
-          "content": "The complete 'I don't know' of the {term:model:model}. Combines both 'I lack knowledge' ({term:epistemic-var:epistemic}) and 'The task is ambiguous' ({term:aleatoric-var:aleatoric})."
+          "title": "Intuitive Definition",
+          "content": "The {term:reference:reference} {term:policy:policy} ({term:reference:π_ref}) is a FROZEN snapshot of the SFT {term:model:model} taken before RL training begins. Its {term:weights:weights} are locked and never updated. Think of it as the 'anchor' - it tells us what 'normal' behavior looks like. The {term:kl:KL} penalty compares the current {term:policy:π}_θ against this anchor to prevent the RL {term:policy:policy} from drifting into weird territory."
+        },
+        {
+          "type": "divider"
         },
         {
           "type": "scientific",
-          "title": "The Decomposition",
-          "content": "<strong>{term:total-uncertainty:Total} = {term:epistemic-var:Epistemic} + {term:aleatoric-var:Aleatoric}</strong><br><br>This is the Law of Total {term:variance:Variance} / {term:entropy:entropy} decomposition. We can separate the sources of uncertainty.",
-          "formula": "{term:variance:Var}({term:output:y}|{term:input:x}) = {term:variance:Var}[{term:expectation:E}({term:output:y}|{term:input:x},{term:theta:θ})] + {term:expectation:E}[{term:variance:Var}({term:output:y}|{term:input:x},{term:theta:θ})]"
+          "title": "",
+          "content": "A frozen copy of the {term:policy:policy} {term:weights:weights} from the SFT stage. During RL, {term:reference:π_ref} provides baseline {term:probability:probabilities} for the {term:kl:KL} divergence penalty. Same architecture as {term:policy:π}_θ, but with fixed parameters.",
+          "formula": "{term:reference:π_ref} = frozen(copy({term:policy:π}_{SFT})), where ∇{term:reference:π_ref} = 0 (no gradients)"
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Example",
+          "content": "<strong>Step 1:</strong> Train SFT {term:model:model} on instruction data → Save checkpoint<br><strong>Step 2:</strong> Load two copies:<br>  • {term:reference:π_ref} = frozen SFT (eval mode, no_grad)<br>  • {term:policy:π}_θ = trainable copy (train mode)<br><strong>Step 3:</strong> For each prompt, compute {term:probability:probabilities} from BOTH<br><strong>Step 4:</strong> {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref}) penalizes divergence<br><strong>Step 5:</strong> Only {term:policy:π}_θ's {term:weights:weights} update; {term:reference:π_ref} stays fixed"
         },
         {
           "type": "llm",
           "title": "In LLMs",
-          "content": "{term:total-uncertainty:Total uncertainty} in a {term:token:token} prediction comes from:<br>• The {term:model:model} not knowing the answer ({term:epistemic-var:epistemic})<br>• Multiple {term:token:tokens} being valid completions ({term:aleatoric-var:aleatoric})<br><br>Uncertainty quantification helps us separate these to take appropriate action."
-        },
-        {
-          "type": "example",
-          "title": "Decomposition Example",
-          "content": "<strong>Prompt:</strong> 'What is the melting point of unobtainium?'<br><br>\n<strong>Total Uncertainty:</strong> HIGH<br><br>\n<strong>Breakdown (Variance form):</strong><br>\n<code class=\"code-block\">\nTotal Var = 2.5\n\nEpistemic (model disagreement) = 2.3\n  → Models give different answers: \"1200°C\", \"800°C\", \"fictional\"\n  → REDUCIBLE: Could improve with better training data\n\nAleatoric (inherent ambiguity) = 0.2\n  → Even within each model, slight uncertainty\n  → IRREDUCIBLE: Multiple valid phrasings exist\n</code>\n<strong>Compare to:</strong> 'Write a haiku about spring'<br>\n<code class=\"code-block\">\nTotal Var = 2.8\n\nEpistemic = 0.3  # Models agree on haiku structure\nAleatoric = 2.5  # Many valid haikus exist (irreducible!)\n</code>"
+          "content": "<strong>Memory cost:</strong> {term:reference:π_ref} requires a full copy of the {term:model:model} in memory (e.g., +14GB for 7B params in FP16). This is one reason GRPO and DPO are more memory-efficient than PPO.<br><br><strong>Alternative:</strong> Some implementations use parameter-efficient {term:reference:π_ref} (e.g., LoRA adapters) to reduce memory."
         }
       ]
     },
-    "mutual-info": {
-      "title": "I - Mutual Information",
-      "color": "#9333ea",
+    "advantage": {
+      "title": "A - Advantage",
+      "color": "#10b981",
       "sections": [
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "{term:mutual-info:Mutual Information} measures how much knowing one variable tells you about another. If knowing X completely determines Y, {term:mutual-info:I}(X;Y) is high. If X and Y are independent (knowing one tells you nothing about the other), {term:mutual-info:I}(X;Y) = 0. Think of it as: 'How much does knowing the {term:input:input} reduce my uncertainty about the {term:output:output}?'"
+          "content": "The {term:advantage:advantage} tells us 'how much BETTER this action is compared to what we'd normally expect'. If {term:advantage:A} > 0: this action was better than average → reinforce it. If {term:advantage:A} < 0: this action was worse than expected → discourage it. It centers the learning signal around zero, reducing variance and making training more stable."
         },
         {
           "type": "divider"
@@ -962,33 +775,29 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:mutual-info:I}(X;Y) = {term:entropy:H}(Y) − {term:entropy:H}(Y|X) = {term:entropy:H}(X) − {term:entropy:H}(X|Y). It's the reduction in {term:entropy:entropy} of one variable given knowledge of the other. Properties: Always non-negative, symmetric ({term:mutual-info:I}(X;Y) = {term:mutual-info:I}(Y;X)), measured in bits.",
-          "formula": "{term:mutual-info:I}(X;Y) = {term:entropy:H}(Y) − {term:entropy:H}(Y|X)"
+          "content": "Classically, {term:advantage:A}(s, a) = Q(s, a) - {term:value:V}(s), where Q is action-value and {term:value:V} is state-value. The baseline {term:value:V}(s) reduces variance without changing the expected gradient. In GRPO, {term:advantage:advantage} is computed via group normalization instead.",
+          "formula": "{term:advantage:A}(s, a) = Q(s, a) - {term:value:V}(s)"
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Example (GRPO)",
+          "content": "<strong>Step 1:</strong> Generate G=8 responses to one prompt<br><strong>Step 2:</strong> Score each response: [0.3, 0.7, 0.5, 0.8, 0.2, 0.6, 0.4, 0.9]<br><strong>Step 3:</strong> Compute group mean: μ = 0.55, std: σ = 0.23<br><strong>Step 4:</strong> Normalized {term:advantage:advantages}:<br><code class=\"code-block\">\nA = (R - μ) / σ\n[−1.09, +0.65, −0.22, +1.09, −1.52, +0.22, −0.65, +1.52]\n</code><br><strong>Result:</strong> Response with R=0.9 gets highest {term:advantage:A}=+1.52 (strongly reinforce!)"
         },
         {
           "type": "llm",
-          "title": "In Uncertainty Quantification",
-          "content": "{term:mutual-info:Mutual Information} is used to decompose total uncertainty into {term:epistemic-info:epistemic} and {term:aleatoric-info:aleatoric} components (entropy version). {term:mutual-info:I}({term:output:y}; {term:theta:θ} | {term:input:x}, {term:data:D}) measures how much the {term:model:model} {term:theta:parameters θ} inform the prediction - this IS the {term:epistemic-info:epistemic uncertainty}."
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Calculation",
-          "content": "<strong>Scenario:</strong> How much does knowing the prompt reduce output uncertainty?<br><br>\n<strong>Without prompt:</strong><br>\n<code class=\"code-block\">\nH(next_token) = log₂(50,000) ≈ 15.6 bits\n# Any token in vocab equally likely\n</code>\n<strong>With prompt 'The capital of France is':</strong><br>\n<code class=\"code-block\">\nH(next_token | prompt) ≈ 0.5 bits\n# Almost certainly \"Paris\"\n</code>\n<strong>Mutual Information:</strong><br>\n<code class=\"code-block\">\nI(next_token; prompt) = H(next_token) - H(next_token | prompt)\n                      = 15.6 - 0.5 = 15.1 bits\n</code>\n<strong>Result:</strong> Knowing the prompt provides 15.1 bits of information about the next token!"
+          "title": "In LLMs (GRPO vs PPO)",
+          "content": "<strong>PPO:</strong> Uses a learned critic network to estimate {term:value:V}(s), then A = Q - {term:value:V}. Requires extra memory for critic.<br><br><strong>GRPO:</strong> No critic needed! Computes {term:advantage:A} = ({term:reward:R} - μ_group) / σ_group. More memory-efficient, simpler to train.<br><br><strong>Per-token:</strong> The same {term:advantage:A} is assigned to ALL {term:token:tokens} in a response (score is for final output, replicated across logits)."
         }
       ]
     },
-    "epistemic-info": {
-      "title": "Epistemic Uncertainty (Info-Theoretic Form)",
-      "color": "#4f46e5",
+    "value": {
+      "title": "V - Value Function",
+      "color": "#8b5cf6",
       "sections": [
-        {
-          "type": "equation-display",
-          "content": "{term:mutual-info:I}({term:output:y}, {term:theta:θ} | {term:input:x}, {term:data:D})"
-        },
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "How much would knowing the \"true\" {term:model:model} reduce our uncertainty about the {term:output:output}?<br><br>If different {term:theta:model versions} give <em>confidently different</em> answers, that's high {term:mutual-info:mutual information}. Model A says \"Paris\" (99% confident), Model B says \"London\" (99% confident). They disagree - so the answer heavily depends on <em>which</em> {term:theta:θ} you ask."
+          "content": "The {term:value:value function} answers: 'How good is it to be in this state?' It estimates the total {term:reward:reward} we expect to get from here if we follow our current {term:policy:policy}. High {term:value:V}(s) = we're in a good spot. Low {term:value:V}(s) = things are likely to go badly. It helps us decide if an action made things better or worse than expected."
         },
         {
           "type": "divider"
@@ -996,40 +805,18 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:mutual-info:mutual information} between {term:output:output y} and {term:theta:model parameters θ}, conditioned on {term:input:input x} and {term:data:training data D}.<br><br>Computed as: {term:entropy:H}({term:output:y}|{term:input:x},{term:data:D}) − {term:expectation:E}[{term:entropy:H}({term:output:y}|{term:input:x},{term:theta:θ})]<br><br><strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more {term:data:data}."
+          "content": "State-value {term:value:V}(s) = {term:expectation:E}[Σ_t γᵗ {term:reward:r}_t | s₀=s]. Estimates expected cumulative discounted {term:reward:reward} from state s. Action-value Q(s, a) estimates return from taking action a in state s. Computed via Bellman equations or learned by a critic network.",
+          "formula": "{term:value:V}(s) = {term:expectation:E}_{term:policy:π}[{term:summation:Σ}_{t=0}^{∞} γᵗ {term:reward:r}_t | s₀=s]"
         },
         {
           "type": "example",
-          "title": "Step-by-Step Calculation",
-          "content": "<strong>Prompt:</strong> 'Who won the 2024 US election?'<br><br>\n<strong>3 model checkpoints (trained at different times):</strong><br>\n<code class=\"code-block\">\nModel A (early 2024): H = 0.1 bits, answers \"Unknown\"\nModel B (late 2024):  H = 0.2 bits, answers \"Trump\"\nModel C (mid 2024):   H = 0.3 bits, answers \"Biden\"\n</code>\n<strong>Key observation:</strong> Each model is internally CONFIDENT (low H)<br>\nBUT they DISAGREE with each other!<br><br>\n<strong>Compute Mutual Information (= Epistemic):</strong><br>\n<code class=\"code-block\">\nI(y; θ | x, D) = H(y|x,D) - E[H(y|x,θ)]\n             ≈ Total entropy - Avg individual entropy\n             = HIGH (because model disagree)\n</code>\n<strong>Result:</strong> Knowing WHICH model would resolve uncertainty → epistemic!"
-        }
-      ]
-    },
-    "aleatoric-info": {
-      "title": "Aleatoric Uncertainty (Info-Theoretic Form)",
-      "color": "#e11d48",
-      "sections": [
-        {
-          "type": "equation-display",
-          "content": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:entropy:H}({term:posterior:p}({term:output:y}|{term:input:x}, {term:theta:θ}))]"
+          "title": "Conceptual Example",
+          "content": "<strong>Chess analogy:</strong><br>• State = current board position<br>• {term:value:V}(state) = estimated probability of winning from here<br>• Opening advantage: {term:value:V} = 0.6 (60% expected win)<br>• After blunder: {term:value:V} = 0.2 (only 20% expected win)<br><br><strong>In LLMs:</strong> State = (prompt + tokens generated so far). {term:value:V}(state) ≈ expected final {term:reward:reward} if we continue generating."
         },
         {
-          "type": "intuitive",
-          "title": "Intuitive Definition",
-          "content": "{term:expectation:On average}, how \"fuzzy\" is each {term:theta:model's} {term:output:token distribution}?<br><br>All {term:theta:models} might <em>agree</em> that multiple {term:output:tokens} are valid. For \"The weather today is ___\", every {term:theta:model} assigns high {term:entropy:entropy} because \"sunny\", \"rainy\", \"nice\" are all valid. This shared fuzziness is the inherent ambiguity of the {term:input:task}."
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:entropy:entropy} of that {term:theta:model's} {term:posterior:probability distribution} over {term:output:output y}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - even with infinite {term:data:data}, this {term:entropy:entropy} remains because the {term:input:task itself} is ambiguous."
-        },
-        {
-          "type": "example",
-          "title": "Step-by-Step Calculation",
-          "content": "<strong>Prompt:</strong> 'The weather today is ___'<br><br>\n<strong>Each model's entropy (internal fuzziness):</strong><br>\n<code class=\"code-block\">\nModel 1: H = 3.2 bits (sunny, rainy, cloudy all valid)\nModel 2: H = 3.0 bits\nModel 3: H = 3.4 bits\nModel 4: H = 3.1 bits\nModel 5: H = 3.3 bits\n</code>\n<strong>Key observation:</strong> ALL models have HIGH internal entropy<br>\nThey AGREE that the task is ambiguous!<br><br>\n<strong>Compute Expected Entropy (= Aleatoric):</strong><br>\n<code class=\"code-block\">\nE[H(y|x,θ)] = (3.2 + 3.0 + 3.4 + 3.1 + 3.3) / 5 = 3.2 bits\n</code>\n<strong>Result:</strong> Even a perfect model can't reduce this → irreducible aleatoric!"
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "<strong>PPO uses a critic:</strong> A separate network (or shared backbone with value head) estimates {term:value:V}(s). Adds memory and compute cost.<br><br><strong>GRPO eliminates the critic:</strong> By using group-relative {term:advantage:advantages}, no {term:value:V}(s) estimation needed. This is a key innovation making GRPO simpler and more efficient."
         }
       ]
     }

@@ -23,7 +23,10 @@
     "kl": "#be185d",
     "reference": "#64748b",
     "advantage": "#10b981",
-    "value": "#8b5cf6"
+    "value": "#8b5cf6",
+    "sft": "#0ea5e9",
+    "rlhf": "#8b5cf6",
+    "base-model": "#64748b"
   },
   "terms": {
     "loss": {
@@ -145,6 +148,21 @@
       "display": "V",
       "colorKey": "value",
       "popupKey": "value"
+    },
+    "sft": {
+      "display": "SFT",
+      "colorKey": "sft",
+      "popupKey": "sft"
+    },
+    "rlhf": {
+      "display": "RLHF",
+      "colorKey": "rlhf",
+      "popupKey": "rlhf"
+    },
+    "base-model": {
+      "display": "Base Model",
+      "colorKey": "base-model",
+      "popupKey": "base-model"
     }
   },
   "popups": {
@@ -817,6 +835,81 @@
           "type": "llm",
           "title": "In LLMs",
           "content": "<strong>PPO uses a critic:</strong> A separate network (or shared backbone with value head) estimates {term:value:V}(s). Adds memory and compute cost.<br><br><strong>GRPO eliminates the critic:</strong> By using group-relative {term:advantage:advantages}, no {term:value:V}(s) estimation needed. This is a key innovation making GRPO simpler and more efficient."
+        }
+      ]
+    },
+    "sft": {
+      "title": "SFT - Supervised Fine-Tuning",
+      "color": "#0ea5e9",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "Teaching a {term:model:model} by showing it thousands of example conversations. Like a student copying \"ideal\" homework - the {term:model:model} learns to produce responses that look like the training examples. Effective for teaching FORMAT but limited because it just copies patterns rather than learning what makes a response GOOD."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Supervised learning on (instruction, response) pairs. Minimizes cross-entropy {term:loss:loss} on response {term:token:tokens} only.",
+          "formula": "{term:loss:L}_{SFT} = -Σ log {term:probability:P}_θ(target | prompt, context)"
+        },
+        {
+          "type": "example",
+          "title": "Training Example",
+          "content": "<strong>Data:</strong> {instruction: \"Explain gravity\", response: \"Imagine invisible strings...\"}<br><br><strong>Process:</strong> Feed both as sequence → {term:model:Model} predicts response tokens → {term:loss:Loss} only on response → Update {term:theta:weights}"
+        }
+      ]
+    },
+    "rlhf": {
+      "title": "RLHF - RL from Human Feedback",
+      "color": "#8b5cf6",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "Instead of copying responses, {term:model:model} GENERATES its own and gets scored. A {term:reward:reward} {term:model:model} (trained on preferences) scores it. Learning from a coach, not copying textbooks."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "{term:policy:Policy} optimization with learned {term:reward:reward} + {term:kl:KL} penalty to stay near {term:sft:SFT} baseline.",
+          "formula": "max {term:expectation:E}[{term:reward:R}(response)] - β × {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref})"
+        },
+        {
+          "type": "example",
+          "title": "Flow",
+          "content": "<strong>1.</strong> Collect preferences: Human says B > A<br><strong>2.</strong> Train {term:reward:reward} {term:model:model}: {term:reward:R}(B-like) = 0.85, {term:reward:R}(A-like) = 0.20<br><strong>3.</strong> RL: Generate → Score → Update {term:theta:weights}"
+        }
+      ]
+    },
+    "base-model": {
+      "title": "Base Model - Pre-trained Foundation",
+      "color": "#64748b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "Raw pre-trained LLM. Predicts \"what comes next\" but doesn't know to ANSWER or refuse harmful. Ask \"What is 2+2?\" → might say \"What is 2+3?\" (completion mode)."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Next-{term:token:token} prediction on web data. No task-specific optimization.",
+          "formula": "{term:loss:L}_pretrain = -Σ log {term:probability:P}(t_i | t_1...t_{i-1})"
+        },
+        {
+          "type": "example",
+          "title": "Behavior",
+          "content": "<strong>Examples:</strong> LLaMA-2 Base, GPT-3 davinci-base<br><strong>Problem:</strong> Learned helpful tutorials AND harmful content without knowing which to use"
         }
       ]
     }

@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "title": "Reinforcement Learning in LLMs",
+    "subtitle": "From Alignment to Reasoning",
+    "version": "2.1"
+  },
+  "navigation": {
+    "sections": [
+      {
+        "id": 0,
+        "title": "1. RL in LLMs",
+        "slides": [
+          "slide-0-1",
+          "slide-0-2",
+          "slide-0-3",
+          "slide-0-4"
+        ]
+      }
+    ]
+  },
+  "colorPalette": {
+    "sft": "#0ea5e9",
+    "rlhf": "#8b5cf6",
+    "rlvr": "#10b981",
+    "base-model": "#64748b",
+    "pipeline": "#f59e0b"
+  },
+  "terms": {
+    "sft": {
+      "display": "SFT",
+      "colorKey": "sft",
+      "popupKey": "sft"
+    },
+    "rlhf": {
+      "display": "RLHF",
+      "colorKey": "rlhf",
+      "popupKey": "rlhf"
+    },
+    "rlvr": {
+      "display": "RLVR",
+      "colorKey": "rlvr",
+      "popupKey": "rlvr"
+    },
+    "base-model": {
+      "display": "Base Model",
+      "colorKey": "base-model",
+      "popupKey": "base-model"
+    }
+  },
+  "popups": {
+    "sft": {
+      "title": "SFT - Supervised Fine-Tuning",
+      "color": "#0ea5e9",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "Teaching a {term:model:model} by showing it thousands of example conversations. Like a student copying \"ideal\" homework - the {term:model:model} learns to produce responses that look like the training examples. Effective for teaching FORMAT but limited because it just copies patterns rather than learning what makes a response GOOD."
+        },
+        { "type": "divider" },
+        {
+          "type": "scientific",
+          "content": "Supervised learning on (instruction, response) pairs. Minimizes cross-entropy {term:loss:loss} on response {term:token:tokens} only.",
+          "formula": "L_SFT = -Σ log P_θ(target | prompt, context)"
+        },
+        {
+          "type": "example",
+          "title": "Training Example",
+          "content": "<strong>Data:</strong> {instruction: \"Explain gravity\", response: \"Imagine invisible strings...\"}<br><br><strong>Process:</strong> Feed both as sequence → {term:model:Model} predicts response tokens → {term:loss:Loss} only on response → Update {term:theta:weights}"
+        }
+      ]
+    },
+    "rlhf": {
+      "title": "RLHF - RL from Human Feedback",
+      "color": "#8b5cf6",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "Instead of copying responses, {term:model:model} GENERATES its own and gets scored. A {term:reward:reward} {term:model:model} (trained on preferences) scores it. Learning from a coach, not copying textbooks."
+        },
+        { "type": "divider" },
+        {
+          "type": "scientific",
+          "content": "{term:policy:Policy} optimization with learned {term:reward:reward} + {term:kl:KL} penalty to stay near {term:sft:SFT} baseline.",
+          "formula": "max E[R(response)] - β × KL(π_θ || π_ref)"
+        },
+        {
+          "type": "example",
+          "title": "Flow",
+          "content": "<strong>1.</strong> Collect preferences: Human says B > A<br><strong>2.</strong> Train {term:reward:reward} {term:model:model}: R(B-like) = 0.85, R(A-like) = 0.20<br><strong>3.</strong> RL: Generate → Score → Update {term:theta:weights}"
+        }
+      ]
+    },
+    "rlvr": {
+      "title": "RLVR - RL with Verifiable Rewards",
+      "color": "#10b981",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "Automated verification instead of human preferences. For math: calculator. For code: unit tests. {term:reward:Reward} is binary: RIGHT (1.0) or WRONG (0.0). No humans, scales infinitely."
+        },
+        { "type": "divider" },
+        {
+          "type": "scientific",
+          "content": "Binary {term:reward:reward} from deterministic verifiers. No neural {term:reward:reward} {term:model:model}.",
+          "formula": "R(response) = verifier(response, ground_truth) ∈ {0, 1}"
+        },
+        {
+          "type": "example",
+          "title": "Verification",
+          "content": "<strong>Math:</strong> \"847 × 23 = 19481\" → calculator → TRUE → R=1.0<br><strong>Code:</strong> is_prime → run_tests → pass → R=1.0<br><strong>Limit:</strong> Only verifiable tasks"
+        }
+      ]
+    },
+    "base-model": {
+      "title": "Base Model - Pre-trained Foundation",
+      "color": "#64748b",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "Raw pre-trained LLM. Predicts \"what comes next\" but doesn't know to ANSWER or refuse harmful. Ask \"What is 2+2?\" → might say \"What is 2+3?\" (completion mode)."
+        },
+        { "type": "divider" },
+        {
+          "type": "scientific",
+          "content": "Next-{term:token:token} prediction on web data. No task-specific optimization.",
+          "formula": "L_pretrain = -Σ log P(t_i | t_1...t_{i-1})"
+        },
+        {
+          "type": "example",
+          "title": "Behavior",
+          "content": "<strong>Examples:</strong> LLaMA-2 Base, GPT-3 davinci-base<br><strong>Problem:</strong> Learned helpful tutorials AND harmful content without knowing which to use"
+        }
+      ]
+    }
+  },
+  "slides": [
+    {
+      "id": "slide-0-1",
+      "sectionIndex": 0,
+      "title": "What Does SFT Actually Do? (The Copying Teacher)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Setup",
+          "content": "You have a pre-trained LLM that can complete text but doesn't follow instructions. Ask it \"What is 2+2?\" → it might respond \"What is 2+3? What is 2+4?\" (completion, not answering).<br><br><strong>{term:sft:SFT}'s job:</strong> Teach the {term:model:model} that when a human asks a question, you ANSWER it."
+        },
+        {
+          "type": "insight-box",
+          "title": "What {term:sft:SFT} Data Looks Like",
+          "content": "Thousands of (instruction, ideal_response) pairs. Typically 10K-100K examples.<br><br><strong>Example entry:</strong><br>• <em>instruction:</em> \"Explain gravity to a 5-year-old\"<br>• <em>response:</em> \"Imagine everything has invisible strings pulling it toward the ground...\"<br><br><strong>Sources:</strong> Human writers, GPT-4 generations, filtered web data."
+        },
+        {
+          "type": "insight-box",
+          "title": "How {term:sft:SFT} Training Works",
+          "content": "<strong>Step 1:</strong> Feed instruction + response as one sequence<br>• Example: \"[INST] Explain gravity [/INST] Imagine everything has invisible strings...\"<br><br><strong>Step 2:</strong> {term:model:Model} predicts each {term:token:token}, gets {term:loss:loss} ONLY on response {term:token:tokens}<br>• Instruction tokens: NO {term:loss:loss}<br>• Response tokens: {term:loss:Loss} computed<br><br><strong>Step 3:</strong> For token \"Imagine\", if {term:model:model} predicted P(\"Imagine\") = 0.02<br>• {term:loss:Loss} = -log(0.02) = 3.9 (HIGH!)<br>• Update {term:theta:weights} to increase P(\"Imagine\")<br><br><strong>Step 4:</strong> Repeat millions of times"
+        },
+        {
+          "type": "insight-box",
+          "title": "What {term:sft:SFT} Actually Does",
+          "content": "<strong>Before:</strong> Text predictor. \"What is 2+2?\" → \"What is 2+3?\"<br><strong>After:</strong> Learns PATTERN: [instruction] → [helpful response]<br><br><strong>The catch:</strong> {term:sft:SFT} copies training responses verbatim.<br><br>If training has 50 gravity explanations with different metaphors, the {term:model:model} learns the AVERAGE. It doesn't learn \"what's BEST\" - just \"what appeared in training\"."
+        },
+        {
+          "type": "insight-box",
+          "title": "The {term:sft:SFT} Problem",
+          "content": "<strong>Research (ICML 2025):</strong> On out-of-distribution tests, {term:sft:SFT} drops -8% to -79%<br><br><strong>Example:</strong> Train on 2-digit multiplication → Test on 3-digit → Fails<br><br>The {term:model:model} memorized patterns, not principles.<br><br><strong>This is why we need RL: to learn STRATEGY, not copy patterns.</strong>"
+        },
+        {
+          "type": "html",
+          "content": "<p style=\"margin-top: 20px; padding: 12px; background: #f0f9ff; border-left: 3px solid #0ea5e9; border-radius: 4px;\"><strong>Want deeper {term:sft:SFT} details?</strong> See our <a href=\"#\" onclick=\"loadTopic('topics/training_finetuning_llms.json'); return false;\" style=\"color: #0ea5e9; text-decoration: underline;\">Training & Fine-Tuning LLMs</a> topic.</p>"
+        }
+      ]
+    },
+    {
+      "id": "slide-0-2",
+      "sectionIndex": 0,
+      "title": "What Does RL Actually Do? (The Scoring Coach)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Key Difference",
+          "content": "<strong>{term:sft:SFT}:</strong> \"Here's a perfect response. Copy it exactly.\"<br><strong>RL:</strong> \"Generate whatever you want. I'll tell you how good it was. Do better next time.\"<br><br>{term:sft:SFT} = learning from textbook.<br>RL = learning from coach who grades performance."
+        },
+        {
+          "type": "insight-box",
+          "title": "RL Training Loop",
+          "content": "<strong>There IS no fixed dataset.</strong> The {term:model:model} generates its own training {term:data:data}!<br><br><strong>1.</strong> Prompt: \"Explain quantum physics simply\"<br><strong>2.</strong> {term:model:Model} generates multiple responses<br>&nbsp;&nbsp;&nbsp;• A: \"Particles can be waves...\" → {term:reward:R} = 0.73<br>&nbsp;&nbsp;&nbsp;• B: \"Imagine tiny balls...\" → {term:reward:R} = 0.89 ← Best!<br>&nbsp;&nbsp;&nbsp;• C: \"Quantum mechanics states...\" → {term:reward:R} = 0.62<br><strong>3.</strong> Update: Make {term:model:model} more likely to generate B-like responses<br><br>The {term:model:model} explores and learns which STRATEGIES work."
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step RL Training",
+          "content": "<strong>Step 1 - Generate:</strong><br>• Prompt: \"What is 12 × 15?\" → Response: \"Let me calculate: 180\"<br><br><strong>Step 2 - Score:</strong><br>• {term:rlhf:RLHF}: Neural {term:reward:reward} {term:model:model} → {term:reward:R} = 0.78<br>• {term:rlvr:RLVR}: Rule verifier → {term:reward:R} = 1.0 (correct!)<br><br><strong>Step 3 - Advantage:</strong><br>• Was this better than expected? {term:advantage:A} = 0.78 - 0.65 = +0.13<br><br><strong>Step 4 - Update:</strong><br>• Increase {term:probability:P} of {term:token:tokens} that led to high {term:reward:reward}<br>• {term:kl:KL} penalty keeps {term:model:model} from drifting too far from {term:sft:SFT}"
+        },
+        {
+          "type": "insight-box",
+          "title": "Why RL Generalizes Better",
+          "content": "<strong>{term:sft:SFT}:</strong> \"Problems like X → responses like Y\"<br><strong>RL:</strong> \"Doing Z gets high {term:reward:rewards}. Do more Z.\"<br><br><strong>Math example:</strong><br>• {term:sft:SFT}: Copies \"23×17=391\"<br>• RL: Discovers strategies that transfer:<br>&nbsp;&nbsp;&nbsp;• Break into steps: 23×17 = 23×10 + 23×7 = 391<br>&nbsp;&nbsp;&nbsp;• Verify: \"391/23 = 17 \"<br><br>{term:sft:SFT} memorized one answer. RL found transferable strategy.<br><br><strong>Result:</strong> RL shows +3% to +61% on out-of-distribution tasks."
+        },
+        {
+          "type": "insight-box",
+          "title": "The {term:kl:KL} Penalty - Why We Need a Leash",
+          "content": "<strong>Problem:</strong> Without constraints, RL can \"hack\" the {term:reward:reward} {term:model:model}.<br>• \"AMAZING! PERFECT! WOW!\" × 50 → {term:reward:R} = 0.99 (oops)<br><br><strong>Solution:</strong> {term:kl:KL} penalty keeps {term:model:model} near {term:sft:SFT} baseline"
+        },
+        {
+          "type": "equation",
+          "id": "rl_objective",
+          "label": "RL Objective with KL Constraint",
+          "parts": [
+            { "type": "raw", "text": "objective = max(" },
+            { "type": "term", "key": "reward", "text": "Reward" },
+            { "type": "raw", "text": " - β × " },
+            { "type": "term", "key": "kl", "text": "KL" },
+            { "type": "raw", "text": "(current || sft))" }
+          ],
+          "explanation": {
+            "prefix": "",
+            "template": "<strong>β controls the leash:</strong> β=0 (no leash, chaos), β=0.1 (explore reasonably), β=1.0 (tight). Typical: β ∈ [0.01, 0.1]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "slide-0-3",
+      "sectionIndex": 0,
+      "title": "What is Alignment? (Teaching the Model VALUES)",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The Problem Alignment Solves",
+          "content": "A pre-trained LLM predicts \"what comes next\" from internet {term:data:data}.<br><br>Internet includes: helpful tutorials, racist rants, misinformation, malware, scams...<br><br><strong>The {term:model:model} learned ALL of it.</strong> Ask \"how to make a bomb?\" and it might tell you.<br><br><strong>Alignment = Teaching which knowledge to USE vs REFUSE.</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Two Types of Alignment",
+          "content": "<strong>Type A: Preference ({term:rlhf:RLHF})</strong><br>• Goal: Helpful, harmless, honest<br>• Domain: Chatbots, assistants<br>• {term:reward:Reward}: Learned from human preferences<br><br><strong>Type B: Reasoning ({term:rlvr:RLVR})</strong><br>• Goal: CORRECT for verifiable tasks<br>• Domain: Math, code, logic<br>• {term:reward:Reward}: Binary from automated verifiers<br><br>{term:rlhf:RLHF} = \"don't be harmful\" | {term:rlvr:RLVR} = \"get right answer\""
+        },
+        {
+          "type": "table",
+          "headers": ["Aspect", "Type A: {term:rlhf:RLHF}", "Type B: {term:rlvr:RLVR}"],
+          "rows": [
+            ["Goal", "Helpful, harmless, honest", "Correct, show reasoning"],
+            ["Domain", "Chatbots, assistants", "Math, code, logic"],
+            ["{term:reward:Reward}", "Human preferences (subjective)", "Verifier (objective)"],
+            ["Cost", "$$$ (human annotators)", "Cheap (automated)"],
+            ["Scalability", "Limited by budget", "Infinite"]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:rlhf:RLHF}: Human Preference Alignment",
+          "content": "<strong>Step 1 - Collect Preferences:</strong><br>• Prompt: \"Best way to lose weight?\"<br>• A: \"Diet pills! Lose 30 lbs fast!\" | B: \"Gradual diet/exercise changes...\"<br>• Human: B is better (safer)<br><br><strong>Step 2 - Train {term:reward:Reward} Model:</strong><br>• Learns: {term:reward:R}(B-like) = 0.85, {term:reward:R}(A-like) = 0.20<br><br><strong>Step 3 - RL:</strong> Generate → Score → Learn to generate B-like<br><br><strong>Issues:</strong> $$$ for humans, subjective, can be gamed"
+        },
+        {
+          "type": "insight-box",
+          "title": "{term:rlvr:RLVR}: Verifiable Rewards",
+          "content": "<strong>No humans for scoring!</strong><br><br><strong>Math:</strong> \"847 × 23 = ?\" → \"19,481\" → calculator.check() → TRUE → {term:reward:R}=1.0<br><br><strong>Code:</strong> is_prime() → run_tests([2→True, 4→False]) → pass → {term:reward:R}=1.0<br><br><strong>Why powerful:</strong> No annotation cost, objective, scales infinitely<br><strong>Limit:</strong> Only verifiable tasks. Can't verify \"is essay good?\""
+        }
+      ]
+    },
+    {
+      "id": "slide-0-4",
+      "sectionIndex": 0,
+      "title": "Training Pipelines - Building Aligned LLMs",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "Pipeline 1: Standard ({term:base-model:Base} → {term:sft:SFT} → RL)",
+          "content": "<strong>Stage 1: Pre-training</strong> (done for you)<br>• Start with LLaMA, Mistral. Already knows language.<br><br><strong>Stage 2: {term:sft:SFT}</strong> (teaches FORMAT)<br>• Input: 10K-100K (instruction, response) pairs<br>• Learns: \"Answer questions\", \"Use markdown\", \"Be polite\"<br>• Does NOT learn what's BEST<br><br><strong>Stage 3: RL</strong> (teaches STRATEGY)<br>• Input: Prompts + {term:reward:reward} signal<br>• Learns: \"Detailed explanations score higher\", \"Verify math\", \"Refuse harmful\"<br><br><strong>Why two stages?</strong> {term:sft:SFT} gives RL stable starting point."
+        },
+        {
+          "type": "insight-box",
+          "title": "Pipeline 2: Pure RL (DeepSeek-R1-Zero)",
+          "content": "<strong>Experiment:</strong> Skip {term:sft:SFT}? Just RL on {term:base-model:base model}?<br><br><strong>What worked:</strong><br>•  Reasoning emerged (\"think step by step\")<br>•  Self-verification appeared<br>•  Matched o1 on math<br><br><strong>Problems:</strong><br>•  Language mixing (English → Chinese mid-sentence)<br>•  Alien formatting (no markdown)<br>•  Phrase repetition<br>•  MASSIVE compute needed<br><br><strong>Conclusion:</strong> RL CAN work alone, but {term:sft:SFT} provides stability."
+        },
+        {
+          "type": "insight-box",
+          "title": "Pipeline 3: DeepSeek-R1 (4-Stage Production)",
+          "content": "<strong>Stage 1: Cold-Start {term:sft:SFT}</strong><br>• ~1K reasoning examples. Just enough to prevent chaos.<br><br><strong>Stage 2: Reasoning RL (GRPO)</strong><br>• Math/code with verifiable {term:reward:rewards}. Develops chain-of-thought.<br><br><strong>Stage 3: Rejection Sampling</strong><br>• Generate millions, keep correct + readable + good format<br>• Result: 800K high-quality examples<br><br><strong>Stage 4: Full {term:sft:SFT} + {term:rlhf:RLHF}</strong><br>• Fine-tune on 800K, then {term:rlhf:RLHF} for safety<br><br><strong>Result:</strong> R1-Zero's reasoning + normal readability"
+        },
+        {
+          "type": "insight-box",
+          "title": "The Forgetting Problem",
+          "content": "<strong>Issue:</strong> RL after {term:sft:SFT} can \"forget\" what {term:sft:SFT} taught<br><br><strong>Example:</strong><br>• {term:sft:SFT} teaches: \"Use markdown\"<br>• RL optimizes: \"Get high {term:reward:reward}\"<br>• Result: Stops using markdown ({term:reward:reward} {term:model:model} doesn't care)<br><br>This is <strong>\"Alignment Tax\"</strong> - improving one hurts another."
+        },
+        {
+          "type": "insight-box",
+          "title": "Emerging: Joint Training (BRIDGE)",
+          "content": "Instead of {term:sft:SFT}-then-RL, do BOTH simultaneously:<br><br><strong>Combined objective:</strong> {term:loss:Loss} = SFT_loss + λ × RL_loss<br><br>• {term:sft:SFT} keeps teaching format<br>• RL keeps improving strategy<br>• They inform each other continuously<br><br>Still research-stage, but promising."
+        },
+        {
+          "type": "insight-box",
+          "title": "Pipeline Summary",
+          "content": "<strong>Pathway 1: Standard (Stable)</strong><br>• {term:base-model:Base} → {term:sft:SFT} → RL<br>• Examples: GPT-4, Claude, Llama-3<br><br><strong>Pathway 2: Pure RL (Experimental)</strong><br>• {term:base-model:Base} → RL only<br>• Example: DeepSeek-R1-Zero<br>• Emergent reasoning but unstable<br><br><strong>Pathway 3: 4-Stage (Production)</strong><br>• {term:base-model:Base} → Cold {term:sft:SFT} → RL → Rejection Sampling → Full {term:sft:SFT}/{term:rlhf:RLHF}<br>• Example: DeepSeek-R1<br><br><strong>Pathway 4: Joint (Research)</strong><br>• {term:base-model:Base} → {term:sft:SFT} + RL together<br>• Examples: BRIDGE, UFT"
+        }
+      ]
+    }
+  ]
+}

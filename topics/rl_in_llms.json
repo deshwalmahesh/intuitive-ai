@@ -26,8 +26,8 @@
     ]
   },
   "colorPalette": {
-    "rlvr": "#10b981",
-    "pipeline": "#f59e0b"
+    "rlvr": "#065f46",
+    "pipeline": "#92400e"
   },
   "terms": {
     "rlvr": {
@@ -39,7 +39,7 @@
   "popups": {
     "rlvr": {
       "title": "RLVR - RL with Verifiable Rewards",
-      "color": "#10b981",
+      "color": "#065f46",
       "sections": [
         {
           "type": "intuitive",
@@ -391,7 +391,7 @@
         {
           "type": "insight-box",
           "title": "Let's tackle the jargon first!",
-          "content": "1. {term:policy:Policy} ({term:policy:\u03c0}_\u03b8):</strong> The LLM we're actively training. Its {term:theta:weights} change every step.<br><br><strong>2. {term:reference:Reference} ({term:reference:\u03c0_ref}):</strong> Frozen copy of the {term:sft:SFT} {term:model:model}. Never updates. Used to compute how far we've drifted ({term:kl:KL} penalty).<br><br><strong>3. {term:reward:Reward Model} (r_\u03c6):</strong> A separate LLM with a linear head on top. Takes (prompt, response) \u2192 outputs single score. Trained on human preference pairs (Bradley-Terry).<br><br><strong>4. {term:value:Critic} (V):</strong> Predicts {term:expectation:expected} {term:reward:reward} before seeing the response. Used to compute: 'Was this better or worse than expected?' ({term:advantage:Advantage})<br><br><strong>Memory Cost:</strong> 4 \u00d7 14GB (for 7B {term:model:model} in FP16) = ~56GB just for {term:theta:weights}!"
+          "content": "<strong>1. {term:policy:Policy} ({term:policy:\u03c0}_\u03b8):</strong> The LLM we're actively training. Its {term:theta:weights} change every step.<br><br><strong>2. {term:reference:Reference} ({term:reference:\u03c0_ref}):</strong> Frozen copy of the {term:sft:SFT} {term:model:model}. Never updates. Used to compute how far we've drifted ({term:kl:KL} penalty).<br><br><strong>3. {term:reward:Reward Model} (r_\u03c6):</strong> A separate LLM with a linear head on top. Takes (prompt, response) \u2192 outputs single score. Trained on human preference pairs (Bradley-Terry).<br><br><strong>4. {term:value:Critic} (V):</strong> Predicts {term:expectation:expected} {term:reward:reward} before seeing the response. Used to compute: 'Was this better or worse than expected?' ({term:advantage:Advantage})<br><br><strong>Memory Cost:</strong> 4 \u00d7 14GB (for 7B {term:model:model} in FP16) = ~56GB just for {term:theta:weights}!"
         },
         {
           "type": "insight-box",

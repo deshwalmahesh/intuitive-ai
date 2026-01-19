@@ -12,12 +12,12 @@
     "model": "#059669",
     "summation": "#78350f",
     "variance": "#d97706",
-    "output": "#db2777",
+    "output": "#c026d3",
     "input": "#475569",
-    "theta": "#16a34a",
+    "theta": "#15803d",
     "posterior": "#7c3aed",
     "expectation": "#172554",
-    "entropy": "#0891b2",
+    "entropy": "#0e7490",
     "reward": "#f59e0b",
     "policy": "#4f46e5",
     "kl": "#be185d",
@@ -25,8 +25,8 @@
     "advantage": "#10b981",
     "value": "#8b5cf6",
     "sft": "#0ea5e9",
-    "rlhf": "#8b5cf6",
-    "base-model": "#64748b",
+    "rlhf": "#d8b4fe",
+    "base-model": "#334155",
     "ppo-ratio": "#0d9488",
     "clip-epsilon": "#f97316",
     "sigmoid": "#a855f7",
@@ -44,11 +44,8 @@
       "colorKey": "gradient",
       "popupKey": "gradient"
     },
-    "weights": {
-      "display": "W",
-      "colorKey": "theta",
-      "popupKey": "theta"
-    },
+
+
     "data": {
       "display": "D",
       "colorKey": "data",
@@ -241,18 +238,18 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "{term:gradient:∇}{term:loss:L} is a vector of partial derivatives of the {term:loss:loss} function with respect to each {term:weights:weight} parameter. It points in the direction of steepest increase, so we move opposite to it.",
-          "formula": "{term:gradient:∇}{term:loss:L} = [∂{term:loss:L}/∂{term:weights:θ}₁, ∂{term:loss:L}/∂{term:weights:θ}₂, ..., ∂{term:loss:L}/∂{term:weights:θ}ₙ]"
+          "content": "{term:gradient:∇}{term:loss:L} is a vector of partial derivatives of the {term:loss:loss} function with respect to each {term:theta:weight} parameter. It points in the direction of steepest increase, so we move opposite to it.",
+          "formula": "{term:gradient:∇}{term:loss:L} = [∂{term:loss:L}/∂{term:theta:θ}₁, ∂{term:loss:L}/∂{term:theta:θ}₂, ..., ∂{term:loss:L}/∂{term:theta:θ}ₙ]"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Step-by-Step Example</div>\n<strong>Step 1:</strong> Current {term:weights:weights} θ:<br>\n<code class=\"code-block\">\n[2.0, 3.0, 1.5]\n</code>\n<strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br>\n<strong>Step 3:</strong> Calculate {term:gradient:gradient} (for these weights):<br>\n<code class=\"code-block\">\n[0.1, -0.2, 0.05]\n</code>\n<strong>Step 4:</strong> Apply learning rate <code>lr = 0.001</code>:<br>\n<code class=\"code-block\">\nθ_new = θ − lr × ∇L\n</code>\n<strong>Step 5:</strong> Updated {term:weights:weights}:<br>\n<code class=\"code-block\">\n[1.9999, 3.0002, 1.49995]\n</code>\n<strong>Result:</strong> {term:loss:Loss} should be slightly lower now!\n</div>"
+          "content": "<div class=\"insight-box\">\n<div class=\"insight-title\">Step-by-Step Example</div>\n<strong>Step 1:</strong> Current {term:theta:weights} θ:<br>\n<code class=\"code-block\">\n[2.0, 3.0, 1.5]\n</code>\n<strong>Step 2:</strong> Compute {term:loss:loss} on a batch of {term:data:data}<br>\n<strong>Step 3:</strong> Calculate {term:gradient:gradient} (for these weights):<br>\n<code class=\"code-block\">\n[0.1, -0.2, 0.05]\n</code>\n<strong>Step 4:</strong> Apply learning rate <code>lr = 0.001</code>:<br>\n<code class=\"code-block\">\nθ_new = θ − lr × ∇L\n</code>\n<strong>Step 5:</strong> Updated {term:theta:weights}:<br>\n<code class=\"code-block\">\n[1.9999, 3.0002, 1.49995]\n</code>\n<strong>Result:</strong> {term:loss:Loss} should be slightly lower now!\n</div>"
         },
         {
           "type": "llm",
           "title": "In LLMs",
-          "content": "<strong>What the gradient looks like:</strong><br>\nFor LLaMA-7B, {term:gradient:∇L} has the <strong>same shape</strong> as {term:weights:θ}: 7 billion numbers!<br><br>\n<code class=\"code-block\">\n# Gradient for one attention layer (simplified)\n∇W_Q = [[0.001, -0.003, ...],  # 4096 × 4096 matrix\n        [0.002,  0.001, ...],\n        ...]\n</code>\n<strong>Gradient accumulation:</strong> With large {term:model:models}, we often can't fit the full batch in memory. We accumulate {term:gradient:gradients} over multiple mini-batches before applying the update."
+          "content": "<strong>What the gradient looks like:</strong><br>\nFor LLaMA-7B, {term:gradient:∇L} has the <strong>same shape</strong> as {term:theta:θ}: 7 billion numbers!<br><br>\n<code class=\"code-block\">\n# Gradient for one attention layer (simplified)\n∇W_Q = [[0.001, -0.003, ...],  # 4096 × 4096 matrix\n        [0.002,  0.001, ...],\n        ...]\n</code>\n<strong>Gradient accumulation:</strong> With large {term:model:models}, we often can't fit the full batch in memory. We accumulate {term:gradient:gradients} over multiple mini-batches before applying the update."
         }
       ]
     },
@@ -417,7 +414,7 @@
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "The {term:model:model} is the entire 'brain' - the neural network that takes {term:input:input} and produces {term:output:output}. It's the combination of architecture (how layers connect) + {term:weights:weights} (learned numbers). Same architecture + different {term:weights:weights} = different {term:model:model}."
+          "content": "The {term:model:model} is the entire 'brain' - the neural network that takes {term:input:input} and produces {term:output:output}. It's the combination of architecture (how layers connect) + {term:theta:weights} (learned numbers). Same architecture + different {term:theta:weights} = different {term:model:model}."
         },
         {
           "type": "divider"
@@ -425,13 +422,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A parameterized function mapping {term:input:inputs} to {term:output:outputs}. For LLMs: {term:input:input} = {term:token:token} sequence, {term:output:output} = {term:logits:logits} over {term:vocabulary:vocabulary}. Architecture defines the function class; training finds optimal {term:weights:θ}.",
-          "formula": "{term:model:f}_{term:weights:θ}: X → Y"
+          "content": "A parameterized function mapping {term:input:inputs} to {term:output:outputs}. For LLMs: {term:input:input} = {term:token:token} sequence, {term:output:output} = {term:logits:logits} over {term:vocabulary:vocabulary}. Architecture defines the function class; training finds optimal {term:theta:θ}.",
+          "formula": "{term:model:f}_{term:theta:θ}: X → Y"
         },
         {
           "type": "example",
           "title": "What's Inside a Model",
-          "content": "<strong>LLaMA-7B architecture:</strong><br>• Embedding: {term:vocabulary:vocab} → 4096-dim vectors<br>• 32 transformer layers, each with:<br>  - Self-attention (Q, K, V projections)<br>  - MLP (feed-forward network)<br>  - Layer normalization<br>• Final linear: 4096 → {term:vocabulary:vocab_size}<br><br><strong>Total:</strong> 7 billion {term:weights:parameters} = the learned 'knowledge'"
+          "content": "<strong>LLaMA-7B architecture:</strong><br>• Embedding: {term:vocabulary:vocab} → 4096-dim vectors<br>• 32 transformer layers, each with:<br>  - Self-attention (Q, K, V projections)<br>  - MLP (feed-forward network)<br>  - Layer normalization<br>• Final linear: 4096 → {term:vocabulary:vocab_size}<br><br><strong>Total:</strong> 7 billion {term:theta:parameters} = the learned 'knowledge'"
         }
       ]
     },
@@ -497,12 +494,12 @@
     },
     "theta": {
       "title": "θ (theta) - Model Parameters",
-      "color": "#16a34a",
+      "color": "#15803d",
       "sections": [
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "The 'brain' of the {term:model:model} - all the learned {term:weights:weights} that determine how it responds. Different {term:theta:θ} = different {term:model:model}."
+          "content": "The 'brain' of the {term:model:model} - all the learned {term:theta:weights} that determine how it responds. Different {term:theta:θ} = different {term:model:model}."
         },
         {
           "type": "divider"
@@ -510,7 +507,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The set of all learnable parameters in a neural network. For LLMs, this includes embeddings, attention {term:weights:weights} (Q, K, V), FFN {term:weights:weights}, and layer norms.",
+          "content": "The set of all learnable parameters in a neural network. For LLMs, this includes embeddings, attention {term:theta:weights} (Q, K, V), FFN {term:theta:weights}, and layer norms.",
           "formula": "{term:theta:θ} = {W_embed, W_attn, W_ffn, ...} ∈ ℝⁿ"
         },
         {
@@ -532,7 +529,7 @@
     },
     "output": {
       "title": "y - Output",
-      "color": "#db2777",
+      "color": "#c026d3",
       "sections": [
         {
           "type": "intuitive",
@@ -662,7 +659,7 @@
     },
     "entropy": {
       "title": "H - Entropy",
-      "color": "#0891b2",
+      "color": "#0e7490",
       "sections": [
         {
           "type": "intuitive",
@@ -725,7 +722,7 @@
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "The {term:policy:policy} IS the LLM itself - the 'decision-making strategy' for generating text. In RL terms: the current context (prompt + tokens so far) is the 'state', and the next {term:token:token} to generate is the 'action'. The {term:policy:policy} outputs a {term:probability:probability} distribution over ALL possible next {term:token:tokens} in the {term:vocabulary:vocabulary}. During RLHF, we update the {term:policy:policy}'s {term:weights:weights} to favor {term:token:tokens} that lead to higher {term:reward:rewards}."
+          "content": "The {term:policy:policy} IS the LLM itself - the 'decision-making strategy' for generating text. In RL terms: the current context (prompt + tokens so far) is the 'state', and the next {term:token:token} to generate is the 'action'. The {term:policy:policy} outputs a {term:probability:probability} distribution over ALL possible next {term:token:tokens} in the {term:vocabulary:vocabulary}. During RLHF, we update the {term:policy:policy}'s {term:theta:weights} to favor {term:token:tokens} that lead to higher {term:reward:rewards}."
         },
         {
           "type": "divider"
@@ -739,12 +736,12 @@
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> User says 'Hi'<br><strong>Step 2:</strong> {term:policy:Policy π} outputs {term:probability:probabilities} for next {term:token:token}:<br><code class=\"code-block\">\n{'Hello': 0.15, 'Hi': 0.12, 'Hey': 0.08, ...49997 others}\n</code><br><strong>Step 3:</strong> Sampling picks 'Hello' → becomes context for next {term:token:token}<br><strong>Step 4:</strong> After RLHF, if 'Hello!' gets high {term:reward:reward}, {term:weights:θ} updates to increase {term:probability:P}('Hello')"
+          "content": "<strong>Step 1:</strong> User says 'Hi'<br><strong>Step 2:</strong> {term:policy:Policy π} outputs {term:probability:probabilities} for next {term:token:token}:<br><code class=\"code-block\">\n{'Hello': 0.15, 'Hi': 0.12, 'Hey': 0.08, ...49997 others}\n</code><br><strong>Step 3:</strong> Sampling picks 'Hello' → becomes context for next {term:token:token}<br><strong>Step 4:</strong> After RLHF, if 'Hello!' gets high {term:reward:reward}, {term:theta:θ} updates to increase {term:probability:P}('Hello')"
         },
         {
           "type": "llm",
           "title": "In LLMs (RLHF)",
-          "content": "<strong>Current policy {term:policy:π}_{term:theta:θ}:</strong> The LLM being trained. Its {term:weights:θ} change during RL.<br><br><strong>Reference policy {term:reference:π_ref}:</strong> Frozen copy of the SFT {term:model:model}. Used to compute {term:kl:KL} penalty.<br><br><strong>Old policy {term:policy:π}_{old}:</strong> In PPO/GRPO, the {term:policy:policy} from previous training step - used for importance sampling ratio."
+          "content": "<strong>Current policy {term:policy:π}_{term:theta:θ}:</strong> The LLM being trained. Its {term:theta:θ} change during RL.<br><br><strong>Reference policy {term:reference:π_ref}:</strong> Frozen copy of the SFT {term:model:model}. Used to compute {term:kl:KL} penalty.<br><br><strong>Old policy {term:policy:π}_{old}:</strong> In PPO/GRPO, the {term:policy:policy} from previous training step - used for importance sampling ratio."
         }
       ]
     },
@@ -785,7 +782,7 @@
         {
           "type": "intuitive",
           "title": "Intuitive Definition",
-          "content": "The {term:reference:reference} {term:policy:policy} ({term:reference:π_ref}) is a FROZEN snapshot of the SFT {term:model:model} taken before RL training begins. Its {term:weights:weights} are locked and never updated. Think of it as the 'anchor' - it tells us what 'normal' behavior looks like. The {term:kl:KL} penalty compares the current {term:policy:π}_θ against this anchor to prevent the RL {term:policy:policy} from drifting into weird territory."
+          "content": "The {term:reference:reference} {term:policy:policy} ({term:reference:π_ref}) is a FROZEN snapshot of the SFT {term:model:model} taken before RL training begins. Its {term:theta:weights} are locked and never updated. Think of it as the 'anchor' - it tells us what 'normal' behavior looks like. The {term:kl:KL} penalty compares the current {term:policy:π}_θ against this anchor to prevent the RL {term:policy:policy} from drifting into weird territory."
         },
         {
           "type": "divider"
@@ -793,13 +790,13 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "A frozen copy of the {term:policy:policy} {term:weights:weights} from the SFT stage. During RL, {term:reference:π_ref} provides baseline {term:probability:probabilities} for the {term:kl:KL} divergence penalty. Same architecture as {term:policy:π}_θ, but with fixed parameters.",
+          "content": "A frozen copy of the {term:policy:policy} {term:theta:weights} from the SFT stage. During RL, {term:reference:π_ref} provides baseline {term:probability:probabilities} for the {term:kl:KL} divergence penalty. Same architecture as {term:policy:π}_θ, but with fixed parameters.",
           "formula": "{term:reference:π_ref} = frozen(copy({term:policy:π}_{SFT})), where ∇{term:reference:π_ref} = 0 (no gradients)"
         },
         {
           "type": "example",
           "title": "Step-by-Step Example",
-          "content": "<strong>Step 1:</strong> Train SFT {term:model:model} on instruction data → Save checkpoint<br><strong>Step 2:</strong> Load two copies:<br>  • {term:reference:π_ref} = frozen SFT (eval mode, no_grad)<br>  • {term:policy:π}_θ = trainable copy (train mode)<br><strong>Step 3:</strong> For each prompt, compute {term:probability:probabilities} from BOTH<br><strong>Step 4:</strong> {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref}) penalizes divergence<br><strong>Step 5:</strong> Only {term:policy:π}_θ's {term:weights:weights} update; {term:reference:π_ref} stays fixed"
+          "content": "<strong>Step 1:</strong> Train SFT {term:model:model} on instruction data → Save checkpoint<br><strong>Step 2:</strong> Load two copies:<br>  • {term:reference:π_ref} = frozen SFT (eval mode, no_grad)<br>  • {term:policy:π}_θ = trainable copy (train mode)<br><strong>Step 3:</strong> For each prompt, compute {term:probability:probabilities} from BOTH<br><strong>Step 4:</strong> {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref}) penalizes divergence<br><strong>Step 5:</strong> Only {term:policy:π}_θ's {term:theta:weights} update; {term:reference:π_ref} stays fixed"
         },
         {
           "type": "llm",
@@ -895,7 +892,7 @@
     },
     "rlhf": {
       "title": "RLHF - RL from Human Feedback",
-      "color": "#8b5cf6",
+      "color": "#d8b4fe",
       "sections": [
         {
           "type": "intuitive",
@@ -920,7 +917,7 @@
     },
     "base-model": {
       "title": "Base Model - Pre-trained Foundation",
-      "color": "#64748b",
+      "color": "#334155",
       "sections": [
         {
           "type": "intuitive",

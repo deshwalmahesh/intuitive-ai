@@ -1014,12 +1014,12 @@
     }
   ],
   "colorPalette": {
-    "mutual-info": "#9333ea",
+    "mutual-info": "#a21caf",
     "epistemic-var": "#2563eb",
-    "aleatoric-var": "#dc2626",
-    "epistemic-info": "#4f46e5",
+    "aleatoric-var": "#7f1d1d",
+    "epistemic-info": "#818cf8",
     "aleatoric-info": "#e11d48",
-    "total": "#7e22ce"
+    "total": "#581c87"
   },
   "terms": {
     "mutual-info": {
@@ -1084,7 +1084,7 @@
     },
     "aleatoric-var": {
       "title": "Aleatoric Uncertainty (Variance Form)",
-      "color": "#dc2626",
+      "color": "#7f1d1d",
       "sections": [
         {
           "type": "equation-display",
@@ -1101,7 +1101,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:variance:variance} of {term:output:output y} given {term:input:input x} and that specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite {term:data:data} or a perfect {term:model:model}. It's intrinsic to the task."
+          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:variance:variance} of {term:output:output y} given {term:input:input x} and that specific {term:theta:θ}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - cannot be decreased even with infinite {term:data:data} or a perfect {term:model:model}. It's intrinsic to the task.",
+          "formula": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:variance:Var}({term:output:y}|{term:input:x}, {term:theta:θ})]"
         },
         {
           "type": "example",
@@ -1112,7 +1113,7 @@
     },
     "total-uncertainty": {
       "title": "Total Uncertainty",
-      "color": "#7e22ce",
+      "color": "#581c87",
       "sections": [
         {
           "type": "intuitive",
@@ -1139,7 +1140,7 @@
     },
     "mutual-info": {
       "title": "I - Mutual Information",
-      "color": "#9333ea",
+      "color": "#a21caf",
       "sections": [
         {
           "type": "intuitive",
@@ -1169,7 +1170,7 @@
     },
     "epistemic-info": {
       "title": "Epistemic Uncertainty (Info-Theoretic Form)",
-      "color": "#4f46e5",
+      "color": "#818cf8",
       "sections": [
         {
           "type": "equation-display",
@@ -1186,7 +1187,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:mutual-info:mutual information} between {term:output:output y} and {term:theta:model parameters θ}, conditioned on {term:input:input x} and {term:data:training data D}.<br><br>Computed as: {term:entropy:H}({term:output:y}|{term:input:x},{term:data:D}) − {term:expectation:E}[{term:entropy:H}({term:output:y}|{term:input:x},{term:theta:θ})]<br><br><strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more {term:data:data}."
+          "content": "The {term:mutual-info:mutual information} between {term:output:output y} and {term:theta:model parameters θ}, conditioned on {term:input:input x} and {term:data:training data D}.<br><br>Computed as: {term:entropy:H}({term:output:y}|{term:input:x},{term:data:D}) − {term:expectation:E}[{term:entropy:H}({term:output:y}|{term:input:x},{term:theta:θ})]<br><br><strong>Key property:</strong> <em>Reducible</em> - measures knowledge gap that can be closed with more {term:data:data}.",
+          "formula": "{term:mutual-info:I}({term:output:y}, {term:theta:θ} | {term:input:x}, {term:data:D})"
         },
         {
           "type": "example",
@@ -1214,7 +1216,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:entropy:entropy} of that {term:theta:model's} {term:posterior:probability distribution} over {term:output:output y}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - even with infinite {term:data:data}, this {term:entropy:entropy} remains because the {term:input:task itself} is ambiguous."
+          "content": "The {term:expectation:expected value} (average) computed across the {term:posterior:posterior distribution} over {term:theta:model parameters θ}, of the {term:entropy:entropy} of that {term:theta:model's} {term:posterior:probability distribution} over {term:output:output y}.<br><br><strong>Key property:</strong> <em>Irreducible</em> - even with infinite {term:data:data}, this {term:entropy:entropy} remains because the {term:input:task itself} is ambiguous.",
+          "formula": "{term:expectation:E}<sub>{term:posterior:p}({term:theta:θ}|{term:data:D})</sub>[{term:entropy:H}({term:posterior:p}({term:output:y}|{term:input:x}, {term:theta:θ}))]"
         },
         {
           "type": "example",

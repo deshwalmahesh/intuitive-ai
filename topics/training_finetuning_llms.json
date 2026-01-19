@@ -54,46 +54,46 @@
     ]
   },
   "colorPalette": {
-    "pre-training": "#059669",
-    "fine-tuning": "#7c3aed",
-    "causal-mask": "#dc2626",
-    "teacher-forcing": "#f59e0b",
-    "mlm": "#0891b2",
-    "cls-token": "#8b5cf6",
-    "bos-token": "#059669",
-    "eos-token": "#db2777",
-    "sft": "#4f46e5",
-    "encoder-only": "#2563eb",
-    "decoder-only": "#16a34a",
-    "attention-mask": "#ea580c",
-    "bce-loss": "#dc2626",
+    "pre-training": "#047857",
+    "fine-tuning": "#6d28d9",
+    "causal-mask": "#be123c",
+    "teacher-forcing": "#b45309",
+    "mlm": "#155e75",
+    "cls-token": "#9333ea",
+    "bos-token": "#6ee7b7",
+    "eos-token": "#ec4899",
+
+    "encoder-only": "#1d4ed8",
+    "decoder-only": "#14532d",
+    "attention-mask": "#c2410c",
+    "bce-loss": "#ef4444",
     "cce-loss": "#b91c1c",
     "mse-loss": "#991b1b",
-    "sigmoid-activation": "#ea580c",
-    "multi-class": "#2563eb",
-    "multi-label": "#16a34a",
-    "token-classification": "#7c3aed",
-    "lm-head": "#0891b2",
-    "hidden-state": "#6366f1",
-    "ner": "#059669",
-    "pos-tagging": "#0d9488",
-    "extractive-qa": "#7c3aed",
-    "mask-token": "#f59e0b",
-    "preference-data": "#f59e0b",
-    "system-prompt": "#0891b2",
-    "chat-template": "#db2777",
-    "reward-model": "#ea580c",
-    "full-finetuning": "#059669",
-    "partial-finetuning": "#2563eb",
-    "peft": "#7c3aed",
-    "lora": "#db2777",
-    "lora-rank": "#f59e0b",
-    "lora-alpha": "#0891b2",
-    "frozen-layer": "#64748b",
-    "trainable-layer": "#16a34a",
-    "prefix-tuning": "#8b5cf6",
-    "prompt-tuning": "#0d9488",
-    "adapter": "#ea580c"
+    "sigmoid-activation": "#fb923c",
+    "multi-class": "#1e40af",
+    "multi-label": "#4ade80",
+    "token-classification": "#5b21b6",
+    "lm-head": "#06b6d4",
+    "hidden-state": "#4338ca",
+    "ner": "#34d399",
+    "pos-tagging": "#0f766e",
+    "extractive-qa": "#a78bfa",
+    "mask-token": "#fcd34d",
+    "preference-data": "#a16207",
+    "system-prompt": "#22d3ee",
+    "chat-template": "#9d174d",
+    "reward-model": "#9a3412",
+    "full-finetuning": "#064e3b",
+    "partial-finetuning": "#60a5fa",
+    "peft": "#4c1d95",
+    "lora": "#831843",
+    "lora-rank": "#fbbf24",
+    "lora-alpha": "#67e8f9",
+    "frozen-layer": "#94a3b8",
+    "trainable-layer": "#22c55e",
+    "prefix-tuning": "#7e22ce",
+    "prompt-tuning": "#14b8a6",
+    "adapter": "#7c2d12"
   },
   "terms": {
     "pre-training": {
@@ -136,11 +136,7 @@
       "colorKey": "eos-token",
       "popupKey": "eos-token"
     },
-    "sft": {
-      "display": "SFT",
-      "colorKey": "sft",
-      "popupKey": "sft"
-    },
+
     "encoder-only": {
       "display": "Encoder-only",
       "colorKey": "encoder-only",
@@ -305,7 +301,7 @@
   "popups": {
     "pre-training": {
       "title": "Pre-training - Learning Language from Scratch",
-      "color": "#059669",
+      "color": "#047857",
       "sections": [
         {
           "type": "intuitive",
@@ -318,7 +314,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "The process of initializing {term:weights:model parameters} by training on a self-supervised objective (next token prediction or masked token prediction) over a large corpus. The {term:model:model} learns P(token|context) from the statistical patterns in text.",
+          "content": "The process of initializing {term:theta:model parameters} by training on a self-supervised objective (next token prediction or masked token prediction) over a large corpus. The {term:model:model} learns P(token|context) from the statistical patterns in text.",
           "formula": "{term:loss:L} = −{term:summation:Σ} log {term:probability:P}({term:token:t}_i | context)"
         },
         {
@@ -330,12 +326,12 @@
     },
     "fine-tuning": {
       "title": "Fine-tuning - Adapting for Your Task",
-      "color": "#7c3aed",
+      "color": "#6d28d9",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:fine-tuning:Fine-tuning} takes a {term:pre-training:pre-trained} {term:model:model} that already 'knows' language and adapts it for YOUR specific task using YOUR {term:data:labeled data}. Instead of training billions of {term:weights:parameters} from random values, you start from a {term:model:model} that already understands language! This is {term:transfer-learning:transfer learning}."
+          "content": "{term:fine-tuning:Fine-tuning} takes a {term:pre-training:pre-trained} {term:model:model} that already 'knows' language and adapts it for YOUR specific task using YOUR {term:data:labeled data}. Instead of training billions of {term:theta:parameters} from random values, you start from a {term:model:model} that already understands language! This is {term:transfer-learning:transfer learning}."
         },
         {
           "type": "divider"
@@ -343,8 +339,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Continuing training from {term:pre-training:pre-trained} {term:weights:weights} θ_pretrained on a task-specific dataset. The {term:model:model} adapts its representations while preserving general language knowledge. Can be full (all parameters) or partial (selected layers).",
-          "formula": "{term:weights:θ}_new = {term:weights:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}_{task}"
+          "content": "Continuing training from {term:pre-training:pre-trained} {term:theta:weights} θ_pretrained on a task-specific dataset. The {term:model:model} adapts its representations while preserving general language knowledge. Can be full (all parameters) or partial (selected layers).",
+          "formula": "{term:theta:θ}_new = {term:theta:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}_{task}"
         },
         {
           "type": "example",
@@ -355,7 +351,7 @@
     },
     "encoder-only": {
       "title": "Encoder-only Models (BERT-style)",
-      "color": "#2563eb",
+      "color": "#1d4ed8",
       "sections": [
         {
           "type": "intuitive",
@@ -380,7 +376,7 @@
     },
     "decoder-only": {
       "title": "Decoder-only Models (GPT/LLaMA-style)",
-      "color": "#16a34a",
+      "color": "#14532d",
       "sections": [
         {
           "type": "intuitive",
@@ -405,7 +401,7 @@
     },
     "mlm": {
       "title": "MLM - Masked Language Modeling",
-      "color": "#0891b2",
+      "color": "#155e75",
       "sections": [
         {
           "type": "intuitive",
@@ -430,7 +426,7 @@
     },
     "cls-token": {
       "title": "[CLS] - Classification Token",
-      "color": "#8b5cf6",
+      "color": "#9333ea",
       "sections": [
         {
           "type": "intuitive",
@@ -455,7 +451,7 @@
     },
     "causal-mask": {
       "title": "Causal Mask - Preventing Future Peeking",
-      "color": "#dc2626",
+      "color": "#be123c",
       "sections": [
         {
           "type": "intuitive",
@@ -480,7 +476,7 @@
     },
     "teacher-forcing": {
       "title": "Teacher Forcing - Parallel Training",
-      "color": "#f59e0b",
+      "color": "#b45309",
       "sections": [
         {
           "type": "intuitive",
@@ -505,7 +501,7 @@
     },
     "bos-token": {
       "title": "BOS - Beginning Of Sequence",
-      "color": "#059669",
+      "color": "#6ee7b7",
       "sections": [
         {
           "type": "intuitive",
@@ -530,7 +526,7 @@
     },
     "eos-token": {
       "title": "EOS - End Of Sequence",
-      "color": "#db2777",
+      "color": "#ec4899",
       "sections": [
         {
           "type": "intuitive",
@@ -553,34 +549,10 @@
         }
       ]
     },
-    "sft": {
-      "title": "SFT - Supervised Fine-Tuning",
-      "color": "#4f46e5",
-      "sections": [
-        {
-          "type": "intuitive",
-          "title": "What It Does",
-          "content": "{term:sft:SFT} teaches the {term:model:model} to follow instructions using human-written (instruction, response) pairs. The {term:model:model} learns patterns like 'when given this instruction, respond this way'. It's still next-{term:token:token} prediction - just on curated {term:data:data}!"
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "scientific",
-          "title": "",
-          "content": "Same {term:loss:loss} function as {term:pre-training:pre-training}! The key difference is the {term:data:data} format (instruction-response pairs) and optional prompt masking (labels=-100 for prompt {term:token:tokens} so they don't contribute to {term:loss:loss}).",
-          "formula": "{term:loss:L}_{SFT} = −{term:summation:Σ}_{response} log {term:probability:P}({term:token:t}_i | prompt, {term:token:t}_1...{term:token:t}_{i-1})"
-        },
-        {
-          "type": "example",
-          "title": "SFT Data Format",
-          "content": "<strong>JSONL format (industry standard):</strong><br><code class=\"code-block\">{\"messages\": [\n  {\"role\": \"system\", \"content\": \"You are helpful.\"},\n  {\"role\": \"user\", \"content\": \"Translate: Hello\"},\n  {\"role\": \"assistant\", \"content\": \"Bonjour\"}\n]}</code><br><br><strong>Key point:</strong> Loss is computed only on assistant response tokens! Prompt tokens have <code>labels = -100</code> (ignored by PyTorch CrossEntropyLoss)."
-        }
-      ]
-    },
+
     "attention-mask": {
       "title": "Attention Mask - Handling Padding",
-      "color": "#ea580c",
+      "color": "#c2410c",
       "sections": [
         {
           "type": "intuitive",
@@ -605,7 +577,7 @@
     },
     "bce-loss": {
       "title": "BCE - Binary Cross-Entropy Loss",
-      "color": "#dc2626",
+      "color": "#ef4444",
       "sections": [
         {
           "type": "intuitive",
@@ -680,7 +652,7 @@
     },
     "sigmoid-activation": {
       "title": "σ - Sigmoid Activation",
-      "color": "#ea580c",
+      "color": "#fb923c",
       "sections": [
         {
           "type": "intuitive",
@@ -705,7 +677,7 @@
     },
     "multi-class": {
       "title": "Multi-class Classification",
-      "color": "#2563eb",
+      "color": "#1e40af",
       "sections": [
         {
           "type": "intuitive",
@@ -730,7 +702,7 @@
     },
     "multi-label": {
       "title": "Multi-label Classification",
-      "color": "#16a34a",
+      "color": "#4ade80",
       "sections": [
         {
           "type": "intuitive",
@@ -755,7 +727,7 @@
     },
     "token-classification": {
       "title": "Token Classification",
-      "color": "#7c3aed",
+      "color": "#5b21b6",
       "sections": [
         {
           "type": "intuitive",
@@ -780,7 +752,7 @@
     },
     "lm-head": {
       "title": "LM Head - Language Model Head",
-      "color": "#0891b2",
+      "color": "#06b6d4",
       "sections": [
         {
           "type": "intuitive",
@@ -805,7 +777,7 @@
     },
     "hidden-state": {
       "title": "Hidden State",
-      "color": "#6366f1",
+      "color": "#4338ca",
       "sections": [
         {
           "type": "intuitive",
@@ -830,7 +802,7 @@
     },
     "ner": {
       "title": "NER - Named Entity Recognition",
-      "color": "#059669",
+      "color": "#34d399",
       "sections": [
         {
           "type": "intuitive",
@@ -854,7 +826,7 @@
     },
     "pos-tagging": {
       "title": "POS - Part-of-Speech Tagging",
-      "color": "#0d9488",
+      "color": "#0f766e",
       "sections": [
         {
           "type": "intuitive",
@@ -878,7 +850,7 @@
     },
     "extractive-qa": {
       "title": "Extractive QA - Span Extraction",
-      "color": "#7c3aed",
+      "color": "#a78bfa",
       "sections": [
         {
           "type": "intuitive",
@@ -903,7 +875,7 @@
     },
     "mask-token": {
       "title": "[MASK] - Mask Token",
-      "color": "#f59e0b",
+      "color": "#fcd34d",
       "sections": [
         {
           "type": "intuitive",
@@ -927,7 +899,7 @@
     },
     "preference-data": {
       "title": "Preference Data - Human Judgment in Data Form",
-      "color": "#f59e0b",
+      "color": "#a16207",
       "sections": [
         {
           "type": "intuitive",
@@ -952,7 +924,7 @@
     },
     "system-prompt": {
       "title": "System Prompt - The Model's Operating Instructions",
-      "color": "#0891b2",
+      "color": "#22d3ee",
       "sections": [
         {
           "type": "intuitive",
@@ -976,7 +948,7 @@
     },
     "chat-template": {
       "title": "Chat Template - Conversation → Tokens",
-      "color": "#db2777",
+      "color": "#9d174d",
       "sections": [
         {
           "type": "intuitive",
@@ -1006,7 +978,7 @@
     },
     "reward-model": {
       "title": "Reward Model - The Preference Scorer",
-      "color": "#ea580c",
+      "color": "#9a3412",
       "sections": [
         {
           "type": "intuitive",
@@ -1031,7 +1003,7 @@
     },
     "transfer-learning": {
       "title": "Transfer Learning - Knowledge Reuse",
-      "color": "#7c3aed",
+      "color": "#6d28d9",
       "sections": [
         {
           "type": "intuitive",
@@ -1044,7 +1016,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Initialize {term:model:model} with {term:pre-training:pre-trained} {term:weights:weights} instead of random values. Then {term:fine-tuning:fine-tune} on target task. The {term:pre-training:pre-trained} representations provide a strong starting point, requiring far less task-specific {term:data:data}."
+          "content": "Initialize {term:model:model} with {term:pre-training:pre-trained} {term:theta:weights} instead of random values. Then {term:fine-tuning:fine-tune} on target task. The {term:pre-training:pre-trained} representations provide a strong starting point, requiring far less task-specific {term:data:data}."
         },
         {
           "type": "example",
@@ -1055,12 +1027,12 @@
     },
     "full-finetuning": {
       "title": "Full Fine-tuning - Train Everything",
-      "color": "#059669",
+      "color": "#064e3b",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:full-finetuning:Full fine-tuning} updates ALL {term:weights:parameters} of the {term:model:model} - every single weight in every layer gets adjusted. It's like sending a student to a completely new school where everything they learned gets refined. Maximum flexibility but maximum cost."
+          "content": "{term:full-finetuning:Full fine-tuning} updates ALL {term:theta:parameters} of the {term:model:model} - every single weight in every layer gets adjusted. It's like sending a student to a completely new school where everything they learned gets refined. Maximum flexibility but maximum cost."
         },
         {
           "type": "divider"
@@ -1068,8 +1040,8 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "All {term:weights:parameters} θ in the {term:model:model} are {term:trainable-layer:trainable} and updated via gradient descent. Nothing is {term:frozen-layer:frozen}. This allows the {term:model:model} to maximally adapt but requires storing full optimizer states for every parameter.",
-          "formula": "{term:weights:θ}_new = {term:weights:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}"
+          "content": "All {term:theta:parameters} θ in the {term:model:model} are {term:trainable-layer:trainable} and updated via gradient descent. Nothing is {term:frozen-layer:frozen}. This allows the {term:model:model} to maximally adapt but requires storing full optimizer states for every parameter.",
+          "formula": "{term:theta:θ}_new = {term:theta:θ}_pretrained − η × {term:gradient:∇}{term:loss:L}"
         },
         {
           "type": "example",
@@ -1080,7 +1052,7 @@
     },
     "partial-finetuning": {
       "title": "Partial Fine-tuning - Selective Layer Training",
-      "color": "#2563eb",
+      "color": "#60a5fa",
       "sections": [
         {
           "type": "intuitive",
@@ -1094,7 +1066,7 @@
           "type": "scientific",
           "title": "",
           "content": "Selected layers have {term:trainable-layer:requires_grad=True}, others are {term:frozen-layer:frozen} (requires_grad=False). Common patterns: freeze all but last N transformer blocks, or freeze embedding + early layers while training attention/FFN in later layers.",
-          "formula": "{term:gradient:∇}{term:loss:L} computed only for {term:trainable-layer:unfrozen} {term:weights:θ}"
+          "formula": "{term:gradient:∇}{term:loss:L} computed only for {term:trainable-layer:unfrozen} {term:theta:θ}"
         },
         {
           "type": "example",
@@ -1105,7 +1077,7 @@
     },
     "peft": {
       "title": "PEFT - Parameter-Efficient Fine-Tuning",
-      "color": "#7c3aed",
+      "color": "#4c1d95",
       "sections": [
         {
           "type": "intuitive",
@@ -1118,7 +1090,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Keep all pretrained {term:weights:weights} {term:frozen-layer:frozen}. Add small {term:trainable-layer:trainable} modules (adapters, low-rank matrices, or soft prompts). Only new parameters are updated. Original model is preserved completely.",
+          "content": "Keep all pretrained {term:theta:weights} {term:frozen-layer:frozen}. Add small {term:trainable-layer:trainable} modules (adapters, low-rank matrices, or soft prompts). Only new parameters are updated. Original model is preserved completely.",
           "formula": "output = f_{term:frozen-layer:frozen}({term:input:x}) + g_{term:trainable-layer:adapter}({term:input:x})"
         },
         {
@@ -1130,7 +1102,7 @@
     },
     "lora": {
       "title": "LoRA - Low-Rank Adaptation",
-      "color": "#db2777",
+      "color": "#831843",
       "sections": [
         {
           "type": "intuitive",
@@ -1155,7 +1127,7 @@
     },
     "lora-rank": {
       "title": "r - LoRA Rank",
-      "color": "#f59e0b",
+      "color": "#fbbf24",
       "sections": [
         {
           "type": "intuitive",
@@ -1180,7 +1152,7 @@
     },
     "lora-alpha": {
       "title": "α (alpha) - LoRA Scaling Factor",
-      "color": "#0891b2",
+      "color": "#67e8f9",
       "sections": [
         {
           "type": "intuitive",
@@ -1205,12 +1177,12 @@
     },
     "frozen-layer": {
       "title": "Frozen Layers",
-      "color": "#64748b",
+      "color": "#94a3b8",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "A {term:frozen-layer:frozen} layer has its {term:weights:weights} fixed during training - {term:data:data} flows through it, but {term:gradient:gradients} don't update it. Like reading a textbook without highlighting - you use the knowledge but don't modify the book."
+          "content": "A {term:frozen-layer:frozen} layer has its {term:theta:weights} fixed during training - {term:data:data} flows through it, but {term:gradient:gradients} don't update it. Like reading a textbook without highlighting - you use the knowledge but don't modify the book."
         },
         {
           "type": "divider"
@@ -1218,7 +1190,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Set requires_grad=False on {term:weights:parameters}. The forward pass proceeds normally, but during backward pass, {term:gradient:gradients} are not computed for these {term:weights:weights}, and optimizer ignores them.",
+          "content": "Set requires_grad=False on {term:theta:parameters}. The forward pass proceeds normally, but during backward pass, {term:gradient:gradients} are not computed for these {term:theta:weights}, and optimizer ignores them.",
           "formula": "for param in frozen_layers: param.requires_grad = False"
         },
         {
@@ -1230,12 +1202,12 @@
     },
     "trainable-layer": {
       "title": "Trainable Layers",
-      "color": "#16a34a",
+      "color": "#22c55e",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:trainable-layer:Trainable} layers have their {term:weights:weights} updated during training based on {term:gradient:gradients}. These are the layers that 'learn' and adapt to your specific task."
+          "content": "{term:trainable-layer:Trainable} layers have their {term:theta:weights} updated during training based on {term:gradient:gradients}. These are the layers that 'learn' and adapt to your specific task."
         },
         {
           "type": "divider"
@@ -1243,7 +1215,7 @@
         {
           "type": "scientific",
           "title": "",
-          "content": "Layers with requires_grad=True. {term:gradient:Gradients} are computed during backward pass and optimizer updates these {term:weights:weights}. Memory for optimizer states (momentum, variance in AdamW) is allocated only for {term:trainable-layer:trainable} parameters."
+          "content": "Layers with requires_grad=True. {term:gradient:Gradients} are computed during backward pass and optimizer updates these {term:theta:weights}. Memory for optimizer states (momentum, variance in AdamW) is allocated only for {term:trainable-layer:trainable} parameters."
         },
         {
           "type": "example",
@@ -1254,12 +1226,12 @@
     },
     "prefix-tuning": {
       "title": "Prefix Tuning",
-      "color": "#8b5cf6",
+      "color": "#7e22ce",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
-          "content": "{term:prefix-tuning:Prefix tuning} adds learnable vectors to the Key and Value matrices of attention across multiple layers. It's like giving the {term:model:model} a 'learned context' that steers its attention without changing any original {term:weights:weights}."
+          "content": "{term:prefix-tuning:Prefix tuning} adds learnable vectors to the Key and Value matrices of attention across multiple layers. It's like giving the {term:model:model} a 'learned context' that steers its attention without changing any original {term:theta:weights}."
         },
         {
           "type": "divider"
@@ -1279,7 +1251,7 @@
     },
     "prompt-tuning": {
       "title": "Prompt Tuning",
-      "color": "#0d9488",
+      "color": "#14b8a6",
       "sections": [
         {
           "type": "intuitive",
@@ -1303,7 +1275,7 @@
     },
     "adapter": {
       "title": "Adapter Layers",
-      "color": "#ea580c",
+      "color": "#7c2d12",
       "sections": [
         {
           "type": "intuitive",
@@ -1336,7 +1308,7 @@
         {
           "type": "insight-box",
           "title": "The Core Idea",
-          "content": "<strong>Training</strong> = adjusting the {term:model:model}'s {term:weights:parameters} (billions of numbers) so that it produces useful outputs. Like adjusting the knobs on a radio until you get clear sound - except there are billions of knobs!"
+          "content": "<strong>Training</strong> = adjusting the {term:model:model}'s {term:theta:parameters} (billions of numbers) so that it produces useful outputs. Like adjusting the knobs on a radio until you get clear sound - except there are billions of knobs!"
         },
         {
           "type": "table",
@@ -1354,8 +1326,8 @@
             ],
             [
               "<strong>Starting Point</strong>",
-              "Random {term:weights:weights}",
-              "{term:pre-training:Pre-trained} {term:weights:weights}"
+              "Random {term:theta:weights}",
+              "{term:pre-training:Pre-trained} {term:theta:weights}"
             ],
             [
               "<strong>{term:data:Data}</strong>",
@@ -1382,7 +1354,7 @@
         {
           "type": "insight-box",
           "title": "What Does the Model Actually Learn?",
-          "content": "We don't know <em>exactly</em> what's stored in those billions of {term:weights:parameters}, but research suggests:<br><br>• <strong>Grammar & Syntax:</strong> Sentence structure, word order rules<br>• <strong>Semantics:</strong> Word meanings, relationships, synonyms<br>• <strong>World Knowledge:</strong> Facts about entities, events, history<br>• <strong>Reasoning Patterns:</strong> Logical inference, cause-effect relationships<br><br>The {term:model:model} learns from <em>statistical patterns</em> in the {term:data:data} - it sees 'Paris' following 'capital of France' millions of times!"
+          "content": "We don't know <em>exactly</em> what's stored in those billions of {term:theta:parameters}, but research suggests:<br><br>• <strong>Grammar & Syntax:</strong> Sentence structure, word order rules<br>• <strong>Semantics:</strong> Word meanings, relationships, synonyms<br>• <strong>World Knowledge:</strong> Facts about entities, events, history<br>• <strong>Reasoning Patterns:</strong> Logical inference, cause-effect relationships<br><br>The {term:model:model} learns from <em>statistical patterns</em> in the {term:data:data} - it sees 'Paris' following 'capital of France' millions of times!"
         },
         {
           "type": "html",
@@ -1898,7 +1870,7 @@
         {
           "type": "insight-box",
           "title": "Step-by-Step: How Base Model Training Works",
-          "content": "<strong>Step 1:</strong> Take raw text: 'The cat sat on the mat'<br><br><strong>Step 2:</strong> Create input-label pairs (shifted by 1):<br><code class=\"code-block\">Input:  [{term:bos-token:BOS}, The, cat, sat, on, the, mat]\nLabels: [The, cat, sat, on, the, mat, {term:eos-token:EOS}]</code><br><br><strong>Step 3:</strong> At each position, predict next {term:token:token}<br><br><strong>Step 4:</strong> Compute {term:loss:loss}: How wrong was the prediction?<br><code>{term:loss:L} = −log {term:probability:P}(correct)</code><br><br><strong>Step 5:</strong> Update {term:weights:weights} via {term:gradient:gradients}<br><br><strong>Repeat</strong> for trillions of {term:token:tokens}!"
+          "content": "<strong>Step 1:</strong> Take raw text: 'The cat sat on the mat'<br><br><strong>Step 2:</strong> Create input-label pairs (shifted by 1):<br><code class=\"code-block\">Input:  [{term:bos-token:BOS}, The, cat, sat, on, the, mat]\nLabels: [The, cat, sat, on, the, mat, {term:eos-token:EOS}]</code><br><br><strong>Step 3:</strong> At each position, predict next {term:token:token}<br><br><strong>Step 4:</strong> Compute {term:loss:loss}: How wrong was the prediction?<br><code>{term:loss:L} = −log {term:probability:P}(correct)</code><br><br><strong>Step 5:</strong> Update {term:theta:weights} via {term:gradient:gradients}<br><br><strong>Repeat</strong> for trillions of {term:token:tokens}!"
         },
         {
           "type": "table",
@@ -1971,8 +1943,8 @@
           "rows": [
             [
               "<strong>Starting Point</strong>",
-              "Random {term:weights:weights}",
-              "<strong><strong>Base model</strong> {term:weights:weights}</strong>"
+              "Random {term:theta:weights}",
+              "<strong><strong>Base model</strong> {term:theta:weights}</strong>"
             ],
             [
               "<strong>Training Data</strong>",
@@ -2084,7 +2056,7 @@
         {
           "type": "insight-box",
           "title": "Step-by-Step: The RLHF Pipeline",
-          "content": "<strong>Step 1: Collect {term:preference-data:Preference Data}</strong><br>• Generate multiple responses per prompt<br>• Humans rank: 'A is better than B'<br><br><strong>Step 2: Train {term:reward-model:Reward Model}</strong><br>• Input: (prompt, response) → Output: score<br>• Learns to predict human preference<br><code class=\"code-block\">{term:reward:R}('Helpful answer') = 0.85\n{term:reward:R}('Harmful answer') = -0.94</code><br><br><strong>Step 3: Optimize {term:policy:Policy} (the LLM)</strong><br>• Generate responses<br>• {term:reward-model:Reward model} scores them<br>• Update {term:weights:weights} to increase {term:reward:reward}<br>• {term:kl:KL} penalty prevents drifting too far from SFT"
+          "content": "<strong>Step 1: Collect {term:preference-data:Preference Data}</strong><br>• Generate multiple responses per prompt<br>• Humans rank: 'A is better than B'<br><br><strong>Step 2: Train {term:reward-model:Reward Model}</strong><br>• Input: (prompt, response) → Output: score<br>• Learns to predict human preference<br><code class=\"code-block\">{term:reward:R}('Helpful answer') = 0.85\n{term:reward:R}('Harmful answer') = -0.94</code><br><br><strong>Step 3: Optimize {term:policy:Policy} (the LLM)</strong><br>• Generate responses<br>• {term:reward-model:Reward model} scores them<br>• Update {term:theta:weights} to increase {term:reward:reward}<br>• {term:kl:KL} penalty prevents drifting too far from SFT"
         },
         {
           "type": "equation",
@@ -2257,7 +2229,7 @@
         {
           "type": "insight-box",
           "title": "The Training Pipeline (Typical Modern LLM)",
-          "content": "<strong>Phase 1: {term:pre-training:Pre-training}</strong> (~months, $millions)<br>Random {term:weights:weights} → Train on trillions of {term:token:tokens} → <strong>Base Model</strong><br><br><strong>Phase 2: {term:sft:SFT}</strong> (~days, $thousands)<br><strong>Base Model</strong> → Train on instruction {term:data:data} → <strong>Instruction Model</strong><br><br><strong>Phase 3: RLHF/DPO</strong> (~days, $thousands)<br><strong>Instruction Model</strong> → Train on {term:preference-data:preferences} → <strong>RL-Aligned Model</strong><br><br><strong>Result:</strong> ChatGPT, Claude, Gemini, LLaMA-Chat, etc."
+          "content": "<strong>Phase 1: {term:pre-training:Pre-training}</strong> (~months, $millions)<br>Random {term:theta:weights} → Train on trillions of {term:token:tokens} → <strong>Base Model</strong><br><br><strong>Phase 2: {term:sft:SFT}</strong> (~days, $thousands)<br><strong>Base Model</strong> → Train on instruction {term:data:data} → <strong>Instruction Model</strong><br><br><strong>Phase 3: RLHF/DPO</strong> (~days, $thousands)<br><strong>Instruction Model</strong> → Train on {term:preference-data:preferences} → <strong>RL-Aligned Model</strong><br><br><strong>Result:</strong> ChatGPT, Claude, Gemini, LLaMA-Chat, etc."
         },
         {
           "type": "html",
@@ -2328,7 +2300,7 @@
         {
           "type": "insight-box",
           "title": "How {term:full-finetuning:Full Fine-tuning} Works",
-          "content": "Update ALL {term:weights:parameters} in the {term:model:model}:<br><br><code class=\"code-block\">for param in model.parameters():\n    param.requires_grad = True  # Everything is trainable!\n\n# Standard training loop\nfor batch in data:\n    loss = model(batch)\n    loss.backward()     # Gradients for ALL 7B params\n    optimizer.step()    # Update ALL 7B params</code>"
+          "content": "Update ALL {term:theta:parameters} in the {term:model:model}:<br><br><code class=\"code-block\">for param in model.parameters():\n    param.requires_grad = True  # Everything is trainable!\n\n# Standard training loop\nfor batch in data:\n    loss = model(batch)\n    loss.backward()     # Gradients for ALL 7B params\n    optimizer.step()    # Update ALL 7B params</code>"
         },
         {
           "type": "insight-box",
@@ -2338,7 +2310,7 @@
         {
           "type": "insight-box",
           "title": "Step-by-Step: What Happens to Data",
-          "content": "<strong>Step 1:</strong> Input batch → Tokenized IDs<br><code class=\"code-block\">[\"Classify: Great movie!\"] → [345, 2883, 32, 1893, 999]</code><br><br><strong>Step 2:</strong> Forward pass through ALL layers (7B params active)<br>Input → Embeddings → 32 Transformer blocks → Hidden states<br><br><strong>Step 3:</strong> Compute {term:loss:loss}<br><code class=\"code-block\">loss = CrossEntropy(logits, labels)</code><br><br><strong>Step 4:</strong> Backward pass → {term:gradient:Gradients} for ALL 7B params!<br><br><strong>Step 5:</strong> {term:weights:Weights} updated everywhere:<br><code class=\"code-block\">θ_new = θ_old - lr × ∇L  # For all 7 billion params</code>"
+          "content": "<strong>Step 1:</strong> Input batch → Tokenized IDs<br><code class=\"code-block\">[\"Classify: Great movie!\"] → [345, 2883, 32, 1893, 999]</code><br><br><strong>Step 2:</strong> Forward pass through ALL layers (7B params active)<br>Input → Embeddings → 32 Transformer blocks → Hidden states<br><br><strong>Step 3:</strong> Compute {term:loss:loss}<br><code class=\"code-block\">loss = CrossEntropy(logits, labels)</code><br><br><strong>Step 4:</strong> Backward pass → {term:gradient:Gradients} for ALL 7B params!<br><br><strong>Step 5:</strong> {term:theta:Weights} updated everywhere:<br><code class=\"code-block\">θ_new = θ_old - lr × ∇L  # For all 7 billion params</code>"
         },
         {
           "type": "table",
@@ -2391,7 +2363,7 @@
         {
           "type": "insight-box",
           "title": "Step-by-Step: Data Flow",
-          "content": "<strong>Step 1:</strong> Input passes through {term:frozen-layer:frozen} layers 0-23<br>• Forward pass: Normal computation<br>• Backward pass: No {term:gradient:gradient} computation (faster!)<br><br><strong>Step 2:</strong> Input reaches {term:trainable-layer:trainable} layers 24-31<br>• Forward pass: Normal computation<br>• Backward pass: {term:gradient:Gradients} computed, {term:weights:weights} updated<br><br><strong>Memory saved:</strong> Optimizer states only for trainable layers:<ul><li>Full: 7B × 12 bytes = 84 GB optimizer states</li><li>Partial (25%): 1.75B × 12 bytes = 21 GB optimizer states</li></ul>"
+          "content": "<strong>Step 1:</strong> Input passes through {term:frozen-layer:frozen} layers 0-23<br>• Forward pass: Normal computation<br>• Backward pass: No {term:gradient:gradient} computation (faster!)<br><br><strong>Step 2:</strong> Input reaches {term:trainable-layer:trainable} layers 24-31<br>• Forward pass: Normal computation<br>• Backward pass: {term:gradient:Gradients} computed, {term:theta:weights} updated<br><br><strong>Memory saved:</strong> Optimizer states only for trainable layers:<ul><li>Full: 7B × 12 bytes = 84 GB optimizer states</li><li>Partial (25%): 1.75B × 12 bytes = 21 GB optimizer states</li></ul>"
         },
         {
           "type": "insight-box",

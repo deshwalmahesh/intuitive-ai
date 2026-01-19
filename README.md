@@ -1,10 +1,14 @@
 # Interactive Intuitive and Hype Free AI/ML Concepts
 
 > **"Making complex concepts click, literally."**  
-> Because reading papers shouldn't feel like deciphering ancient hieroglyphics.
+> Because understanding papers & concepts shouldn't exactly be how some loner people decided
 
 ---
 
+# This what you can expect from this Project. Enjoy the [Live Demo](https://deshwalmahesh.github.io/intuitive-ai/)
+https://github.com/user-attachments/assets/84ef8941-d6a6-43f6-87d7-144ab5668c14
+
+---
 ## Why This Exists (The Rant)
 
 We've all been there. You're reading a paper, vibing along, and then BAM:

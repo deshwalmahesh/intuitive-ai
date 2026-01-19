@@ -309,32 +309,56 @@ const Renderer = {
                 return sub;
                 
             case 'labeled-expression':
-                const label = document.createElement('div');
-                label.className = 'eq-label';
-                label.dataset.popup = part.popupKey;
+                // Use curly brace underbrace style (inline, no vertical stacking)
+                const labelWrapper = document.createElement('span');
+                labelWrapper.className = 'eq-brace-wrapper';
+                labelWrapper.dataset.popup = part.popupKey;
+                labelWrapper.style.cursor = 'pointer';
+                labelWrapper.style.display = 'inline-flex';
+                labelWrapper.style.flexDirection = 'column';
+                labelWrapper.style.alignItems = 'center';
+                labelWrapper.style.verticalAlign = 'top';
                 
+                // Expression content
                 const expr = document.createElement('span');
-                expr.className = `eq-part eq-underline-${part.underline || 'blue'}`;
+                expr.className = 'eq-part';
+                expr.style.display = 'inline-flex';
+                expr.style.alignItems = 'center';
                 
                 for (const exprPart of part.content || []) {
                     const rendered = this.renderEquationPart(exprPart);
                     if (rendered) expr.appendChild(rendered);
                 }
                 
-                label.appendChild(expr);
+                labelWrapper.appendChild(expr);
                 
-                // Arrow and label text
-                const arrow = document.createElement('span');
-                arrow.className = `eq-label-arrow c-${part.labelColor}`;
-                arrow.textContent = '↑';
-                label.appendChild(arrow);
+                // Curly brace that stretches to full width
+                const brace = document.createElement('span');
+                brace.style.display = 'block';
+                brace.style.width = '100%';
+                brace.style.textAlign = 'center';
+                brace.style.fontSize = '14px';
+                brace.style.lineHeight = '0.6';
+                brace.style.color = this.colorPalette[part.labelColor] || '#666';
+                brace.style.marginTop = '2px';
+                // Use CSS border trick for stretchy brace
+                brace.style.borderBottom = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
+                brace.style.borderLeft = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
+                brace.style.borderRight = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
+                brace.style.borderTop = 'none';
+                brace.style.borderRadius = '0 0 8px 8px';
+                brace.style.height = '6px';
+                labelWrapper.appendChild(brace);
                 
+                // Label text below the brace
                 const labelText = document.createElement('span');
-                labelText.className = `eq-label-text c-${part.labelColor}`;
+                labelText.className = `c-${part.labelColor}`;
+                labelText.style.fontSize = '11px';
+                labelText.style.fontWeight = '600';
                 labelText.textContent = part.label;
-                label.appendChild(labelText);
+                labelWrapper.appendChild(labelText);
                 
-                return label;
+                return labelWrapper;
                 
             default:
                 return null;

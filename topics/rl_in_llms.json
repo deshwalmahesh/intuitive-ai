@@ -15,14 +15,18 @@
           "slide-0-3",
           "slide-0-4"
         ]
+      },
+      {
+        "id": 1,
+        "title": "2. Famous Techniques",
+        "slides": [
+          "slide-1-1"
+        ]
       }
     ]
   },
   "colorPalette": {
-    "sft": "#0ea5e9",
-    "rlhf": "#8b5cf6",
     "rlvr": "#10b981",
-    "base-model": "#64748b",
     "pipeline": "#f59e0b"
   },
   "terms": {
@@ -47,12 +51,12 @@
         {
           "type": "scientific",
           "content": "Binary {term:reward:reward} from deterministic verifiers. No neural {term:reward:reward} {term:model:model}.",
-          "formula": "R(response) = verifier(response, ground_truth) ∈ {0, 1}"
+          "formula": "R(response) = verifier(response, ground_truth) \u2208 {0, 1}"
         },
         {
           "type": "example",
           "title": "Verification",
-          "content": "<strong>Math:</strong> \"847 × 23 = 19481\" → calculator → TRUE → R=1.0<br><strong>Code:</strong> is_prime → run_tests → pass → R=1.0<br><strong>Limit:</strong> Only verifiable tasks"
+          "content": "<strong>Math:</strong> \"847 \u00d7 23 = 19481\" \u2192 calculator \u2192 TRUE \u2192 R=1.0<br><strong>Code:</strong> is_prime \u2192 run_tests \u2192 pass \u2192 R=1.0<br><strong>Limit:</strong> Only verifiable tasks"
         }
       ]
     }
@@ -71,12 +75,12 @@
         {
           "type": "insight-box",
           "title": "How {term:sft:SFT} Creates the \"Average\"",
-          "content": "<strong>The Scenario:</strong> You have 5 examples of \"How to greet\".<br>• 2 examples say \"Hi!\"<br>• 2 examples say \"Hello there.\"<br>• 1 example says \"Greetings.\"<br><br><strong>The Mechanics:</strong><br>• {term:model:Model} predicts \"Hi\": {term:loss:Loss} = 0 for some, High for others.<br>• {term:gradient:Gradient} descent minimizes TOTAL {term:loss:loss}.<br>• <strong>Optimum:</strong> The {term:model:model} learns to output a probability distribution that mixes them: 40% Hi, 40% Hello, 20% Greetings.<br><br><strong>The Trap:</strong> It becomes a \"probabilistic average\" of the training data. It cannot be BETTER than the data."
+          "content": "<strong>The Scenario:</strong> You have 5 examples of \"How to greet\".<br>\u2022 2 examples say \"Hi!\"<br>\u2022 2 examples say \"Hello there.\"<br>\u2022 1 example says \"Greetings.\"<br><br><strong>The Mechanics:</strong><br>\u2022 {term:model:Model} predicts \"Hi\": {term:loss:Loss} = 0 for some, High for others.<br>\u2022 {term:gradient:Gradient} descent minimizes TOTAL {term:loss:loss}.<br>\u2022 <strong>Optimum:</strong> The {term:model:model} learns to output a probability distribution that mixes them: 40% Hi, 40% Hello, 20% Greetings.<br><br><strong>The Trap:</strong> It becomes a \"probabilistic average\" of the training data. It cannot be BETTER than the data."
         },
         {
           "type": "insight-box",
           "title": "How RL Finds the \"Peak\"",
-          "content": "<strong>The Scenario:</strong> Same greeting task, but we score them.<br>• \"Hi!\" → {term:reward:R} = 0.5<br>• \"Hello there.\" → {term:reward:R} = 0.6<br>• \"Greetings.\" → {term:reward:R} = 0.9 (User loves this one!)<br><br><strong>The Mechanics:</strong><br>• RL objective: Maximize Expected {term:reward:Reward}.<br>• {term:policy:Policy} Update: <strong>Shift probability mass</strong> from low reward to high reward.<br>• {term:gradient:Gradient} pushes P(\"Greetings\") → 1.0.<br><br><strong>Result:</strong> The {term:model:model} IGNORES the \"average\" (Hi/Hello) and collapses onto the \"peak\" strategy (Greetings). It surpasses the majority of its training data!"
+          "content": "<strong>The Scenario:</strong> Same greeting task, but we score them.<br>\u2022 \"Hi!\" \u2192 {term:reward:R} = 0.5<br>\u2022 \"Hello there.\" \u2192 {term:reward:R} = 0.6<br>\u2022 \"Greetings.\" \u2192 {term:reward:R} = 0.9 (User loves this one!)<br><br><strong>The Mechanics:</strong><br>\u2022 RL objective: Maximize Expected {term:reward:Reward}.<br>\u2022 {term:policy:Policy} Update: <strong>Shift probability mass</strong> from low reward to high reward.<br>\u2022 {term:gradient:Gradient} pushes P(\"Greetings\") \u2192 1.0.<br><br><strong>Result:</strong> The {term:model:model} IGNORES the \"average\" (Hi/Hello) and collapses onto the \"peak\" strategy (Greetings). It surpasses the majority of its training data!"
         },
         {
           "type": "html",
@@ -97,22 +101,22 @@
         {
           "type": "insight-box",
           "title": "RL Training Loop",
-          "content": "<strong>There IS no fixed dataset.</strong> The {term:model:model} generates its own training {term:data:data}!<br><br><strong>1.</strong> Prompt: \"Explain quantum physics simply\"<br><strong>2.</strong> {term:model:Model} generates multiple responses<br>&nbsp;&nbsp;&nbsp;• A: \"Particles can be waves...\" → {term:reward:R} = 0.73<br>&nbsp;&nbsp;&nbsp;• B: \"Imagine tiny balls...\" → {term:reward:R} = 0.89 ← Best!<br>&nbsp;&nbsp;&nbsp;• C: \"Quantum mechanics states...\" → {term:reward:R} = 0.62<br><strong>3.</strong> Update: Make {term:model:model} more likely to generate B-like responses<br><br>The {term:model:model} explores and learns which STRATEGIES work."
+          "content": "<strong>There IS no fixed dataset.</strong> The {term:model:model} generates its own training {term:data:data}!<br><br><strong>1.</strong> Prompt: \"Explain quantum physics simply\"<br><strong>2.</strong> {term:model:Model} generates multiple responses<br>&nbsp;&nbsp;&nbsp;\u2022 A: \"Particles can be waves...\" \u2192 {term:reward:R} = 0.73<br>&nbsp;&nbsp;&nbsp;\u2022 B: \"Imagine tiny balls...\" \u2192 {term:reward:R} = 0.89 \u2190 Best!<br>&nbsp;&nbsp;&nbsp;\u2022 C: \"Quantum mechanics states...\" \u2192 {term:reward:R} = 0.62<br><strong>3.</strong> Update: Make {term:model:model} more likely to generate B-like responses<br><br>The {term:model:model} explores and learns which STRATEGIES work."
         },
         {
           "type": "insight-box",
           "title": "Step-by-Step RL Training",
-          "content": "<strong>Step 1 - Generate:</strong><br>• Prompt: \"What is 12 × 15?\" → Response: \"Let me calculate: 180\"<br><br><strong>Step 2 - Score:</strong><br>• {term:rlhf:RLHF}: Neural {term:reward:reward} {term:model:model} → {term:reward:R} = 0.78<br>• {term:rlvr:RLVR}: Rule verifier → {term:reward:R} = 1.0 (correct!)<br><br><strong>Step 3 - Advantage:</strong><br>• Was this better than expected? {term:advantage:A} = 0.78 - 0.65 = +0.13<br><br><strong>Step 4 - Update:</strong><br>• Increase {term:probability:P} of {term:token:tokens} that led to high {term:reward:reward}<br>• {term:kl:KL} penalty keeps {term:model:model} from drifting too far from {term:sft:SFT}"
+          "content": "<strong>Step 1 - Generate:</strong><br>\u2022 Prompt: \"What is 12 \u00d7 15?\" \u2192 Response: \"Let me calculate: 180\"<br><br><strong>Step 2 - Score:</strong><br>\u2022 {term:rlhf:RLHF}: Neural {term:reward:reward} {term:model:model} \u2192 {term:reward:R} = 0.78<br>\u2022 {term:rlvr:RLVR}: Rule verifier \u2192 {term:reward:R} = 1.0 (correct!)<br><br><strong>Step 3 - Advantage:</strong><br>\u2022 Was this better than expected? {term:advantage:A} = 0.78 - 0.65 = +0.13<br><br><strong>Step 4 - Update:</strong><br>\u2022 Increase {term:probability:P} of {term:token:tokens} that led to high {term:reward:reward}<br>\u2022 {term:kl:KL} penalty keeps {term:model:model} from drifting too far from {term:sft:SFT}"
         },
         {
           "type": "insight-box",
           "title": "Why RL Generalizes Better",
-          "content": "<strong>{term:sft:SFT}:</strong> \"Problems like X → responses like Y\"<br><strong>RL:</strong> \"Doing Z gets high {term:reward:rewards}. Do more Z.\"<br><br><strong>Math example:</strong><br>• {term:sft:SFT}: Copies \"23×17=391\"<br>• RL: Discovers strategies that transfer:<br>&nbsp;&nbsp;&nbsp;• Break into steps: 23×17 = 23×10 + 23×7 = 391<br>&nbsp;&nbsp;&nbsp;• Verify: \"391/23 = 17 \"<br><br>{term:sft:SFT} memorized one answer. RL found transferable strategy.<br><br><strong>Result:</strong> RL shows +3% to +61% on out-of-distribution tasks."
+          "content": "<strong>{term:sft:SFT}:</strong> \"Problems like X \u2192 responses like Y\"<br><strong>RL:</strong> \"Doing Z gets high {term:reward:rewards}. Do more Z.\"<br><br><strong>Math example:</strong><br>\u2022 {term:sft:SFT}: Copies \"23\u00d717=391\"<br>\u2022 RL: Discovers strategies that transfer:<br>&nbsp;&nbsp;&nbsp;\u2022 Break into steps: 23\u00d717 = 23\u00d710 + 23\u00d77 = 391<br>&nbsp;&nbsp;&nbsp;\u2022 Verify: \"391/23 = 17 \"<br><br>{term:sft:SFT} memorized one answer. RL found transferable strategy.<br><br><strong>Result:</strong> RL shows +3% to +61% on out-of-distribution tasks."
         },
         {
           "type": "insight-box",
           "title": "The {term:kl:KL} Penalty - Why We Need a Leash",
-          "content": "<strong>Problem:</strong> Without constraints, RL can \"hack\" the {term:reward:reward} {term:model:model}.<br>• \"AMAZING! PERFECT! WOW!\" × 50 → {term:reward:R} = 0.99 (oops)<br><br><strong>Solution:</strong> {term:kl:KL} penalty keeps {term:model:model} near {term:sft:SFT} baseline"
+          "content": "<strong>Problem:</strong> Without constraints, RL can \"hack\" the {term:reward:reward} {term:model:model}.<br>\u2022 \"AMAZING! PERFECT! WOW!\" \u00d7 50 \u2192 {term:reward:R} = 0.99 (oops)<br><br><strong>Solution:</strong> {term:kl:KL} penalty keeps {term:model:model} near {term:sft:SFT} baseline"
         },
         {
           "type": "equation",
@@ -130,7 +134,7 @@
             },
             {
               "type": "raw",
-              "text": " - β × "
+              "text": " - \u03b2 \u00d7 "
             },
             {
               "type": "term",
@@ -144,7 +148,7 @@
           ],
           "explanation": {
             "prefix": "",
-            "template": "<strong>β controls the leash:</strong> β=0 (no leash, chaos), β=0.1 (explore reasonably), β=1.0 (tight). Typical: β ∈ [0.01, 0.1]"
+            "template": "<strong>\u03b2 controls the leash:</strong> \u03b2=0 (no leash, chaos), \u03b2=0.1 (explore reasonably), \u03b2=1.0 (tight). Typical: \u03b2 \u2208 [0.01, 0.1]"
           }
         }
       ]
@@ -162,7 +166,7 @@
         {
           "type": "insight-box",
           "title": "Two Types of Alignment",
-          "content": "<strong>Type A: Preference ({term:rlhf:RLHF})</strong><br>• Goal: Helpful, harmless, honest<br>• Domain: Chatbots, assistants<br>• {term:reward:Reward}: Learned from human preferences<br><br><strong>Type B: Reasoning ({term:rlvr:RLVR})</strong><br>• Goal: CORRECT for verifiable tasks<br>• Domain: Math, code, logic<br>• {term:reward:Reward}: Binary from automated verifiers<br><br>{term:rlhf:RLHF} = \"don't be harmful\" | {term:rlvr:RLVR} = \"get right answer\""
+          "content": "<strong>Type A: Preference ({term:rlhf:RLHF})</strong><br>\u2022 Goal: Helpful, harmless, honest<br>\u2022 Domain: Chatbots, assistants<br>\u2022 {term:reward:Reward}: Learned from human preferences<br><br><strong>Type B: Reasoning ({term:rlvr:RLVR})</strong><br>\u2022 Goal: CORRECT for verifiable tasks<br>\u2022 Domain: Math, code, logic<br>\u2022 {term:reward:Reward}: Binary from automated verifiers<br><br>{term:rlhf:RLHF} = \"don't be harmful\" | {term:rlvr:RLVR} = \"get right answer\""
         },
         {
           "type": "table",
@@ -202,12 +206,12 @@
         {
           "type": "insight-box",
           "title": "{term:rlhf:RLHF}: Human Preference Alignment",
-          "content": "<strong>Step 1 - Collect Preferences:</strong><br>• Prompt: \"Best way to lose weight?\"<br>• A: \"Diet pills! Lose 30 lbs fast!\" | B: \"Gradual diet/exercise changes...\"<br>• Human: B is better (safer)<br><br><strong>Step 2 - Train {term:reward:Reward} Model:</strong><br>• Learns: {term:reward:R}(B-like) = 0.85, {term:reward:R}(A-like) = 0.20<br><br><strong>Step 3 - RL:</strong> Generate → Score → Learn to generate B-like<br><br><strong>Issues:</strong> $$$ for humans, subjective, can be gamed"
+          "content": "<strong>Step 1 - Collect Preferences:</strong><br>\u2022 Prompt: \"Best way to lose weight?\"<br>\u2022 A: \"Diet pills! Lose 30 lbs fast!\" | B: \"Gradual diet/exercise changes...\"<br>\u2022 Human: B is better (safer)<br><br><strong>Step 2 - Train {term:reward:Reward} Model:</strong><br>\u2022 Learns: {term:reward:R}(B-like) = 0.85, {term:reward:R}(A-like) = 0.20<br><br><strong>Step 3 - RL:</strong> Generate \u2192 Score \u2192 Learn to generate B-like<br><br><strong>Issues:</strong> $$$ for humans, subjective, can be gamed"
         },
         {
           "type": "insight-box",
           "title": "{term:rlvr:RLVR}: Verifiable Rewards",
-          "content": "<strong>No humans for scoring!</strong><br><br><strong>Math:</strong> \"847 × 23 = ?\" → \"19,481\" → calculator.check() → TRUE → {term:reward:R}=1.0<br><br><strong>Code:</strong> is_prime() → run_tests([2→True, 4→False]) → pass → {term:reward:R}=1.0<br><br><strong>Why powerful:</strong> No annotation cost, objective, scales infinitely<br><strong>Limit:</strong> Only verifiable tasks. Can't verify \"is essay good?\""
+          "content": "<strong>No humans for scoring!</strong><br><br><strong>Math:</strong> \"847 \u00d7 23 = ?\" \u2192 \"19,481\" \u2192 calculator.check() \u2192 TRUE \u2192 {term:reward:R}=1.0<br><br><strong>Code:</strong> is_prime() \u2192 run_tests([2\u2192True, 4\u2192False]) \u2192 pass \u2192 {term:reward:R}=1.0<br><br><strong>Why powerful:</strong> No annotation cost, objective, scales infinitely<br><strong>Limit:</strong> Only verifiable tasks. Can't verify \"is essay good?\""
         }
       ]
     },
@@ -219,22 +223,299 @@
         {
           "type": "insight-box",
           "title": "1. The Standard Pipeline (SFT then RL)",
-          "content": "<strong>Path:</strong> {term:base-model:Pre-train} → {term:sft:SFT} → RL({term:rlhf:RLHF}/GRPO)<br><br><strong>Why SFT first?</strong><br>RL needs a \"reasonable\" starting point. If the {term:model:model} speaks gibberish, it gets 0 {term:reward:reward} everywhere and learns nothing (the \"cold start\" problem). {term:sft:SFT} teaches the <strong>format</strong> and basic <strong>instruction following</strong> so RL has something to optimize.<br><br><strong>Analogy:</strong> Teach a kid the rules of chess (SFT) before training them to become a grandmaster (RL)."
+          "content": "<strong>Path:</strong> {term:base-model:Pre-train} \u2192 {term:sft:SFT} \u2192 RL({term:rlhf:RLHF}/GRPO)<br><br><strong>Why SFT first?</strong><br>RL needs a \"reasonable\" starting point. If the {term:model:model} speaks gibberish, it gets 0 {term:reward:reward} everywhere and learns nothing (the \"cold start\" problem). {term:sft:SFT} teaches the <strong>format</strong> and basic <strong>instruction following</strong> so RL has something to optimize.<br><br><strong>Analogy:</strong> Teach a kid the rules of chess (SFT) before training them to become a grandmaster (RL)."
         },
         {
           "type": "insight-box",
           "title": "2. The DeepSeek-R1-Zero Pipeline (Direct RL on Base Model)",
-          "content": "<strong>Path:</strong> {term:base-model:Pre-train} → RL (Directly!)<br><br><strong>The Experiment:</strong> Can reasoning <em>emerge</em> from pure optimization, without human demos?<br><br><strong>How:</strong> Apply RL with strict verifiable {term:reward:rewards} (Math/Code correct=1, wrong=0) directly to the base {term:model:model}.<br><strong>Result:</strong> It worked! The {term:model:model} *invented* \"Chain of Thought\" (`<think>...`) because thinking longer increased success rates.<br><strong>The Cost:</strong> Without SFT, the output was ugly (no spaces, mixed languages). It was smart but unreadable."
+          "content": "<strong>Path:</strong> {term:base-model:Pre-train} \u2192 RL (Directly!)<br><br><strong>The Experiment:</strong> Can reasoning <em>emerge</em> from pure optimization, without human demos?<br><br><strong>How:</strong> Apply RL with strict verifiable {term:reward:rewards} (Math/Code correct=1, wrong=0) directly to the base {term:model:model}.<br><strong>Result:</strong> It worked! The {term:model:model} *invented* \"Chain of Thought\" (`<think>...`) because thinking longer increased success rates.<br><strong>The Cost:</strong> Without SFT, the output was ugly (no spaces, mixed languages). It was smart but unreadable."
         },
         {
           "type": "insight-box",
           "title": "3. The DeepSeek-R1 Production Pipeline (4-Stage)",
-          "content": "To get \"Zero's\" smarts with \"Standard\" readability, they built this:<br><br><strong>Stage 1: Cold-Start {term:sft:SFT}</strong><br>• Small set of high-quality reasoning. Prevents chaotic formatting.<br><br><strong>Stage 2: Reasoning RL</strong><br>• Train until reasoning capability matches R1-Zero.<br><br><strong>Stage 3: Rejection Sampling (The SFT Generator)</strong><br>• Use Stage 2 {term:model:model} to generate millions of solutions.<br>• Filter: Keep only those that are Correct AND Readable.<br>• Result: 800K perfect synthetic SFT examples.<br><br><strong>Stage 4: Full {term:sft:SFT} + {term:rlhf:RLHF}</strong><br>• Fine-tune on the 800K synthetic data. Then apply {term:rlhf:RLHF} for safety."
+          "content": "To get \"Zero's\" smarts with \"Standard\" readability, they built this:<br><br><strong>Stage 1: Cold-Start {term:sft:SFT}</strong><br>\u2022 Small set of high-quality reasoning. Prevents chaotic formatting.<br><br><strong>Stage 2: Reasoning RL</strong><br>\u2022 Train until reasoning capability matches R1-Zero.<br><br><strong>Stage 3: Rejection Sampling (The SFT Generator)</strong><br>\u2022 Use Stage 2 {term:model:model} to generate millions of solutions.<br>\u2022 Filter: Keep only those that are Correct AND Readable.<br>\u2022 Result: 800K perfect synthetic SFT examples.<br><br><strong>Stage 4: Full {term:sft:SFT} + {term:rlhf:RLHF}</strong><br>\u2022 Fine-tune on the 800K synthetic data. Then apply {term:rlhf:RLHF} for safety."
         },
         {
           "type": "insight-box",
           "title": "4. Joint Training Pipeline (SFT + RL together)",
-          "content": "<strong>The Problem:</strong> Doing RL <em>after</em> SFT often makes the {term:model:model} \"forget\" SFT formatting (Alignment Tax).<br><br><strong>The Solution (Joint):</strong> <a href=\"https://arxiv.org/html/2508.11408v2\">Train on BOTH objectives simultaneously.</a><br><code>Loss = Loss_RL + λ * Loss_SFT</code><br><br>• The {term:sft:SFT} loss keeps the {term:model:model} anchored to correct formatting.<br>• The RL loss pushes for better strategies.<br>• <strong>Result:</strong> High performance without the \"alien\" behavior of Pure RL."
+          "content": "<strong>The Problem:</strong> Doing RL <em>after</em> SFT often makes the {term:model:model} \"forget\" SFT formatting (Alignment Tax).<br><br><strong>The Solution (Joint):</strong> <a href=\"https://arxiv.org/html/2508.11408v2\">Train on BOTH objectives simultaneously.</a><br><div class=\"popup-equation\">{term:loss:L} = {term:loss:L}_RL + \u03bb \u00d7 {term:loss:L}_SFT</div><br>\u2022 The {term:sft:SFT} loss keeps the {term:model:model} anchored to correct formatting.<br>\u2022 The RL loss pushes for better strategies.<br>\u2022 <strong>Result:</strong> High performance without the \"alien\" behavior of Pure RL."
+        }
+      ]
+    },
+    {
+      "id": "slide-1-1",
+      "sectionIndex": 1,
+      "title": "PPO - RLHF: The OG",
+      "content": [
+        {
+          "type": "equation",
+          "id": "ppo_rlhf_objective",
+          "label": "The PPO-RLHF Objective",
+          "parts": [
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "raw",
+              "text": "^PPO = "
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "green",
+              "label": "Reward Signal",
+              "labelColor": "advantage",
+              "popupKey": "advantage",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "expectation",
+                  "text": "E"
+                },
+                {
+                  "type": "raw",
+                  "text": "[min("
+                },
+                {
+                  "type": "term",
+                  "key": "ppo-ratio",
+                  "text": "r_t"
+                },
+                {
+                  "type": "raw",
+                  "text": " \u00d7 "
+                },
+                {
+                  "type": "term",
+                  "key": "advantage",
+                  "text": "A"
+                },
+                {
+                  "type": "raw",
+                  "text": ", clip("
+                },
+                {
+                  "type": "term",
+                  "key": "ppo-ratio",
+                  "text": "r_t"
+                },
+                {
+                  "type": "raw",
+                  "text": ", 1\u2212"
+                },
+                {
+                  "type": "term",
+                  "key": "clip-epsilon",
+                  "text": "\u03b5"
+                },
+                {
+                  "type": "raw",
+                  "text": ", 1+"
+                },
+                {
+                  "type": "term",
+                  "key": "clip-epsilon",
+                  "text": "\u03b5"
+                },
+                {
+                  "type": "raw",
+                  "text": ") \u00d7 "
+                },
+                {
+                  "type": "term",
+                  "key": "advantage",
+                  "text": "A"
+                },
+                {
+                  "type": "raw",
+                  "text": ")]"
+                }
+              ]
+            },
+            {
+              "type": "operator",
+              "symbol": "\u2212"
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "pink",
+              "label": "Stability Leash",
+              "labelColor": "kl",
+              "popupKey": "kl",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "beta",
+                  "text": "\u03b2"
+                },
+                {
+                  "type": "raw",
+                  "text": " \u00d7 "
+                },
+                {
+                  "type": "term",
+                  "key": "kl",
+                  "text": "KL"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "policy",
+                  "text": "\u03c0_\u03b8"
+                },
+                {
+                  "type": "raw",
+                  "text": " || "
+                },
+                {
+                  "type": "term",
+                  "key": "reference",
+                  "text": "\u03c0_ref"
+                },
+                {
+                  "type": "raw",
+                  "text": ")"
+                }
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>What it means:</strong> ",
+            "template": "We want our {term:policy:LLM} to get better at pleasing humans. So we let it {term:output:generate} many {term:output:responses} to the same {term:input:prompt}, {term:reward:score} each one, and ask: \"Was this {term:output:response} better or worse than we {term:expectation:expected}?\" That's what the {term:advantage:Reward Signal} captures \u2014 it tells us which {term:output:responses} deserve more credit. If a {term:output:response} was surprisingly good (positive {term:advantage:advantage}), we nudge our {term:policy:LLM}'s {term:theta:weights} to {term:output:generate} more like it.<br><br>But here's the catch: if we push too hard, the {term:policy:LLM} might go crazy \u2014 maybe it learns to spam \"AMAZING!!\" a hundred times because that hacks the {term:reward:scorer}. That's where the {term:kl:Stability Leash} comes in. It constantly checks: \"How different is our {term:policy:current LLM} from the {term:reference:original safe version}?\" If it drifts too far, we yank it back.<br><br>The {term:clip-epsilon:clipping} inside the {term:advantage:Reward Signal} adds another safety net: even if a {term:output:response} was amazing, we cap how much we can change the {term:theta:weights} in one step. Small, stable steps. No wild swings."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "Let's tackle the jargon first!",
+          "content": "1. {term:policy:Policy} ({term:policy:\u03c0}_\u03b8):</strong> The LLM we're actively training. Its {term:theta:weights} change every step.<br><br><strong>2. {term:reference:Reference} ({term:reference:\u03c0_ref}):</strong> Frozen copy of the {term:sft:SFT} {term:model:model}. Never updates. Used to compute how far we've drifted ({term:kl:KL} penalty).<br><br><strong>3. {term:reward:Reward Model} (r_\u03c6):</strong> A separate LLM with a linear head on top. Takes (prompt, response) \u2192 outputs single score. Trained on human preference pairs (Bradley-Terry).<br><br><strong>4. {term:value:Critic} (V):</strong> Predicts {term:expectation:expected} {term:reward:reward} before seeing the response. Used to compute: 'Was this better or worse than expected?' ({term:advantage:Advantage})<br><br><strong>Memory Cost:</strong> 4 \u00d7 14GB (for 7B {term:model:model} in FP16) = ~56GB just for {term:theta:weights}!"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: From Prompt to Weight Update",
+          "content": "<strong>Example Prompt:</strong> 'Explain gravity to a 5-year-old'<br><br><strong>Step 1: GENERATE</strong><br>\u2022 <strong>Input:</strong> Prompt \u2192 {term:policy:main LLM}<br>\u2022 <strong>Output:</strong> 'Gravity is like invisible strings that pull things down to the ground!'<br>\u2022 <strong>What happens:</strong> Give the {term:policy:main LLM} a prompt \u2192 it generates a response. Each {term:token:token} has a {term:probability:probability}. We save these for later.<br><br><strong>Step 2: SCORE</strong><br>\u2022 <strong>Input:</strong> (Prompt, Response) \u2192 {term:reward:Scoring LLM}<br>\u2022 <strong>Output:</strong> {term:reward:R} = 0.85 (good simple explanation!)<br>\u2022 <strong>Why:</strong> The {term:reward:Scoring LLM} rates it ('This is 0.85 good'). This is our 'ground truth'.<br><br><strong>Step 3: COMPUTE {term:advantage:ADVANTAGE}</strong><br>\u2022 <strong>Input:</strong> {term:reward:R} = 0.85, {term:value:V} = 0.70 ({term:value:critic}'s prediction)<br>\u2022 <strong>Output:</strong> {term:advantage:A} = 0.85 - 0.70 = +0.15<br>\u2022 <strong>Why:</strong> Compare to what the {term:value:Critic} predicted ('I expected 0.70'). +0.15 means 'better than expected!' \u2192 reinforce this behavior.<br><br><strong>Step 4: COMPUTE {term:ppo-ratio:RATIO}</strong><br>\u2022 <strong>Input:</strong> {term:policy:\u03c0}_new('strings') = 0.25, {term:policy:\u03c0}_old('strings') = 0.10<br>\u2022 <strong>Output:</strong> {term:ppo-ratio:r_t} = 0.25 / 0.10 = 2.5<br>\u2022 <strong>Why:</strong> How much did our {term:model:model}'s preference for this {term:token:token} change?<br><br><strong>Step 5: CLIP THE {term:ppo-ratio:RATIO}</strong><br>\u2022 <strong>Input:</strong> {term:ppo-ratio:r_t} = 2.5, {term:clip-epsilon:\u03b5} = 0.2<br>\u2022 <strong>Output:</strong> clip(2.5, 0.8, 1.2) = 1.2 (bounded!)<br>\u2022 <strong>Why:</strong> But DON'T let it change too much! We limit how aggressively we update to prevent training collapse.<br><br><strong>Step 6: COMPUTE {term:kl:KL} PENALTY</strong><br>\u2022 <strong>Input:</strong> {term:token:Token} distributions from {term:policy:\u03c0}_\u03b8 and {term:reference:\u03c0_ref}<br>\u2022 <strong>Output:</strong> {term:kl:KL} = 0.03<br>\u2022 <strong>Why:</strong> Prevents the {term:model:model} from drifting too far from the {term:reference:original model}. Catches 'reward hacking'.<br><br><strong>Step 7: UPDATE {term:theta:WEIGHTS}</strong><br>\u2022 <strong>Input:</strong> {term:loss:L}^PPO = min({term:ppo-ratio:r_t} \u00d7 {term:advantage:A}, clipped \u00d7 {term:advantage:A}) - {term:beta:\u03b2} \u00d7 {term:kl:KL}<br>\u2022 <strong>Output:</strong> {term:theta:\u03b8}_new = {term:theta:\u03b8} - \u03b1 \u00d7 {term:gradient:\u2207}{term:loss:L}<br>\u2022 <strong>Result:</strong> Update the {term:policy:main LLM} {term:theta:weights} to make it MORE likely to generate such responses!"
+        },
+        {
+          "type": "equation",
+          "id": "reward_model_loss",
+          "label": "How the Scoring LLM Learns (Bradley-Terry)",
+          "parts": [
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "raw",
+              "text": "_R = \u2212"
+            },
+            {
+              "type": "term",
+              "key": "expectation",
+              "text": "E"
+            },
+            {
+              "type": "raw",
+              "text": "["
+            },
+            {
+              "type": "term",
+              "key": "log",
+              "text": "log"
+            },
+            {
+              "type": "raw",
+              "text": " "
+            },
+            {
+              "type": "term",
+              "key": "sigmoid",
+              "text": "\u03c3"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "labeled-expression",
+              "label": "Score Gap",
+              "labelColor": "reward",
+              "popupKey": "reward",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "reward",
+                  "text": "r"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "input",
+                  "text": "x"
+                },
+                {
+                  "type": "raw",
+                  "text": ", "
+                },
+                {
+                  "type": "term",
+                  "key": "output",
+                  "text": "y_w"
+                },
+                {
+                  "type": "raw",
+                  "text": ") \u2212 "
+                },
+                {
+                  "type": "term",
+                  "key": "reward",
+                  "text": "r"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "input",
+                  "text": "x"
+                },
+                {
+                  "type": "raw",
+                  "text": ", "
+                },
+                {
+                  "type": "term",
+                  "key": "output",
+                  "text": "y_l"
+                },
+                {
+                  "type": "raw",
+                  "text": ")"
+                }
+              ]
+            },
+            {
+              "type": "raw",
+              "text": ")]"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>What it means:</strong> ",
+            "template": "We show the {term:reward:Scoring LLM} thousands of battles: \"Here's a {term:input:prompt}, and here are two {term:output:responses}. Humans said {term:output:this one} is better than {term:output:that one}. Learn to agree with them.\"<br><br>The {term:sigmoid:\u03c3} (sigmoid) converts the {term:reward:Score Gap} into a {term:probability:win probability}: \"How confident are we that the {term:output:winner} actually wins?\" If our {term:reward:scorer} gives the {term:output:winner} a much higher {term:reward:score} than the {term:output:loser}, this {term:probability:probability} goes toward 1 (very confident). If the {term:reward:scores} are close or reversed, it drops toward 0.5 or lower.<br><br>The {term:log:log} makes mistakes hurt more when we were overconfident. If we smugly predicted \"99% {term:output:winner}\" but were wrong? Massive {term:loss:punishment}. If we humbly said \"55% {term:output:winner}\" and were wrong? Small slap on the wrist. This teaches the {term:reward:scorer} to be calibrated, not just correct."
+          }
+        },
+        {
+          "type": "image",
+          "src": "images/rl_in_llms/RLHF.jpeg",
+          "alt": "RLHF: Bradley-Terry model and policy optimization",
+          "style": "max-height: 600px;"
         }
       ]
     }

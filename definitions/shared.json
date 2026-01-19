@@ -26,7 +26,12 @@
     "value": "#8b5cf6",
     "sft": "#0ea5e9",
     "rlhf": "#8b5cf6",
-    "base-model": "#64748b"
+    "base-model": "#64748b",
+    "ppo-ratio": "#0d9488",
+    "clip-epsilon": "#f97316",
+    "sigmoid": "#a855f7",
+    "beta": "#6366f1",
+    "log": "#0369a1"
   },
   "terms": {
     "loss": {
@@ -163,6 +168,31 @@
       "display": "Base Model",
       "colorKey": "base-model",
       "popupKey": "base-model"
+    },
+    "ppo-ratio": {
+      "display": "r_t",
+      "colorKey": "ppo-ratio",
+      "popupKey": "ppo-ratio"
+    },
+    "clip-epsilon": {
+      "display": "ε",
+      "colorKey": "clip-epsilon",
+      "popupKey": "clip-epsilon"
+    },
+    "sigmoid": {
+      "display": "σ",
+      "colorKey": "sigmoid",
+      "popupKey": "sigmoid"
+    },
+    "beta": {
+      "display": "β",
+      "colorKey": "beta",
+      "popupKey": "beta"
+    },
+    "log": {
+      "display": "log",
+      "colorKey": "log",
+      "popupKey": "log"
     }
   },
   "popups": {
@@ -910,6 +940,134 @@
           "type": "example",
           "title": "Behavior",
           "content": "<strong>Examples:</strong> LLaMA-2 Base, GPT-3 davinci-base<br><strong>Problem:</strong> Learned helpful tutorials AND harmful content without knowing which to use"
+        }
+      ]
+    },
+    "ppo-ratio": {
+      "title": "r_t - PPO Importance Sampling Ratio",
+      "color": "#0d9488",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "The PPO ratio measures how much more or less likely an action (generating a {term:token:token}) is under the CURRENT {term:policy:policy} compared to the OLD {term:policy:policy}. If {term:ppo-ratio:r_t} = 2.0, the current {term:policy:policy} is TWICE as likely to generate this {term:token:token}. PPO clips this ratio to prevent updates that are too aggressive, keeping training stable."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The importance sampling ratio between current and old {term:policy:policies}. Used in PPO to reuse samples collected from the old {term:policy:policy} while updating toward the new one. Clipped to [{term:clip-epsilon:1-ε}, {term:clip-epsilon:1+ε}] to constrain policy updates.",
+          "formula": "{term:ppo-ratio:r_t}({term:theta:θ}) = {term:policy:π}_{term:theta:θ}(a|s) / {term:policy:π}_{old}(a|s)"
+        },
+        {
+          "type": "example",
+          "title": "Step-by-Step Calculation",
+          "content": "<strong>Token:</strong> 'Paris' after 'The capital of France is'<br><br><strong>Step 1:</strong> Get {term:probability:probabilities} from both {term:policy:policies}<br><code class=\"code-block\">π_old('Paris') = 0.70\nπ_new('Paris') = 0.91</code><br><strong>Step 2:</strong> Compute ratio<br><code class=\"code-block\">r_t = 0.91 / 0.70 = 1.30</code><br><strong>Step 3:</strong> Apply clipping (ε=0.2)<br><code class=\"code-block\">clip(1.30, 0.8, 1.2) = 1.2</code><br><strong>Result:</strong> Even though ratio is 1.30, we use 1.2 for stability!"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "<strong>Per-token ratio:</strong> Computed for each {term:token:token} in the response sequence.<br><br><strong>Sequence-level:</strong> Some implementations compute ratio for the entire response as product of {term:token:token} ratios.<br><br><strong>Why it matters:</strong> Large ratio means {term:policy:policy} changed significantly for this action. Clipping prevents catastrophic updates."
+        }
+      ]
+    },
+    "clip-epsilon": {
+      "title": "ε - PPO Clipping Hyperparameter",
+      "color": "#f97316",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "The clipping hyperparameter {term:clip-epsilon:ε} defines the 'trust region' - how far the {term:policy:policy} is allowed to move in a single update. With {term:clip-epsilon:ε}=0.2, the {term:ppo-ratio:ratio} is constrained to [0.8, 1.2]. Smaller {term:clip-epsilon:ε} = more conservative updates, larger = more aggressive. It's the 'leash length' for {term:policy:policy} updates."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Defines the clipping bounds [{term:clip-epsilon:1-ε}, {term:clip-epsilon:1+ε}] for the {term:ppo-ratio:importance sampling ratio} in the PPO objective. Standard value is 0.2. Smaller values make training more stable but slower; larger values allow faster learning but risk instability.",
+          "formula": "clip({term:ppo-ratio:r_t}, 1-{term:clip-epsilon:ε}, 1+{term:clip-epsilon:ε}) where {term:clip-epsilon:ε} ∈ [0.1, 0.3]"
+        },
+        {
+          "type": "example",
+          "title": "Effect of Different ε Values",
+          "content": "<strong>With ε = 0.2 (standard):</strong><br>• Ratio range: [0.8, 1.2]<br>• Max change per step: ±20%<br><br><strong>With ε = 0.1 (conservative):</strong><br>• Ratio range: [0.9, 1.1]<br>• Max change per step: ±10%<br>• More stable, slower learning<br><br><strong>With ε = 0.3 (aggressive):</strong><br>• Ratio range: [0.7, 1.3]<br>• Max change per step: ±30%<br>• Faster learning, risk of instability"
+        },
+        {
+          "type": "llm",
+          "title": "In LLMs",
+          "content": "<strong>Typical value:</strong> ε = 0.2 for most RLHF implementations.<br><br><strong>Tuning:</strong> If training is unstable, try ε = 0.1. If learning is too slow, try ε = 0.3.<br><br><strong>Combined with KL:</strong> Clipping constrains the {term:ppo-ratio:ratio}, while {term:kl:KL} penalty constrains overall distribution drift. Both are needed for stable RLHF."
+        }
+      ]
+    },
+    "sigmoid": {
+      "title": "σ - Sigmoid Function",
+      "color": "#a855f7",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "The sigmoid squashes any number into a value between 0 and 1. Think of it as a 'confidence meter' - large positive inputs → near 1.0, large negative inputs → near 0.0, zero → exactly 0.5. It's how we convert raw score differences into {term:probability:probabilities}."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "content": "The logistic sigmoid function maps ℝ → (0, 1). Used to convert score differences into {term:probability:probabilities} in the Bradley-Terry {term:model:model}.",
+          "formula": "{term:sigmoid:σ}(x) = 1 / (1 + e^(-x))"
+        },
+        {
+          "type": "example",
+          "title": "Values",
+          "content": "<strong>σ(0) = 0.5:</strong> Equal scores → 50% preference<br><strong>σ(2) = 0.88:</strong> Winner scored 2 higher → 88% confident<br><strong>σ(-2) = 0.12:</strong> Winner scored 2 lower (wrong order!) → only 12%"
+        }
+      ]
+    },
+    "beta": {
+      "title": "β - KL Penalty Coefficient",
+      "color": "#6366f1",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "The {term:beta:β} parameter controls how tightly we 'leash' the {term:policy:policy} to the {term:reference:reference model}. Higher {term:beta:β} = tighter leash = less creative exploration. Lower {term:beta:β} = looser leash = more exploration but risk of reward hacking."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "content": "Coefficient for the {term:kl:KL} divergence penalty in the RLHF objective. Controls the trade-off between maximizing {term:reward:reward} and staying close to the {term:reference:reference policy}.",
+          "formula": "Objective = {term:reward:R} − {term:beta:β} × {term:kl:KL}({term:policy:π}_θ || {term:reference:π_ref})"
+        },
+        {
+          "type": "example",
+          "title": "Typical Values",
+          "content": "<strong>β = 0:</strong> No constraint → risk of mode collapse<br><strong>β = 0.01-0.1:</strong> Standard RLHF range<br><strong>β = 1.0+:</strong> Very conservative → almost no change from SFT"
+        }
+      ]
+    },
+    "log": {
+      "title": "log - Logarithm",
+      "color": "#0369a1",
+      "sections": [
+        {
+          "type": "intuitive",
+          "content": "The {term:log:log} function converts {term:probability:probabilities} into 'surprise' or 'information' scores. Low {term:probability:probability} → high surprise (large negative {term:log:log}). High {term:probability:probability} → low surprise (near zero {term:log:log}). Used in {term:loss:loss} functions because it heavily penalizes confident wrong predictions."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "content": "Natural logarithm (base e). Maps (0, 1] → (-∞, 0]. Key property: {term:log:log}(ab) = {term:log:log}(a) + {term:log:log}(b) makes it suitable for products of {term:probability:probabilities}."
+        },
+        {
+          "type": "example",
+          "title": "Values",
+          "content": "<strong>log(1.0) = 0:</strong> Perfect (P=1) → no penalty<br><strong>log(0.5) = -0.69:</strong> 50% → moderate penalty<br><strong>log(0.1) = -2.3:</strong> 10% → high penalty<br><strong>log(0.01) = -4.6:</strong> 1% → severe penalty"
         }
       ]
     }

@@ -35,167 +35,102 @@
   },
   "terms": {
     "loss": {
-      "display": "L",
-      "colorKey": "loss",
-      "popupKey": "loss"
+      "display": "L"
     },
     "gradient": {
-      "display": "∇",
-      "colorKey": "gradient",
-      "popupKey": "gradient"
+      "display": "∇"
     },
-
-
     "data": {
-      "display": "D",
-      "colorKey": "data",
-      "popupKey": "data"
+      "display": "D"
     },
     "token": {
-      "display": "t",
-      "colorKey": "token",
-      "popupKey": "token"
+      "display": "t"
     },
     "probability": {
-      "display": "P",
-      "colorKey": "probability",
-      "popupKey": "probability"
+      "display": "P"
     },
     "vocabulary": {
-      "display": "Vocab",
-      "colorKey": "vocabulary",
-      "popupKey": "vocabulary"
+      "display": "Vocab"
     },
     "softmax": {
-      "display": "Softmax",
-      "colorKey": "softmax",
-      "popupKey": "softmax"
+      "display": "Softmax"
     },
     "logits": {
-      "display": "Logits",
-      "colorKey": "logits",
-      "popupKey": "logits"
+      "display": "Logits"
     },
     "model": {
-      "display": "Model",
-      "colorKey": "model",
-      "popupKey": "model"
+      "display": "Model"
     },
     "summation": {
-      "display": "Σ",
-      "colorKey": "summation",
-      "popupKey": "summation"
+      "display": "Σ"
     },
     "variance": {
-      "display": "Variance",
-      "colorKey": "variance",
-      "popupKey": "variance"
+      "display": "Variance"
     },
     "theta": {
-      "display": "θ",
-      "colorKey": "theta",
-      "popupKey": "theta"
+      "display": "θ"
     },
     "output": {
-      "display": "y",
-      "colorKey": "output",
-      "popupKey": "output"
+      "display": "y"
     },
     "input": {
-      "display": "x",
-      "colorKey": "input",
-      "popupKey": "input"
+      "display": "x"
     },
     "posterior": {
-      "display": "p",
-      "colorKey": "posterior",
-      "popupKey": "posterior"
+      "display": "p"
     },
     "expectation": {
-      "display": "E",
-      "colorKey": "expectation",
-      "popupKey": "expectation"
+      "display": "E"
     },
     "entropy": {
-      "display": "H",
-      "colorKey": "entropy",
-      "popupKey": "entropy"
+      "display": "H"
     },
     "reward": {
-      "display": "R",
-      "colorKey": "reward",
-      "popupKey": "reward"
+      "display": "R"
     },
     "policy": {
-      "display": "π",
-      "colorKey": "policy",
-      "popupKey": "policy"
+      "display": "π"
     },
     "kl": {
-      "display": "KL",
-      "colorKey": "kl",
-      "popupKey": "kl"
+      "display": "KL"
     },
     "reference": {
-      "display": "π_ref",
-      "colorKey": "reference",
-      "popupKey": "reference"
+      "display": "π_ref"
     },
     "advantage": {
-      "display": "A",
-      "colorKey": "advantage",
-      "popupKey": "advantage"
+      "display": "A"
     },
     "value": {
-      "display": "V",
-      "colorKey": "value",
-      "popupKey": "value"
+      "display": "V"
     },
     "sft": {
-      "display": "SFT",
-      "colorKey": "sft",
-      "popupKey": "sft"
+      "display": "SFT"
     },
     "rlhf": {
-      "display": "RLHF",
-      "colorKey": "rlhf",
-      "popupKey": "rlhf"
+      "display": "RLHF"
     },
     "base-model": {
-      "display": "Base Model",
-      "colorKey": "base-model",
-      "popupKey": "base-model"
+      "display": "Base Model"
     },
     "ppo-ratio": {
-      "display": "r_t",
-      "colorKey": "ppo-ratio",
-      "popupKey": "ppo-ratio"
+      "display": "r_t"
     },
     "clip-epsilon": {
-      "display": "ε",
-      "colorKey": "clip-epsilon",
-      "popupKey": "clip-epsilon"
+      "display": "ε"
     },
     "sigmoid": {
-      "display": "σ",
-      "colorKey": "sigmoid",
-      "popupKey": "sigmoid"
+      "display": "σ"
     },
     "beta": {
-      "display": "β",
-      "colorKey": "beta",
-      "popupKey": "beta"
+      "display": "β"
     },
     "log": {
-      "display": "log",
-      "colorKey": "log",
-      "popupKey": "log"
+      "display": "log"
     }
   },
   "popups": {
     "loss": {
       "title": "L - Loss Function",
-      "color": "#dc2626",
       "sections": [
         {
           "type": "intuitive",
@@ -225,7 +160,6 @@
     },
     "gradient": {
       "title": "∇ - Gradient",
-      "color": "#16a34a",
       "sections": [
         {
           "type": "intuitive",
@@ -255,7 +189,6 @@
     },
     "data": {
       "title": "D - Training Data",
-      "color": "#854d0e",
       "sections": [
         {
           "type": "intuitive",
@@ -285,7 +218,6 @@
     },
     "token": {
       "title": "t - Token",
-      "color": "#db2777",
       "sections": [
         {
           "type": "intuitive",
@@ -309,7 +241,6 @@
     },
     "probability": {
       "title": "P - Probability Distribution",
-      "color": "#0891b2",
       "sections": [
         {
           "type": "intuitive",
@@ -334,7 +265,6 @@
     },
     "vocabulary": {
       "title": "Vocabulary (Vocab)",
-      "color": "#65a30d",
       "sections": [
         {
           "type": "intuitive",
@@ -359,7 +289,6 @@
     },
     "softmax": {
       "title": "Softmax Function",
-      "color": "#ea580c",
       "sections": [
         {
           "type": "intuitive",
@@ -384,7 +313,6 @@
     },
     "logits": {
       "title": "Logits (Raw Scores)",
-      "color": "#0284c7",
       "sections": [
         {
           "type": "intuitive",
@@ -409,7 +337,6 @@
     },
     "model": {
       "title": "Model (Neural Network)",
-      "color": "#059669",
       "sections": [
         {
           "type": "intuitive",
@@ -434,7 +361,6 @@
     },
     "summation": {
       "title": "Σ - Summation",
-      "color": "#78350f",
       "sections": [
         {
           "type": "intuitive",
@@ -459,7 +385,6 @@
     },
     "variance": {
       "title": "Var - Variance",
-      "color": "#d97706",
       "sections": [
         {
           "type": "intuitive",
@@ -494,7 +419,6 @@
     },
     "theta": {
       "title": "θ (theta) - Model Parameters",
-      "color": "#15803d",
       "sections": [
         {
           "type": "intuitive",
@@ -529,7 +453,6 @@
     },
     "output": {
       "title": "y - Output",
-      "color": "#c026d3",
       "sections": [
         {
           "type": "intuitive",
@@ -564,7 +487,6 @@
     },
     "input": {
       "title": "x - Input",
-      "color": "#475569",
       "sections": [
         {
           "type": "intuitive",
@@ -599,7 +521,6 @@
     },
     "posterior": {
       "title": "p(θ|D) - Posterior Distribution",
-      "color": "#7c3aed",
       "sections": [
         {
           "type": "intuitive",
@@ -629,7 +550,6 @@
     },
     "expectation": {
       "title": "E - Expectation (Mean)",
-      "color": "#172554",
       "sections": [
         {
           "type": "intuitive",
@@ -659,7 +579,6 @@
     },
     "entropy": {
       "title": "H - Entropy",
-      "color": "#0e7490",
       "sections": [
         {
           "type": "intuitive",
@@ -687,7 +606,6 @@
     },
     "reward": {
       "title": "R - Reward",
-      "color": "#f59e0b",
       "sections": [
         {
           "type": "intuitive",
@@ -717,7 +635,6 @@
     },
     "policy": {
       "title": "π - Policy",
-      "color": "#4f46e5",
       "sections": [
         {
           "type": "intuitive",
@@ -747,7 +664,6 @@
     },
     "kl": {
       "title": "KL - KL Divergence",
-      "color": "#be185d",
       "sections": [
         {
           "type": "intuitive",
@@ -777,7 +693,6 @@
     },
     "reference": {
       "title": "π_ref - Reference Policy",
-      "color": "#64748b",
       "sections": [
         {
           "type": "intuitive",
@@ -807,7 +722,6 @@
     },
     "advantage": {
       "title": "A - Advantage",
-      "color": "#10b981",
       "sections": [
         {
           "type": "intuitive",
@@ -837,7 +751,6 @@
     },
     "value": {
       "title": "V - Value Function",
-      "color": "#8b5cf6",
       "sections": [
         {
           "type": "intuitive",
@@ -867,7 +780,6 @@
     },
     "sft": {
       "title": "SFT - Supervised Fine-Tuning",
-      "color": "#0ea5e9",
       "sections": [
         {
           "type": "intuitive",
@@ -892,7 +804,6 @@
     },
     "rlhf": {
       "title": "RLHF - RL from Human Feedback",
-      "color": "#d8b4fe",
       "sections": [
         {
           "type": "intuitive",
@@ -917,7 +828,6 @@
     },
     "base-model": {
       "title": "Base Model - Pre-trained Foundation",
-      "color": "#334155",
       "sections": [
         {
           "type": "intuitive",
@@ -942,7 +852,6 @@
     },
     "ppo-ratio": {
       "title": "r_t - PPO Importance Sampling Ratio",
-      "color": "#0d9488",
       "sections": [
         {
           "type": "intuitive",
@@ -972,7 +881,6 @@
     },
     "clip-epsilon": {
       "title": "ε - PPO Clipping Hyperparameter",
-      "color": "#f97316",
       "sections": [
         {
           "type": "intuitive",
@@ -1002,7 +910,6 @@
     },
     "sigmoid": {
       "title": "σ - Sigmoid Function",
-      "color": "#a855f7",
       "sections": [
         {
           "type": "intuitive",
@@ -1025,7 +932,6 @@
     },
     "beta": {
       "title": "β - KL Penalty Coefficient",
-      "color": "#6366f1",
       "sections": [
         {
           "type": "intuitive",
@@ -1048,7 +954,6 @@
     },
     "log": {
       "title": "log - Logarithm",
-      "color": "#0369a1",
       "sections": [
         {
           "type": "intuitive",

@@ -13,6 +13,10 @@ const Navigation = {
     
     // Store keyboard handler reference for cleanup
     _keyboardHandler: null,
+    
+    // Store button handler references for cleanup
+    _prevBtnHandler: null,
+    _nextBtnHandler: null,
 
     /**
      * Initialize navigation with config
@@ -58,13 +62,26 @@ const Navigation = {
 
     /**
      * Setup navigation button handlers
+     * Removes existing handlers before adding new ones to prevent duplicates
      */
     setupButtons() {
         const prevBtn = document.getElementById('prev-slide-btn');
         const nextBtn = document.getElementById('next-slide-btn');
         
-        prevBtn?.addEventListener('click', () => this.prevSlide());
-        nextBtn?.addEventListener('click', () => this.nextSlide());
+        // Remove existing handlers if any (prevents duplicate listeners)
+        if (this._prevBtnHandler && prevBtn) {
+            prevBtn.removeEventListener('click', this._prevBtnHandler);
+        }
+        if (this._nextBtnHandler && nextBtn) {
+            nextBtn.removeEventListener('click', this._nextBtnHandler);
+        }
+        
+        // Create and store new handler references
+        this._prevBtnHandler = () => this.prevSlide();
+        this._nextBtnHandler = () => this.nextSlide();
+        
+        prevBtn?.addEventListener('click', this._prevBtnHandler);
+        nextBtn?.addEventListener('click', this._nextBtnHandler);
     },
 
     /**
@@ -283,6 +300,19 @@ const Navigation = {
         if (this._keyboardHandler) {
             document.removeEventListener('keydown', this._keyboardHandler);
             this._keyboardHandler = null;
+        }
+        
+        // Remove button listeners
+        const prevBtn = document.getElementById('prev-slide-btn');
+        const nextBtn = document.getElementById('next-slide-btn');
+        
+        if (this._prevBtnHandler && prevBtn) {
+            prevBtn.removeEventListener('click', this._prevBtnHandler);
+            this._prevBtnHandler = null;
+        }
+        if (this._nextBtnHandler && nextBtn) {
+            nextBtn.removeEventListener('click', this._nextBtnHandler);
+            this._nextBtnHandler = null;
         }
     }
 };

@@ -12,6 +12,43 @@ const Renderer = {
     sharedDefinitions: null,
 
     /**
+     * Generate a deterministic hash code from a string
+     * Same input always produces same output
+     * @param {string} str - String to hash
+     * @returns {number} - Positive integer hash
+     */
+    hashCode(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0; // Convert to 32bit integer
+        }
+        return Math.abs(hash);
+    },
+
+    /**
+     * Generate a color from a key using deterministic hashing
+     * Uses golden angle distribution for visually distinct colors
+     * @param {string} key - Term key to generate color for
+     * @returns {string} - HSL color string
+     */
+    generateColor(key) {
+        const hash = this.hashCode(key);
+        const hue = (hash * 137.508) % 360; // Golden angle for good distribution
+        return `hsl(${Math.floor(hue)}, 65%, 45%)`; // Consistent saturation/lightness
+    },
+
+    /**
+     * Get color for a key - uses colorPalette if exists, otherwise auto-generates
+     * This is the SINGLE entry point for getting term colors
+     * @param {string} key - Term key
+     * @returns {string} - Color value (hex or hsl)
+     */
+    getColor(key) {
+        return this.colorPalette[key] || this.generateColor(key);
+    },
+
+    /**
      * Load shared definitions from centralized file
      * This is the SINGLE SOURCE OF TRUTH for all common definitions
      * @returns {Object} - Shared definitions (colorPalette, terms, popups)
@@ -52,41 +89,55 @@ const Renderer = {
 
     /**
      * Generate and inject CSS for color classes
+     * Generates CSS for ALL terms - uses colorPalette if defined, otherwise auto-generates
      */
     injectColorStyles() {
         let css = '';
+
+        // First, add all colorPalette entries
         for (const [key, color] of Object.entries(this.colorPalette)) {
             css += `.c-${key} { color: ${color}; }\n`;
         }
-        
+
+        // Then, generate CSS for any terms NOT in colorPalette (auto-generated colors)
+        for (const key of Object.keys(this.terms)) {
+            if (!this.colorPalette[key]) {
+                const autoColor = this.generateColor(key);
+                css += `.c-${key} { color: ${autoColor}; }\n`;
+            }
+        }
+
         const style = document.createElement('style');
         style.id = 'dynamic-colors';
         style.textContent = css;
-        
+
         // Remove existing if present
         const existing = document.getElementById('dynamic-colors');
         if (existing) existing.remove();
-        
+
         document.head.appendChild(style);
     },
 
     /**
      * Parse term syntax {term:key:display} and render as clickable span
+     * STRICT: Throws error if term is not defined
      * @param {string} text - Text containing term syntax
      * @returns {string} - HTML with rendered terms
      */
     parseTerms(text) {
         if (!text) return '';
-        
+
         // Match {term:key:display} pattern
         const termRegex = /\{term:([^:}]+):([^}]+)\}/g;
-        
+
         return text.replace(termRegex, (match, key, display) => {
-            const termData = this.terms[key];
-            const colorKey = termData?.colorKey || key;
-            const popupKey = termData?.popupKey || key;
-            
-            return `<span class="term c-${colorKey}" data-popup="${popupKey}">${display}</span>`;
+            // STRICT: Term must be defined
+            if (!this.terms[key]) {
+                throw new Error(`[Renderer] Term not defined: "${key}". Add it to terms in shared.json or topic JSON.`);
+            }
+
+            // Key IS the colorKey and popupKey - no aliases, no fallbacks
+            return `<span class="term c-${key}" data-popup="${key}">${display}</span>`;
         });
     },
 
@@ -280,13 +331,19 @@ const Renderer = {
 
     /**
      * Render a single equation part
+     * STRICT: Throws error if term is not defined
      */
     renderEquationPart(part) {
         switch (part.type) {
             case 'term':
+                // STRICT: Term must be defined
+                if (!this.terms[part.key]) {
+                    throw new Error(`[Renderer] Term not defined in equation: "${part.key}". Add it to terms in shared.json or topic JSON.`);
+                }
                 const term = document.createElement('span');
                 term.className = `eq-part`;
-                term.innerHTML = `<span class="term c-${this.terms[part.key]?.colorKey || part.key}" data-popup="${this.terms[part.key]?.popupKey || part.key}">${part.text}</span>`;
+                // Key IS the colorKey and popupKey - no aliases, no fallbacks
+                term.innerHTML = `<span class="term c-${part.key}" data-popup="${part.key}">${part.text}</span>`;
                 return term;
                 
             case 'operator':
@@ -309,10 +366,14 @@ const Renderer = {
                 return sub;
                 
             case 'labeled-expression':
-                // Use curly brace underbrace style (inline, no vertical stacking)
+                // STRICT: labelColor IS the popup key - no separate popupKey allowed
+                if (!part.labelColor) {
+                    throw new Error(`[Renderer] labeled-expression missing 'labelColor'. This is required.`);
+                }
                 const labelWrapper = document.createElement('span');
                 labelWrapper.className = 'eq-brace-wrapper';
-                labelWrapper.dataset.popup = part.popupKey;
+                // labelColor IS the popup key - no aliases
+                labelWrapper.dataset.popup = part.labelColor;
                 labelWrapper.style.cursor = 'pointer';
                 labelWrapper.style.display = 'inline-flex';
                 labelWrapper.style.flexDirection = 'column';
@@ -339,12 +400,13 @@ const Renderer = {
                 brace.style.textAlign = 'center';
                 brace.style.fontSize = '14px';
                 brace.style.lineHeight = '0.6';
-                brace.style.color = this.colorPalette[part.labelColor] || '#666';
+                brace.style.color = this.getColor(part.labelColor);
                 brace.style.marginTop = '2px';
                 // Use CSS border trick for stretchy brace
-                brace.style.borderBottom = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
-                brace.style.borderLeft = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
-                brace.style.borderRight = `2px solid ${this.colorPalette[part.labelColor] || '#666'}`;
+                const braceColor = this.getColor(part.labelColor);
+                brace.style.borderBottom = `2px solid ${braceColor}`;
+                brace.style.borderLeft = `2px solid ${braceColor}`;
+                brace.style.borderRight = `2px solid ${braceColor}`;
                 brace.style.borderTop = 'none';
                 brace.style.borderRadius = '0 0 8px 8px';
                 brace.style.height = '6px';
@@ -368,6 +430,7 @@ const Renderer = {
     /**
      * Render a grid of all terms as clickable colored boxes
      * Used for glossary/dictionary view
+     * STRICT: Only shows terms that have matching popups (key === popupKey)
      */
     renderTermGrid(block) {
         const container = document.createElement('div');
@@ -376,18 +439,15 @@ const Renderer = {
             container.style.gridTemplateColumns = `repeat(${block.columns}, 1fr)`;
         }
 
-        // Get all terms that have popup definitions
+        // Get all terms that have popup definitions (key IS the popupKey)
         const termEntries = [];
         for (const [key, termData] of Object.entries(this.terms)) {
-            // Only include terms that have popup definitions
-            const popupKey = termData.popupKey || key;
-            if (this.popups[popupKey]) {
+            // Key IS the popupKey - no aliases
+            if (this.popups[key]) {
                 termEntries.push({
                     key: key,
                     display: termData.display,
-                    colorKey: termData.colorKey || key,
-                    popupKey: popupKey,
-                    popupTitle: this.popups[popupKey].title || termData.display
+                    popupTitle: this.popups[key].title || termData.display
                 });
             }
         }
@@ -396,12 +456,13 @@ const Renderer = {
         termEntries.sort((a, b) => a.popupTitle.localeCompare(b.popupTitle));
 
         // Render each term as a colored box
-        for (const term of termEntries) {
+        for (const entry of termEntries) {
             const box = document.createElement('div');
             box.className = 'term-grid-box';
-            box.dataset.popup = term.popupKey;
+            box.dataset.popup = entry.key;
 
-            const color = this.colorPalette[term.colorKey] || '#667eea';
+            // Key IS the colorKey - no aliases
+            const color = this.getColor(entry.key);
             box.style.borderColor = color;
             box.style.setProperty('--term-color', color);
 
@@ -409,13 +470,13 @@ const Renderer = {
             const symbol = document.createElement('span');
             symbol.className = 'term-grid-symbol';
             symbol.style.color = color;
-            symbol.textContent = term.display;
+            symbol.textContent = entry.display;
             box.appendChild(symbol);
 
             // Title (from popup)
             const title = document.createElement('span');
             title.className = 'term-grid-title';
-            title.textContent = term.popupTitle.replace(/^[^-]+ - /, ''); // Remove symbol prefix if present
+            title.textContent = entry.popupTitle.replace(/^[^-]+ - /, ''); // Remove symbol prefix if present
             box.appendChild(title);
 
             container.appendChild(box);

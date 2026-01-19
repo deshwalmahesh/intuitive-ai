@@ -62,7 +62,6 @@
     "cls-token": "#9333ea",
     "bos-token": "#6ee7b7",
     "eos-token": "#ec4899",
-
     "encoder-only": "#1d4ed8",
     "decoder-only": "#14532d",
     "attention-mask": "#c2410c",
@@ -97,211 +96,129 @@
   },
   "terms": {
     "pre-training": {
-      "display": "Pre-training",
-      "colorKey": "pre-training",
-      "popupKey": "pre-training"
+      "display": "Pre-training"
     },
     "fine-tuning": {
-      "display": "Fine-tuning",
-      "colorKey": "fine-tuning",
-      "popupKey": "fine-tuning"
+      "display": "Fine-tuning"
     },
     "causal-mask": {
-      "display": "Causal Mask",
-      "colorKey": "causal-mask",
-      "popupKey": "causal-mask"
+      "display": "Causal Mask"
     },
     "teacher-forcing": {
-      "display": "Teacher Forcing",
-      "colorKey": "teacher-forcing",
-      "popupKey": "teacher-forcing"
+      "display": "Teacher Forcing"
     },
     "mlm": {
-      "display": "MLM",
-      "colorKey": "mlm",
-      "popupKey": "mlm"
+      "display": "MLM"
     },
     "cls-token": {
-      "display": "[CLS]",
-      "colorKey": "cls-token",
-      "popupKey": "cls-token"
+      "display": "[CLS]"
     },
     "bos-token": {
-      "display": "BOS",
-      "colorKey": "bos-token",
-      "popupKey": "bos-token"
+      "display": "BOS"
     },
     "eos-token": {
-      "display": "EOS",
-      "colorKey": "eos-token",
-      "popupKey": "eos-token"
+      "display": "EOS"
     },
-
     "encoder-only": {
-      "display": "Encoder-only",
-      "colorKey": "encoder-only",
-      "popupKey": "encoder-only"
+      "display": "Encoder-only"
     },
     "decoder-only": {
-      "display": "Decoder-only",
-      "colorKey": "decoder-only",
-      "popupKey": "decoder-only"
+      "display": "Decoder-only"
     },
     "attention-mask": {
-      "display": "Attention Mask",
-      "colorKey": "attention-mask",
-      "popupKey": "attention-mask"
+      "display": "Attention Mask"
     },
     "bce-loss": {
-      "display": "BCE",
-      "colorKey": "bce-loss",
-      "popupKey": "bce-loss"
+      "display": "BCE"
     },
     "cce-loss": {
-      "display": "CCE",
-      "colorKey": "cce-loss",
-      "popupKey": "cce-loss"
+      "display": "CCE"
     },
     "mse-loss": {
-      "display": "MSE",
-      "colorKey": "mse-loss",
-      "popupKey": "mse-loss"
+      "display": "MSE"
     },
     "sigmoid-activation": {
-      "display": "σ",
-      "colorKey": "sigmoid-activation",
-      "popupKey": "sigmoid-activation"
+      "display": "σ"
     },
     "multi-class": {
-      "display": "Multi-class",
-      "colorKey": "multi-class",
-      "popupKey": "multi-class"
+      "display": "Multi-class"
     },
     "multi-label": {
-      "display": "Multi-label",
-      "colorKey": "multi-label",
-      "popupKey": "multi-label"
+      "display": "Multi-label"
     },
     "token-classification": {
-      "display": "Token Classification",
-      "colorKey": "token-classification",
-      "popupKey": "token-classification"
+      "display": "Token Classification"
     },
     "lm-head": {
-      "display": "LM Head",
-      "colorKey": "lm-head",
-      "popupKey": "lm-head"
+      "display": "LM Head"
     },
     "hidden-state": {
-      "display": "Hidden State",
-      "colorKey": "hidden-state",
-      "popupKey": "hidden-state"
+      "display": "Hidden State"
     },
     "ner": {
-      "display": "NER",
-      "colorKey": "ner",
-      "popupKey": "ner"
+      "display": "NER"
     },
     "pos-tagging": {
-      "display": "POS",
-      "colorKey": "pos-tagging",
-      "popupKey": "pos-tagging"
+      "display": "POS"
     },
     "extractive-qa": {
-      "display": "Extractive QA",
-      "colorKey": "extractive-qa",
-      "popupKey": "extractive-qa"
+      "display": "Extractive QA"
     },
     "mask-token": {
-      "display": "[MASK]",
-      "colorKey": "mask-token",
-      "popupKey": "mask-token"
+      "display": "[MASK]"
     },
     "preference-data": {
-      "display": "Preference Data",
-      "colorKey": "preference-data",
-      "popupKey": "preference-data"
+      "display": "Preference Data"
     },
     "system-prompt": {
-      "display": "System Prompt",
-      "colorKey": "system-prompt",
-      "popupKey": "system-prompt"
+      "display": "System Prompt"
     },
     "chat-template": {
-      "display": "Chat Template",
-      "colorKey": "chat-template",
-      "popupKey": "chat-template"
+      "display": "Chat Template"
     },
     "reward-model": {
-      "display": "Reward Model",
-      "colorKey": "reward-model",
-      "popupKey": "reward-model"
+      "display": "Reward Model"
     },
     "transfer-learning": {
-      "display": "Transfer Learning",
-      "colorKey": "fine-tuning",
-      "popupKey": "transfer-learning"
+      "display": "Transfer Learning"
     },
     "full-finetuning": {
-      "display": "Full Fine-tuning",
-      "colorKey": "full-finetuning",
-      "popupKey": "full-finetuning"
+      "display": "Full Fine-tuning"
     },
     "partial-finetuning": {
-      "display": "Partial Fine-tuning",
-      "colorKey": "partial-finetuning",
-      "popupKey": "partial-finetuning"
+      "display": "Partial Fine-tuning"
     },
     "peft": {
-      "display": "PEFT",
-      "colorKey": "peft",
-      "popupKey": "peft"
+      "display": "PEFT"
     },
     "lora": {
-      "display": "LoRA",
-      "colorKey": "lora",
-      "popupKey": "lora"
+      "display": "LoRA"
     },
     "lora-rank": {
-      "display": "r",
-      "colorKey": "lora-rank",
-      "popupKey": "lora-rank"
+      "display": "r"
     },
     "lora-alpha": {
-      "display": "α",
-      "colorKey": "lora-alpha",
-      "popupKey": "lora-alpha"
+      "display": "α"
     },
     "frozen-layer": {
-      "display": "Frozen",
-      "colorKey": "frozen-layer",
-      "popupKey": "frozen-layer"
+      "display": "Frozen"
     },
     "trainable-layer": {
-      "display": "Trainable",
-      "colorKey": "trainable-layer",
-      "popupKey": "trainable-layer"
+      "display": "Trainable"
     },
     "prefix-tuning": {
-      "display": "Prefix Tuning",
-      "colorKey": "prefix-tuning",
-      "popupKey": "prefix-tuning"
+      "display": "Prefix Tuning"
     },
     "prompt-tuning": {
-      "display": "Prompt Tuning",
-      "colorKey": "prompt-tuning",
-      "popupKey": "prompt-tuning"
+      "display": "Prompt Tuning"
     },
     "adapter": {
-      "display": "Adapter",
-      "colorKey": "adapter",
-      "popupKey": "adapter"
+      "display": "Adapter"
     }
   },
   "popups": {
     "pre-training": {
       "title": "Pre-training - Learning Language from Scratch",
-      "color": "#047857",
       "sections": [
         {
           "type": "intuitive",
@@ -326,7 +243,6 @@
     },
     "fine-tuning": {
       "title": "Fine-tuning - Adapting for Your Task",
-      "color": "#6d28d9",
       "sections": [
         {
           "type": "intuitive",
@@ -351,7 +267,6 @@
     },
     "encoder-only": {
       "title": "Encoder-only Models (BERT-style)",
-      "color": "#1d4ed8",
       "sections": [
         {
           "type": "intuitive",
@@ -376,7 +291,6 @@
     },
     "decoder-only": {
       "title": "Decoder-only Models (GPT/LLaMA-style)",
-      "color": "#14532d",
       "sections": [
         {
           "type": "intuitive",
@@ -401,7 +315,6 @@
     },
     "mlm": {
       "title": "MLM - Masked Language Modeling",
-      "color": "#155e75",
       "sections": [
         {
           "type": "intuitive",
@@ -426,7 +339,6 @@
     },
     "cls-token": {
       "title": "[CLS] - Classification Token",
-      "color": "#9333ea",
       "sections": [
         {
           "type": "intuitive",
@@ -451,7 +363,6 @@
     },
     "causal-mask": {
       "title": "Causal Mask - Preventing Future Peeking",
-      "color": "#be123c",
       "sections": [
         {
           "type": "intuitive",
@@ -476,7 +387,6 @@
     },
     "teacher-forcing": {
       "title": "Teacher Forcing - Parallel Training",
-      "color": "#b45309",
       "sections": [
         {
           "type": "intuitive",
@@ -501,7 +411,6 @@
     },
     "bos-token": {
       "title": "BOS - Beginning Of Sequence",
-      "color": "#6ee7b7",
       "sections": [
         {
           "type": "intuitive",
@@ -526,7 +435,6 @@
     },
     "eos-token": {
       "title": "EOS - End Of Sequence",
-      "color": "#ec4899",
       "sections": [
         {
           "type": "intuitive",
@@ -549,10 +457,8 @@
         }
       ]
     },
-
     "attention-mask": {
       "title": "Attention Mask - Handling Padding",
-      "color": "#c2410c",
       "sections": [
         {
           "type": "intuitive",
@@ -577,7 +483,6 @@
     },
     "bce-loss": {
       "title": "BCE - Binary Cross-Entropy Loss",
-      "color": "#ef4444",
       "sections": [
         {
           "type": "intuitive",
@@ -602,7 +507,6 @@
     },
     "cce-loss": {
       "title": "CCE - Categorical Cross-Entropy Loss",
-      "color": "#b91c1c",
       "sections": [
         {
           "type": "intuitive",
@@ -627,7 +531,6 @@
     },
     "mse-loss": {
       "title": "MSE - Mean Squared Error Loss",
-      "color": "#991b1b",
       "sections": [
         {
           "type": "intuitive",
@@ -652,7 +555,6 @@
     },
     "sigmoid-activation": {
       "title": "σ - Sigmoid Activation",
-      "color": "#fb923c",
       "sections": [
         {
           "type": "intuitive",
@@ -677,7 +579,6 @@
     },
     "multi-class": {
       "title": "Multi-class Classification",
-      "color": "#1e40af",
       "sections": [
         {
           "type": "intuitive",
@@ -702,7 +603,6 @@
     },
     "multi-label": {
       "title": "Multi-label Classification",
-      "color": "#4ade80",
       "sections": [
         {
           "type": "intuitive",
@@ -727,7 +627,6 @@
     },
     "token-classification": {
       "title": "Token Classification",
-      "color": "#5b21b6",
       "sections": [
         {
           "type": "intuitive",
@@ -752,7 +651,6 @@
     },
     "lm-head": {
       "title": "LM Head - Language Model Head",
-      "color": "#06b6d4",
       "sections": [
         {
           "type": "intuitive",
@@ -777,7 +675,6 @@
     },
     "hidden-state": {
       "title": "Hidden State",
-      "color": "#4338ca",
       "sections": [
         {
           "type": "intuitive",
@@ -802,7 +699,6 @@
     },
     "ner": {
       "title": "NER - Named Entity Recognition",
-      "color": "#34d399",
       "sections": [
         {
           "type": "intuitive",
@@ -826,7 +722,6 @@
     },
     "pos-tagging": {
       "title": "POS - Part-of-Speech Tagging",
-      "color": "#0f766e",
       "sections": [
         {
           "type": "intuitive",
@@ -850,7 +745,6 @@
     },
     "extractive-qa": {
       "title": "Extractive QA - Span Extraction",
-      "color": "#a78bfa",
       "sections": [
         {
           "type": "intuitive",
@@ -875,7 +769,6 @@
     },
     "mask-token": {
       "title": "[MASK] - Mask Token",
-      "color": "#fcd34d",
       "sections": [
         {
           "type": "intuitive",
@@ -899,7 +792,6 @@
     },
     "preference-data": {
       "title": "Preference Data - Human Judgment in Data Form",
-      "color": "#a16207",
       "sections": [
         {
           "type": "intuitive",
@@ -924,7 +816,6 @@
     },
     "system-prompt": {
       "title": "System Prompt - The Model's Operating Instructions",
-      "color": "#22d3ee",
       "sections": [
         {
           "type": "intuitive",
@@ -948,7 +839,6 @@
     },
     "chat-template": {
       "title": "Chat Template - Conversation → Tokens",
-      "color": "#9d174d",
       "sections": [
         {
           "type": "intuitive",
@@ -978,7 +868,6 @@
     },
     "reward-model": {
       "title": "Reward Model - The Preference Scorer",
-      "color": "#9a3412",
       "sections": [
         {
           "type": "intuitive",
@@ -1003,7 +892,6 @@
     },
     "transfer-learning": {
       "title": "Transfer Learning - Knowledge Reuse",
-      "color": "#6d28d9",
       "sections": [
         {
           "type": "intuitive",
@@ -1027,7 +915,6 @@
     },
     "full-finetuning": {
       "title": "Full Fine-tuning - Train Everything",
-      "color": "#064e3b",
       "sections": [
         {
           "type": "intuitive",
@@ -1052,7 +939,6 @@
     },
     "partial-finetuning": {
       "title": "Partial Fine-tuning - Selective Layer Training",
-      "color": "#60a5fa",
       "sections": [
         {
           "type": "intuitive",
@@ -1077,7 +963,6 @@
     },
     "peft": {
       "title": "PEFT - Parameter-Efficient Fine-Tuning",
-      "color": "#4c1d95",
       "sections": [
         {
           "type": "intuitive",
@@ -1102,7 +987,6 @@
     },
     "lora": {
       "title": "LoRA - Low-Rank Adaptation",
-      "color": "#831843",
       "sections": [
         {
           "type": "intuitive",
@@ -1127,7 +1011,6 @@
     },
     "lora-rank": {
       "title": "r - LoRA Rank",
-      "color": "#fbbf24",
       "sections": [
         {
           "type": "intuitive",
@@ -1152,7 +1035,6 @@
     },
     "lora-alpha": {
       "title": "α (alpha) - LoRA Scaling Factor",
-      "color": "#67e8f9",
       "sections": [
         {
           "type": "intuitive",
@@ -1177,7 +1059,6 @@
     },
     "frozen-layer": {
       "title": "Frozen Layers",
-      "color": "#94a3b8",
       "sections": [
         {
           "type": "intuitive",
@@ -1202,7 +1083,6 @@
     },
     "trainable-layer": {
       "title": "Trainable Layers",
-      "color": "#22c55e",
       "sections": [
         {
           "type": "intuitive",
@@ -1226,7 +1106,6 @@
     },
     "prefix-tuning": {
       "title": "Prefix Tuning",
-      "color": "#7e22ce",
       "sections": [
         {
           "type": "intuitive",
@@ -1251,7 +1130,6 @@
     },
     "prompt-tuning": {
       "title": "Prompt Tuning",
-      "color": "#14b8a6",
       "sections": [
         {
           "type": "intuitive",
@@ -1275,7 +1153,6 @@
     },
     "adapter": {
       "title": "Adapter Layers",
-      "color": "#7c2d12",
       "sections": [
         {
           "type": "intuitive",

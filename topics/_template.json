@@ -1,13 +1,11 @@
 {
   "_DOCUMENTATION": {
     "CRITICAL": "This template MUST render a real page when applied. Copy it, fill in your content, and it works.",
-    
     "PHILOSOPHY": {
       "core_goal": "When someone closes a popup, they MUST be smarter than before.",
       "the_problem": "Scientific jargon creates artificial barriers. 'Posterior' sounds scary but just means 'beliefs after seeing data'.",
       "solution": "Ground every concept in: (1) intuitive explanation of what it DOES, (2) formal definition + formula, (3) PERCEIVABLE real example"
     },
-
     "SECTION_RULES": {
       "INTUITIVE": {
         "purpose": "Explain what this concept DOES in AI/ML systems",
@@ -47,14 +45,13 @@
         }
       }
     },
-
     "COLOURING_RULES": {
       "golden_rule": "Same concept = Same color = Same popup. EVERYWHERE.",
       "context_matters": {
         "explanation": "Same SYMBOL can mean different things in different contexts. Give them DIFFERENT colors and popups!",
         "examples": [
           "p (posterior: p(θ|D)) → Blue popup for parameter beliefs",
-          "P (probability: P(y|x)) → Cyan popup for output predictions", 
+          "P (probability: P(y|x)) → Cyan popup for output predictions",
           "σ (sigmoid in neural networks) → Purple popup",
           "σ (standard deviation in statistics) → Orange popup"
         ]
@@ -66,13 +63,11 @@
         "Terms inside popups: ALWAYS (nested learning)"
       ]
     },
-
     "SHARED_VS_TOPIC_DEFINITIONS": {
       "shared_json": "Common concepts used across many topics: θ, P, E, Var, Loss, etc.",
       "topic_json": "Concepts specific to this topic only. Can reference shared definitions via {term:key:display}",
       "rule": "If you use a concept in 2+ topics, put it in shared.json"
     },
-
     "ANTI_PATTERNS": [
       "❌ One-line intuitive: 'Variance measures spread' → ✅ Multi-sentence practical explanation",
       "❌ Garbage metaphor: 'Temperature = spicy' → ✅ 'Controls exploration vs repetition in token sampling'",
@@ -81,33 +76,39 @@
       "❌ Same color for different meanings → ✅ Different popup for each meaning"
     ]
   },
-
   "meta": {
     "title": "Your Topic Title",
     "subtitle": "Optional subtitle or tagline",
     "version": "1.0"
   },
-
   "navigation": {
     "sections": [
       {
         "id": 0,
         "title": "🎯 Section 1: Introduction",
-        "slides": ["slide-intro-1", "slide-intro-2"]
+        "slides": [
+          "slide-intro-1",
+          "slide-intro-2"
+        ]
       },
       {
         "id": 1,
         "title": "📐 Section 2: Core Concepts",
-        "slides": ["slide-core-1", "slide-core-2", "slide-core-3"]
+        "slides": [
+          "slide-core-1",
+          "slide-core-2",
+          "slide-core-3"
+        ]
       },
       {
         "id": 2,
         "title": "🔬 Section 3: Applications",
-        "slides": ["slide-app-1"]
+        "slides": [
+          "slide-app-1"
+        ]
       }
     ]
   },
-
   "_reference_colors": {
     "common_palette": {
       "theta": "#16a34a",
@@ -120,7 +121,6 @@
       "entropy": "#db2777"
     }
   },
-
   "slides": [
     {
       "id": "slide-intro-1",
@@ -146,11 +146,27 @@
         {
           "type": "table",
           "class": "uncertainty-table",
-          "headers": ["Concept", "What It Does", "Example"],
+          "headers": [
+            "Concept",
+            "What It Does",
+            "Example"
+          ],
           "rows": [
-            ["{term:variance:Variance}", "Measures disagreement between models", "Var = 0.0018 → models agree"],
-            ["{term:theta:θ}", "Model parameters (weights)", "7B numbers in LLaMA-7B"],
-            ["{term:loss:Loss}", "How wrong the model is", "L = 2.3 → still learning"]
+            [
+              "{term:variance:Variance}",
+              "Measures disagreement between models",
+              "Var = 0.0018 → models agree"
+            ],
+            [
+              "{term:theta:θ}",
+              "Model parameters (weights)",
+              "7B numbers in LLaMA-7B"
+            ],
+            [
+              "{term:loss:Loss}",
+              "How wrong the model is",
+              "L = 2.3 → still learning"
+            ]
           ]
         }
       ]
@@ -168,13 +184,37 @@
           "type": "equation",
           "label": "Cross-Entropy Loss",
           "parts": [
-            { "type": "term", "key": "loss", "text": "L" },
-            { "type": "operator", "symbol": "=" },
-            { "type": "raw", "text": "−" },
-            { "type": "term", "key": "summation", "text": "Σ" },
-            { "type": "raw", "text": " log " },
-            { "type": "term", "key": "probability", "text": "P" },
-            { "type": "raw", "text": "(correct token)" }
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "operator",
+              "symbol": "="
+            },
+            {
+              "type": "raw",
+              "text": "−"
+            },
+            {
+              "type": "term",
+              "key": "summation",
+              "text": "Σ"
+            },
+            {
+              "type": "raw",
+              "text": " log "
+            },
+            {
+              "type": "term",
+              "key": "probability",
+              "text": "P"
+            },
+            {
+              "type": "raw",
+              "text": "(correct token)"
+            }
           ],
           "explanation": {
             "prefix": "<strong>In plain English:</strong> ",
@@ -193,31 +233,60 @@
           "id": "variance_decomposition",
           "label": "Uncertainty Decomposition",
           "parts": [
-            { "type": "term", "key": "total-uncertainty", "text": "Total" },
-            { "type": "operator", "symbol": "=" },
+            {
+              "type": "term",
+              "key": "total-uncertainty",
+              "text": "Total"
+            },
+            {
+              "type": "operator",
+              "symbol": "="
+            },
             {
               "type": "labeled-expression",
               "underline": "blue",
               "label": "Epistemic",
               "labelColor": "epistemic-var",
-              "popupKey": "epistemic-var",
               "content": [
-                { "type": "term", "key": "variance", "text": "Var" },
-                { "type": "raw", "text": "[" },
-                { "type": "term", "key": "expectation", "text": "E" },
-                { "type": "raw", "text": "(y|x,θ)]" }
+                {
+                  "type": "term",
+                  "key": "variance",
+                  "text": "Var"
+                },
+                {
+                  "type": "raw",
+                  "text": "["
+                },
+                {
+                  "type": "term",
+                  "key": "expectation",
+                  "text": "E"
+                },
+                {
+                  "type": "raw",
+                  "text": "(y|x,θ)]"
+                }
               ]
             },
-            { "type": "operator", "symbol": "+" },
+            {
+              "type": "operator",
+              "symbol": "+"
+            },
             {
               "type": "labeled-expression",
               "underline": "orange",
               "label": "Aleatoric",
               "labelColor": "aleatoric-var",
-              "popupKey": "aleatoric-var",
               "content": [
-                { "type": "term", "key": "expectation", "text": "E" },
-                { "type": "raw", "text": "[Var(y|x,θ)]" }
+                {
+                  "type": "term",
+                  "key": "expectation",
+                  "text": "E"
+                },
+                {
+                  "type": "raw",
+                  "text": "[Var(y|x,θ)]"
+                }
               ]
             }
           ],
@@ -262,29 +331,41 @@
         {
           "type": "table",
           "class": "uncertainty-table",
-          "headers": ["Without This", "With This"],
+          "headers": [
+            "Without This",
+            "With This"
+          ],
           "rows": [
-            ["Model says 'Paris'", "Model says 'Paris' (95% confident)"],
-            ["Prediction: $350K", "Range: $350K ± $15K (95% CI)"],
-            ["Classification: Spam", "Spam (87 of 100 trees agree)"]
+            [
+              "Model says 'Paris'",
+              "Model says 'Paris' (95% confident)"
+            ],
+            [
+              "Prediction: $350K",
+              "Range: $350K ± $15K (95% CI)"
+            ],
+            [
+              "Classification: Spam",
+              "Spam (87 of 100 trees agree)"
+            ]
           ]
         }
       ]
     }
   ],
-
   "_POPUP_TEMPLATE": {
-    "_comment": "Example popup structure - add these to definitions/shared.json or topic-specific section",
+    "_comment": "Example popup structure - add to definitions/shared.json or topic-specific section. Color is auto-derived from colorPalette or auto-generated.",
     "example-concept": {
       "title": "Symbol - Full Name",
-      "color": "#hexcolor",
       "sections": [
         {
           "type": "intuitive",
           "title": "What It Does",
           "content": "Practical AI/ML explanation. What is this concept? What does it DO? Where is it used? All {term:key:relevant terms} should be colored and clickable."
         },
-        { "type": "divider" },
+        {
+          "type": "divider"
+        },
         {
           "type": "scientific",
           "title": "",

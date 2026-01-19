@@ -88,26 +88,53 @@ When someone reads a definition:
 
 ---
 
-## Colouring Rules (Read This Twice)
+## Color System (Scalable & Automatic)
+
+### How Colors Work
+
+**The key IS everything.** When you create a term with key `theta`:
+
+- Color comes from `colorPalette["theta"]` if defined, otherwise **auto-generated**
+- Popup is `popups["theta"]`
+- **Rule**: One Key = One Concept. No aliases. No fallbacks.
+
+### Auto-Generated Colors
+
+New terms automatically get unique, consistent colors via hash-based generation:
+
+- Same key = same color on every reload
+- Uses golden angle distribution for visually distinct colors
+- No need to manually pick colors for new terms
+
+### Manual Color Override (Optional)
+
+Add to `colorPalette` only if you want a SPECIFIC color:
+
+```json
+"colorPalette": {
+  "theta": "#15803d",
+  "loss": "#dc2626"
+}
+```
 
 ### The Golden Rule
 
-**Same concept = Same color = Same popup. EVERYWHERE.**
+**Same concept = Same key = Same color = Same popup. EVERYWHERE.**
 
 θ is green on slide 1? It better be green on slide 47. We're not making abstract art here.
 
-### BUT WAIT: Same Symbol, Different Meaning?
+### Different Meaning = Different Key
 
-Sometimes the same symbol means different things in different contexts. **They get DIFFERENT colors and DIFFERENT popups:**
+Same symbol, different context? Use DIFFERENT keys:
 
-| Symbol | Context         | Meaning                                               | Color            | Popup Key     |
-| ------ | --------------- | ----------------------------------------------------- | ---------------- | ------------- |
-| `p`    | `p(θ\|D)`       | Posterior distribution (parameter beliefs after data) | Blue `#2563eb`   | `posterior`   |
-| `P`    | `P(y\|x)`       | Output probability (model's prediction)               | Cyan `#0891b2`   | `probability` |
-| `σ`    | Neural networks | Activation function (sigmoid)                         | Purple `#7c3aed` | `sigmoid`     |
-| `σ`    | Statistics      | Standard deviation                                    | Orange `#f59e0b` | `std-dev`     |
+| Symbol | Context         | Key           | Meaning                    |
+| ------ | --------------- | ------------- | -------------------------- |
+| `p`    | `p(θ\|D)`       | `posterior`   | Beliefs after seeing data  |
+| `P`    | `P(y\|x)`       | `probability` | Model's output probability |
+| `σ`    | Neural networks | `sigmoid`     | Activation function        |
+| `σ`    | Statistics      | `std-dev`     | Standard deviation         |
 
-**Rule:** If the MEANING is different, it deserves a different color and popup. Don't be lazy.
+**Rule:** Different meaning = different key. The color follows automatically.
 
 ### When to Apply Colors
 
@@ -116,15 +143,13 @@ Sometimes the same symbol means different things in different contexts. **They g
 - **Key nouns in text**: When they match a concept from your equation
 - **Terms inside popups**: Also colored (nested learning FTW)
 
-### Color Consistency Example
+### STRICT Mode (Errors, Not Silence)
 
-Your equation has `{term:theta:θ}` (green). In your intuitive explanation:
+The system throws errors if something is broken:
 
-```
-"When we train a model, we're updating the {term:theta:model parameters}..."
-```
-
-"model parameters" is ALSO green because it refers to the same θ.
+- Term referenced but not defined? **ERROR**
+- Popup referenced but not defined? **ERROR**
+- No silent failures. Fix your JSON.
 
 ---
 
@@ -177,7 +202,6 @@ Your equation has `{term:theta:θ}` (green). In your intuitive explanation:
 {
   "your-concept": {
     "title": "Symbol - Full Name",
-    "color": "#hexcolor",
     "sections": [
       {
         "type": "intuitive",
@@ -205,6 +229,8 @@ Your equation has `{term:theta:θ}` (green). In your intuitive explanation:
   }
 }
 ```
+
+**Note:** No `color` field needed! Color is derived from `colorPalette["your-concept"]` or auto-generated.
 
 ---
 
@@ -296,14 +322,15 @@ Click EVERY term. If one doesn't open a popup, you have an orphan symbol. Fix it
 
 Before publishing:
 
-- [ ] Every `{term:KEY:display}` has a matching term definition
+- [ ] Every `{term:KEY:display}` has a matching term in `terms`
+- [ ] Every term key has a matching popup in `popups`
 - [ ] Every popup has: intuitive → divider → scientific (with definition + formula) → example
 - [ ] Scientific section has BOTH text definition AND mathematical formula
 - [ ] Example section shows ACTUAL data, not abstract "let X be..."
-- [ ] Same concept = same color everywhere
-- [ ] Different meaning = different color + different popup
+- [ ] Same concept = same key everywhere (color follows automatically)
+- [ ] Different meaning = different key
 - [ ] All nested terms inside popups are also clickable
-- [ ] Your reader can explain this concept after reading the popup
+- [ ] Open in browser - no console errors (strict mode catches missing definitions)
 
 ---
 
@@ -319,8 +346,8 @@ blog_demo/
 │   ├── _template.json      # Copy this to start
 │   └── your_topic.json     # Your content
 ├── scripts/
-│   ├── renderer.js         # JSON → HTML engine
-│   ├── popup.js            # Modal system
+│   ├── renderer.js         # JSON → HTML engine (strict mode)
+│   ├── popup.js            # Modal system (strict mode)
 │   └── navigation.js       # Slide navigation
 └── styles/
     └── style_1.css         # Styling

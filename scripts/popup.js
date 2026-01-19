@@ -55,18 +55,18 @@ const Popup = {
 
     /**
      * Show popup for a given term key
+     * STRICT: Throws error if popup is not defined
      * @param {string} key - The popup key to display
      */
     show(key) {
         const data = this.popupData[key];
         if (!data) {
-            console.warn(`No popup data for key: ${key}`);
-            return;
+            throw new Error(`[Popup] Popup not defined: "${key}". Add it to popups in shared.json or topic JSON.`);
         }
         
-        // Set title with color
+        // Set title with color (derived from Renderer's color system)
         this.title.textContent = data.title;
-        this.title.style.color = data.color;
+        this.title.style.color = Renderer.getColor(key);
         
         // Build body content
         let bodyHTML = '';

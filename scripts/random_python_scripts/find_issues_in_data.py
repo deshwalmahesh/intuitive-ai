@@ -61,31 +61,17 @@ class validator:
     def resolve_term(self, key, origin_file=None):
         """
         Resolve a reference key (from {term:key:...}) to a popup definition.
-        Handles indirection: key -> term_entry -> popupKey -> popup
+        STRICT: key -> popup (No aliases, No popupKey indirection)
         """
-        popup_key = key  # Default assumption: key is directly a popup key (fallback)
-        found_in_local = False
-
-        # 1. Try to find 'key' in Terms to get the real 'popupKey'
-        # Check Local Terms
-        if origin_file and origin_file in self.topic_data:
-            if key in self.topic_data[origin_file]["terms"]:
-                popup_key = self.topic_data[origin_file]["terms"][key]["popupKey"]
-                found_in_local = True
-
-        # Check Shared Terms (if not found in local)
-        if not found_in_local and key in self.shared_data["terms"]:
-            popup_key = self.shared_data["terms"][key]["popupKey"]
-
-        # 2. Look up the definition using the resolved popup_key
+        # 1. Look up the definition using the key directly
         # Check Local Popups
         if origin_file and origin_file in self.topic_data:
-            if popup_key in self.topic_data[origin_file]["popups"]:
-                return self.topic_data[origin_file]["popups"][popup_key], origin_file
+            if key in self.topic_data[origin_file]["popups"]:
+                return self.topic_data[origin_file]["popups"][key], origin_file
 
         # Check Shared Popups
-        if popup_key in self.shared_data["popups"]:
-            return self.shared_data["popups"][popup_key], "shared.json"
+        if key in self.shared_data["popups"]:
+            return self.shared_data["popups"][key], "shared.json"
 
         return None, None
 
@@ -115,14 +101,8 @@ class validator:
                     f"popups.{key}",
                 )
 
-            # 2. Check color
-            if "color" not in popup or not popup["color"].strip():
-                self.log(
-                    file_path,
-                    "ERROR",
-                    f"Popup '{key}' missing required 'color'",
-                    f"popups.{key}",
-                )
+            # 2. Check color (REMOVED - Color is now derived or auto-generated)
+            # if "color" not in popup: ...
 
             # 3. Check Sections
             if "sections" not in popup or not isinstance(popup["sections"], list):
@@ -293,6 +273,15 @@ class validator:
             r"\breturn\s+",  # return val
             r"print\(",  # print(
             r"\.append\(",  # .append(
+            # Literal Data Structures
+            r"\[\s*[^\]]+,\s*[^\]]+\]",  # [a, b]
+            r"\{\s*[^}]+:[^}]+,[^}]+\}",  # {k: v, ...}
+            # Tuple: (val, val) - strict to avoid English text like "(see below, section A)"
+            r"\((?:(?:['\"]\w+['\"]|\d+|[a-zA-Z_]\w*)\s*,\s*)+(?:['\"]\w+['\"]|\d+|[a-zA-Z_]\w*)\)",
+            # Method Calls: object.method(
+            r"\b[a-zA-Z_]\w*\.[a-zA-Z_]\w*\(",
+            # Function Calls: func(
+            r"\b[a-zA-Z_]\w*\(",
         ]
 
         for pat in patterns:
@@ -303,7 +292,7 @@ class validator:
                         file_path,
                         "WARNING",
                         f"Potential loose code (matched '{pat}')",
-                        f"'{text[:50]}...'. Python code should be in a 'code-block'.",
+                        f"'{text[:50]}...'. Code should be in a 'code-block' or <code> inline tag",
                     )
                     return  # Log once
 
@@ -477,47 +466,55 @@ class validator:
         def check_set(terms, popups, palette, file_name):
             for key, term_data in terms.items():
                 context = f"terms.{key}"
-                # 1. Check if popupKey exists
-                p_key = term_data.get("popupKey")
-                if not p_key:
-                    self.log(
-                        file_name, "ERROR", f"Term '{key}' missing popupKey", context
-                    )
-                    continue
 
-                popup, origin = self.resolve_term(p_key, file_name)
+                # 1. Check for LEGACY fields (Strict Migration)
+                if "popupKey" in term_data:
+                    self.log(
+                        file_name,
+                        "ERROR",
+                        f"Legacy field 'popupKey' detected in term '{key}'",
+                        "Remove it. Rule: Term Key MUST match Popup Key.",
+                    )
+
+                if "colorKey" in term_data:
+                    self.log(
+                        file_name,
+                        "ERROR",
+                        f"Legacy field 'colorKey' detected in term '{key}'",
+                        "Remove it. Rule: Term Key MUST match Color Key (if manual).",
+                    )
+
+                # 2. Check if popup exists (Key = PopupKey)
+                # We use resolve_term which now strictly uses 'key'
+                popup, origin = self.resolve_term(key, file_name)
                 if not popup:
                     self.log(
                         file_name,
                         "ERROR",
-                        f"Term '{key}' points to non-existent popup '{p_key}'",
-                        context,
+                        f"Term '{key}' missing definition",
+                        f"Expected popup with key '{key}' in 'popups' (shared or local).",
                     )
 
-                # 2. Check colorKey
-                c_key = term_data.get("colorKey")
-                if not c_key:
-                    self.log(
-                        file_name, "ERROR", f"Term '{key}' missing colorKey", context
-                    )
-                    continue
+                # 3. Check color consistency (if manual color exists)
+                # We check if the key exists in the palette (local or shared)
+                hex_color = self.resolve_palette(key, file_name)
 
-                hex_color = self.resolve_palette(c_key, file_name)
-                if not hex_color:
-                    self.log(
-                        file_name,
-                        "ERROR",
-                        f"Term '{key}' uses undefined colorKey '{c_key}'",
-                        context,
-                    )
+                # Note: valid to NOT have a palette entry (auto-generated)
+                # But if it HAS a palette entry, it must match any manual color in popup (if that even exists anymore?)
+                # Actually, popups shouldn't have 'color' field either?
+                # The script earlier checks popup['color'] vs palette.
+                # Let's check popup['color'] if it exists.
 
-                # 3. Check Consistency (Popup color vs Palette color)
-                if popup and hex_color:
-                    if popup.get("color").lower() != hex_color.lower():
+                if popup and "color" in popup:
+                    # Popups having 'color' field is also kinda legacy info duplication if strict?
+                    # But README says "No color field needed!".
+                    # Let's warn if it mismatches palette or auto-gen?
+                    # For now, let's just check if it matches PALETTE if palette exists.
+                    if hex_color and popup.get("color").lower() != hex_color.lower():
                         self.log(
                             file_name,
                             "WARNING",
-                            f"Color Mismatch for '{key}': Palette '{c_key}' ({hex_color}) != Popup '{p_key}' ({popup.get('color')})",
+                            f"Color Mismatch for '{key}': Palette '{key}' ({hex_color}) != Popup 'color' ({popup.get('color')})",
                             context,
                         )
 
@@ -528,6 +525,10 @@ class validator:
             self.shared_data["palette"],
             "shared.json",
         )
+
+        # Check topics
+        for fname, data in self.topic_data.items():
+            check_set(data["terms"], data["popups"], data["palette"], fname)
 
     def get_popup_status(self, popup_data):
         """Analyze a popup and return presence of key components boolean tuple"""
@@ -561,11 +562,13 @@ class validator:
 
         # Helper to collect term data
         def collect_term(key, term_data, origin_file):
-            popup_key = term_data.get("popupKey")
-            # Resolve popup (could be in shared)
-            popup_data, popup_origin = self.resolve_term(popup_key, origin_file)
+            # Resolve popup using strict key
+            popup_data, popup_origin = self.resolve_term(key, origin_file)
 
             h_int, h_sci, h_form, h_ex = self.get_popup_status(popup_data)
+
+            # Get color (strict key)
+            color = self.resolve_palette(key, origin_file)
 
             return {
                 "key": key,
@@ -574,8 +577,7 @@ class validator:
                 "title": popup_data.get("title", "MISSING POPUP")
                 if popup_data
                 else "MISSING POPUP",
-                "color": self.resolve_palette(term_data.get("colorKey"), origin_file)
-                or "N/A",
+                "color": color or "Auto/None",
                 "status": (h_int, h_sci, h_form, h_ex),
             }
 
@@ -682,37 +684,48 @@ class validator:
                 )
 
         # 4. Check for ALIASES (Multiple Terms -> Same Popup Key)
-        # Scan all term files to see if multiple term keys map to the same popupKey
-        popup_to_terms = defaultdict(list)
+        # With STRICT Key=PopupKey, this is impossible unless multiple terms are somehow defined
+        # but we already iterate keys.
 
-        # Check shared
-        for t_key, t_data in self.shared_data["terms"].items():
-            p_key = t_data.get("popupKey")
-            if p_key:
-                popup_to_terms[p_key].append(f"{t_key} (shared)")
+        # 5. Check for Ambiguous Symbols (Multiple Terms -> Same Display Symbol)
+        # Example: {"key1": "P", "key2": "P"} -> Confusing
+        # Example: {"key1": "P", "key2": "p"} -> Confusing (case insensitive check)
 
-        # Check topics
-        for fname, tdata in self.topic_data.items():
-            for t_key, t_data in tdata["terms"].items():
-                p_key = t_data.get("popupKey")
-                if p_key:
-                    popup_to_terms[p_key].append(f"{t_key} ({fname})")
+        symbol_usage = defaultdict(list)
 
-        for p_key, term_refs in popup_to_terms.items():
-            # If a popup is referenced by multiple DIFFERENT term keys, that's an alias.
-            # We need to extract the raw term key to check uniqueness
-            raw_keys = set()
-            for ref in term_refs:
-                # ref is "key (filename)"
-                raw_keys.add(ref.split(" (")[0])
+        def collect_symbols(terms_dict, source):
+            for key, data in terms_dict.items():
+                if "display" in data:
+                    symbol = data["display"].strip()
+                    # Use lower case to catch P vs p ambiguity
+                    norm_sym = symbol.lower()
+                    symbol_usage[norm_sym].append(f"{key} ('{symbol}' in {source})")
 
-            if len(raw_keys) > 1:
-                self.log(
-                    "GLOBAL",
-                    "ERROR",
-                    f"Alias Detected: Popup '{p_key}' referenced by multiple terms",
-                    f"Terms: {raw_keys}. Rule: 1 Popup = 1 Term Key (No Aliases).",
-                )
+        # Collect Shared
+        collect_symbols(self.shared_data.get("terms", {}), "shared.json")
+
+        # Collect Topics
+        for fname, data in self.topic_data.items():
+            collect_symbols(data.get("terms", {}), fname)
+
+        # Check for collisions
+        for norm_sym, usages in symbol_usage.items():
+            if len(usages) > 1:
+                # We need to check if these usages are from DIFFERENT keys.
+                # If the same key is defined in shared and then overridden in topic with same symbol, that's fine.
+                # Parse keys from usage strings: "key (...)"
+                keys_involved = set()
+                for u in usages:
+                    k = u.split(" ")[0]
+                    keys_involved.add(k)
+
+                if len(keys_involved) > 1:
+                    self.log(
+                        "GLOBAL",
+                        "WARNING",
+                        f"Ambiguous Symbol: '{norm_sym}' (or variant)",
+                        f"Used by distinct concepts: {usages}. Users might get confused.",
+                    )
 
     # ========================================================================
     # NEW ROBUST VALIDATIONS

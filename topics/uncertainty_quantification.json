@@ -298,7 +298,6 @@
               "underline": "blue",
               "label": "Epistemic",
               "labelColor": "epistemic-var",
-              "popupKey": "epistemic-var",
               "content": [
                 {
                   "type": "term",
@@ -388,7 +387,6 @@
               "underline": "orange",
               "label": "Aleatoric",
               "labelColor": "aleatoric-var",
-              "popupKey": "aleatoric-var",
               "content": [
                 {
                   "type": "term",
@@ -498,7 +496,6 @@
               "underline": "violet",
               "label": "Epistemic",
               "labelColor": "epistemic-info",
-              "popupKey": "epistemic-info",
               "content": [
                 {
                   "type": "term",
@@ -556,7 +553,6 @@
               "underline": "red",
               "label": "Aleatoric",
               "labelColor": "aleatoric-info",
-              "popupKey": "aleatoric-info",
               "content": [
                 {
                   "type": "term",
@@ -1023,40 +1019,27 @@
   },
   "terms": {
     "mutual-info": {
-      "display": "I",
-      "colorKey": "mutual-info",
-      "popupKey": "mutual-info"
+      "display": "I"
     },
     "epistemic-var": {
-      "display": "Epistemic",
-      "colorKey": "epistemic-var",
-      "popupKey": "epistemic-var"
+      "display": "Epistemic"
     },
     "aleatoric-var": {
-      "display": "Aleatoric",
-      "colorKey": "aleatoric-var",
-      "popupKey": "aleatoric-var"
+      "display": "Aleatoric"
     },
     "epistemic-info": {
-      "display": "Epistemic",
-      "colorKey": "epistemic-info",
-      "popupKey": "epistemic-info"
+      "display": "Epistemic"
     },
     "aleatoric-info": {
-      "display": "Aleatoric",
-      "colorKey": "aleatoric-info",
-      "popupKey": "aleatoric-info"
+      "display": "Aleatoric"
     },
     "total-uncertainty": {
-      "display": "Total",
-      "colorKey": "total",
-      "popupKey": "total-uncertainty"
+      "display": "Total"
     }
   },
   "popups": {
     "epistemic-var": {
       "title": "Epistemic Uncertainty (Variance Form)",
-      "color": "#2563eb",
       "sections": [
         {
           "type": "equation-display",
@@ -1084,7 +1067,6 @@
     },
     "aleatoric-var": {
       "title": "Aleatoric Uncertainty (Variance Form)",
-      "color": "#7f1d1d",
       "sections": [
         {
           "type": "equation-display",
@@ -1113,7 +1095,6 @@
     },
     "total-uncertainty": {
       "title": "Total Uncertainty",
-      "color": "#581c87",
       "sections": [
         {
           "type": "intuitive",
@@ -1140,7 +1121,6 @@
     },
     "mutual-info": {
       "title": "I - Mutual Information",
-      "color": "#a21caf",
       "sections": [
         {
           "type": "intuitive",
@@ -1170,7 +1150,6 @@
     },
     "epistemic-info": {
       "title": "Epistemic Uncertainty (Info-Theoretic Form)",
-      "color": "#818cf8",
       "sections": [
         {
           "type": "equation-display",
@@ -1199,7 +1178,6 @@
     },
     "aleatoric-info": {
       "title": "Aleatoric Uncertainty (Info-Theoretic Form)",
-      "color": "#e11d48",
       "sections": [
         {
           "type": "equation-display",

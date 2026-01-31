@@ -20,18 +20,27 @@
         "id": 1,
         "title": "2. Famous Techniques",
         "slides": [
-          "slide-1-1"
+          "slide-1-1",
+          "slide-1-2"
         ]
       }
     ]
   },
   "colorPalette": {
     "rlvr": "#065f46",
-    "pipeline": "#92400e"
+    "pipeline": "#92400e",
+    "dpo-reward-margin": "#22c55e",
+    "dpo-gradient-weight": "#be185d"
   },
   "terms": {
     "rlvr": {
       "display": "RLVR"
+    },
+    "dpo-reward-margin": {
+      "display": "Reward Margin"
+    },
+    "dpo-gradient-weight": {
+      "display": "Adaptive Weight"
     }
   },
   "popups": {
@@ -54,6 +63,44 @@
           "type": "example",
           "title": "Verification",
           "content": "<strong>Math:</strong> \"847 × 23 = 19481\" → calculator → TRUE → R=1.0<br><strong>Code:</strong> is_prime → run_tests → pass → R=1.0<br><strong>Limit:</strong> Only verifiable tasks"
+        }
+      ]
+    },
+    "dpo-reward-margin": {
+      "title": "Reward Margin",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "<strong>What it measures:</strong> The gap between 'how much my model prefers the winner' vs 'how much my model prefers the loser'.<br><br>• Positive margin → Model correctly prefers winner<br>• Negative margin → Model wrongly prefers loser<br>• Larger positive → More confident and correct"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Difference of implicit rewards.",
+          "formula": "margin = {term:implicit-reward:r̂}(winner) − {term:implicit-reward:r̂}(loser)"
+        }
+      ]
+    },
+    "dpo-gradient-weight": {
+      "title": "Adaptive Weight",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "<strong>What it does:</strong> Controls how much we update on each example.<br><br>• Model is correct (winner > loser) → weight is SMALL → small update<br>• Model is wrong (loser > winner) → weight is LARGE → strong update<br><br><strong>Why it matters:</strong> Focuses learning on mistakes. Prevents over-optimizing already-solved examples, which would cause mode collapse."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "{term:sigmoid:Sigmoid} of negative margin.",
+          "formula": "weight = {term:sigmoid:σ}({term:implicit-reward:r̂}_loser − {term:implicit-reward:r̂}_winner)"
         }
       ]
     }
@@ -510,6 +557,53 @@
           "src": "images/rl_in_llms/RLHF.jpeg",
           "alt": "RLHF: Bradley-Terry model and policy optimization",
           "style": "max-height: 600px;"
+        }
+      ]
+    },
+    {
+      "id": "slide-1-2",
+      "sectionIndex": 1,
+      "title": "DPO - Direct Preference Optimization",
+      "content": [
+        {
+          "type": "insight-box",
+          "title": "The DPO Loss Function",
+          "content": "<div class=\"popup-equation\" style=\"font-size: 22px;\">{term:loss:L}<sup>DPO</sup> = −{term:expectation:E}[ {term:log:log} {term:sigmoid:σ}( {term:beta:β} {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:preferred:y_w})</span><span class=\"frac-den\">{term:reference:π_ref}({term:preferred:y_w})</span></span> − {term:beta:β} {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:rejected:y_l})</span><span class=\"frac-den\">{term:reference:π_ref}({term:rejected:y_l})</span></span> ) ]</div>"
+        },
+        {
+          "type": "insight-box",
+          "title": "What Each Part Means",
+          "content": "<strong>The left fraction</strong> <span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:preferred:y_w})</span><span class=\"frac-den\">{term:reference:π_ref}({term:preferred:y_w})</span></span><br>How much MORE does my current model like the <strong>winner</strong> compared to the original model?<br>• If > 1: current model likes winner more<br>• If < 1: current model likes winner less<br><br><strong>The right fraction</strong> <span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:rejected:y_l})</span><span class=\"frac-den\">{term:reference:π_ref}({term:rejected:y_l})</span></span><br>How much MORE does my current model like the <strong>loser</strong> compared to the original model?<br><br><strong>The subtraction (left − right)</strong><br>We want: winner ratio > loser ratio → positive margin → low loss<br>If loser ratio > winner ratio → negative margin → high loss → model gets corrected"
+        },
+        {
+          "type": "insight-box",
+          "title": "The Components",
+          "content": "<strong>{term:policy:π_θ} (Current Model):</strong> The LLM being trained. Its {term:theta:weights} change each step.<br><br><strong>{term:reference:π_ref} (Reference Model):</strong> Frozen copy of the {term:sft:SFT} model. Never changes. Keeps the current model from going crazy.<br><br><strong>{term:preferred:y_w}, {term:rejected:y_l} (Winner/Loser):</strong> Human-labeled preference pair. Fixed dataset - no generation during training.<br><br><strong>{term:beta:β} (Temperature):</strong> Controls how much the model can deviate. Typical: 0.1"
+        },
+        {
+          "type": "insight-box",
+          "title": "What DPO Eliminates vs PPO",
+          "content": "<strong>No Reward Model:</strong> PPO trains a separate neural network to score responses. DPO derives scores directly from the probability ratios above.<br><br><strong>No Sampling:</strong> PPO generates new responses every batch. DPO uses fixed preference pairs like SFT.<br><br><strong>No Critic:</strong> PPO needs a value network for advantages. DPO is pure classification.<br><br><strong>Memory:</strong> PPO needs 4 models (~56GB for 7B). DPO needs 2 models (~28GB for 7B)."
+        },
+        {
+          "type": "insight-box",
+          "title": "The Implicit Reward",
+          "content": "<div class=\"popup-equation\" style=\"font-size: 20px;\">{term:implicit-reward:r̂}(y) = {term:beta:β} × {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}(y)</span><span class=\"frac-den\">{term:reference:π_ref}(y)</span></span></div><br><strong>In plain terms:</strong> How much more does my current model like this response compared to the original?<br><br>• Current = 15%, Original = 5% → ratio = 3 → log(3) = 1.1 → positive (current likes more)<br>• Current = 2%, Original = 8% → ratio = 0.25 → log(0.25) = -1.4 → negative (current likes less)<br><br>No separate reward model was trained. The 'reward' emerges from comparing the two models."
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: One Training Example",
+          "content": "<strong>Input preference pair:</strong><br><code class=\"code-block\">prompt: \"Is raw chicken safe to eat?\"\nwinner: \"No, raw chicken can contain Salmonella...\"\nloser: \"Yes, sushi-grade chicken is perfectly safe!\"</code><br><br><strong>Step 1: Get probabilities from both models</strong><br><code class=\"code-block\">π_θ(winner) = 0.0012    π_ref(winner) = 0.0008\nπ_θ(loser)  = 0.0003    π_ref(loser)  = 0.0005</code><br><br><strong>Step 2: Compute the ratios</strong><br><code class=\"code-block\">winner_ratio = 0.0012 / 0.0008 = 1.5   → model likes winner MORE\nloser_ratio  = 0.0003 / 0.0005 = 0.6   → model likes loser LESS</code><br>Good sign: winner ratio > loser ratio<br><br><strong>Step 3: Compute log ratios and margin (β=0.1)</strong><br><code class=\"code-block\">log(1.5) = 0.405    log(0.6) = -0.511\nmargin = 0.1 × (0.405 - (-0.511)) = 0.092</code><br>Positive margin → correct preference<br><br><strong>Step 4: Compute loss</strong><br><code class=\"code-block\">σ(0.092) = 0.523\nloss = -log(0.523) = 0.648</code><br>Moderate loss - room to improve<br><br><strong>Step 5: Gradient descent</strong><br>Update weights to increase P(winner) and decrease P(loser)"
+        },
+        {
+          "type": "insight-box",
+          "title": "The Gradient: Why Some Examples Matter More",
+          "content": "<div class=\"popup-equation\" style=\"font-size: 18px;\">{term:gradient:∇}{term:loss:L} = −{term:beta:β} × {term:expectation:E}[ <span style=\"color: #be185d; font-weight: bold;\">{term:sigmoid:σ}({term:implicit-reward:r̂}<sub>loser</sub> − {term:implicit-reward:r̂}<sub>winner</sub>)</span> × ({term:gradient:∇}log{term:policy:π}({term:preferred:y_w}) − {term:gradient:∇}log{term:policy:π}({term:rejected:y_l})) ]</div><br><strong>The pink term is a weight between 0 and 1:</strong><br><br><strong>When model is WRONG</strong> (loser has higher implicit reward than winner):<br>• r̂_loser − r̂_winner is positive → σ(positive) → close to 1<br>• Large weight → strong gradient → big update<br><br><strong>When model is CORRECT</strong> (winner has higher implicit reward):<br>• r̂_loser − r̂_winner is negative → σ(negative) → close to 0<br>• Small weight → weak gradient → small update<br><br><strong>Result:</strong> The model focuses learning on examples it gets WRONG. This prevents mode collapse."
+        },
+        {
+          "type": "insight-box",
+          "title": "Why DPO Can Skip the Reward Model",
+          "content": "<strong>The problem with training a reward model:</strong><br>In theory, to find the 'best' policy, you need to score EVERY possible response the model could generate. For a 50K vocabulary generating 100 tokens, that's 50,000^100 possibilities. Impossible.<br><br><strong>The trick DPO uses:</strong><br>DPO only compares TWO responses at a time - the winner and loser for ONE prompt.<br><br>When you compare just two things, you only care about <em>which one is better</em>, not their absolute scores. It's like asking 'Is Alice taller than Bob?' - you don't need to know their exact heights, just who's taller.<br><br><strong>What cancels out:</strong><br><code class=\"code-block\">Score(winner) = (how much model likes winner) + constant\nScore(loser)  = (how much model likes loser)  + constant\n\nDifference = Score(winner) - Score(loser)\n           = (model likes winner) - (model likes loser)\n           ← The constant cancels!</code><br><br><strong>Result:</strong> We never need to compute scores for all possible responses. Just compare two at a time. That's the whole trick that makes DPO work."
         }
       ]
     }

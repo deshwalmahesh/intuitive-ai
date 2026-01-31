@@ -31,7 +31,11 @@
     "clip-epsilon": "#f97316",
     "sigmoid": "#a855f7",
     "beta": "#6366f1",
-    "log": "#0369a1"
+    "log": "#0369a1",
+    "preferred": "#22c55e",
+    "rejected": "#ef4444",
+    "implicit-reward": "#f59e0b",
+    "dpo": "#8b5cf6"
   },
   "terms": {
     "loss": {
@@ -126,6 +130,18 @@
     },
     "log": {
       "display": "log"
+    },
+    "preferred": {
+      "display": "y_w"
+    },
+    "rejected": {
+      "display": "y_l"
+    },
+    "implicit-reward": {
+      "display": "r̂"
+    },
+    "dpo": {
+      "display": "DPO"
     }
   },
   "popups": {
@@ -970,6 +986,102 @@
           "type": "example",
           "title": "Values",
           "content": "<strong>log(1.0) = 0:</strong> Perfect (P=1) → no penalty<br><strong>log(0.5) = -0.69:</strong> 50% → moderate penalty<br><strong>log(0.1) = -2.3:</strong> 10% → high penalty<br><strong>log(0.01) = -4.6:</strong> 1% → severe penalty"
+        }
+      ]
+    },
+    "preferred": {
+      "title": "y_w - Preferred/Winning Response",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "When you show humans two responses to the same prompt and ask 'which is better?', the one they pick is {term:preferred:y_w}. That's it. The 'w' stands for 'winner' of that comparison.<br><br><strong>In practice:</strong> You generate 2+ responses from your {term:model:model}, send them to human annotators, they pick the better one. You now have a preference pair: (prompt, winner, loser)."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The chosen response in a preference pair from human annotation.",
+          "formula": "P({term:preferred:y_w} > {term:rejected:y_l} | {term:input:x}) > 0.5"
+        },
+        {
+          "type": "example",
+          "title": "What Preference Data Looks Like",
+          "content": "<code class=\"code-block\">{\n  \"prompt\": \"How to lose weight safely?\",\n  \"chosen\": \"Balanced diet + exercise. Consult a doctor.\",\n  \"rejected\": \"Magic pills! Lose 30 lbs in a week!\"\n}</code><br><br>The 'chosen' field is {term:preferred:y_w}. Simple."
+        }
+      ]
+    },
+    "rejected": {
+      "title": "y_l - Rejected/Losing Response",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "The response humans said was WORSE in the head-to-head comparison. The 'l' stands for 'loser'. We want the {term:model:model} to generate LESS of this type of response.<br><br><strong>Why it matters:</strong> Without seeing bad examples, the {term:model:model} doesn't know what to AVOID. The rejected response teaches 'don't do this'."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The rejected response in a preference pair. Training decreases its likelihood.",
+          "formula": "P({term:rejected:y_l} > {term:preferred:y_w} | {term:input:x}) < 0.5"
+        },
+        {
+          "type": "example",
+          "title": "Common Rejection Reasons",
+          "content": "<strong>Harmful:</strong> Dangerous advice<br><strong>Wrong:</strong> Factually incorrect<br><strong>Unhelpful:</strong> Doesn't answer the question<br><strong>Hallucinated:</strong> Makes up information"
+        }
+      ]
+    },
+    "implicit-reward": {
+      "title": "r̂ - Implicit Reward",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "<strong>What is it in practice?</strong><br>You have two LLMs: your current one ({term:policy:π_θ}) and the original SFT one ({term:reference:π_ref}). Both look at a response and say 'I think this response has X% probability'.<br><br>The {term:implicit-reward:implicit reward} asks: <strong>'Does my current model like this response MORE or LESS than the original?'</strong><br><br>• Current model says 15%, original says 5% → ratio = 3 → positive reward (current likes it more)<br>• Current model says 2%, original says 8% → ratio = 0.25 → negative reward (current likes it less)"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The {term:log:log} of the {term:probability:probability} ratio between current and {term:reference:reference} models, scaled by {term:beta:β}.",
+          "formula": "{term:implicit-reward:r̂}(y) = {term:beta:β} × {term:log:log}({term:policy:π_θ}(y) / {term:reference:π_ref}(y))"
+        },
+        {
+          "type": "example",
+          "title": "Calculation",
+          "content": "<code class=\"code-block\">Current model: π_θ(response) = 0.15\nOriginal model: π_ref(response) = 0.05\nβ = 0.1\n\nRatio = 0.15 / 0.05 = 3\nlog(3) = 1.1\nr̂ = 0.1 × 1.1 = 0.11\n\nPositive → current model prefers this more</code>"
+        }
+      ]
+    },
+    "dpo": {
+      "title": "DPO - Direct Preference Optimization",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "<strong>The trick:</strong> Align LLMs on human preferences WITHOUT training a separate scoring model.<br><br><strong>How:</strong><br>• Take a pair: (prompt, winner response, loser response)<br>• Ask: 'Does my model prefer the winner over the loser?'<br>• If yes → small loss. If no → big loss.<br>• Update weights via gradient descent.<br><br><strong>Why it works:</strong> The preference signal is baked directly into the loss function. No PPO loops, no reward model, no critic. Just supervised learning on pairs."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "Binary classification loss derived from Bradley-Terry preference model.",
+          "formula": "{term:loss:L} = −{term:log:log} {term:sigmoid:σ}(reward_margin)"
+        },
+        {
+          "type": "example",
+          "title": "What You Need",
+          "content": "<strong>Models:</strong> 2 (current + frozen reference) vs PPO's 4<br><strong>Data:</strong> Fixed preference pairs (no generation during training)<br><strong>Hyperparameters:</strong> Just β and learning rate"
         }
       ]
     }

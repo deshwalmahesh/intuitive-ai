@@ -21,16 +21,11 @@
         "title": "2. Famous Techniques",
         "slides": [
           "slide-1-1",
-          "slide-1-2"
+          "slide-1-2",
+          "slide-1-3"
         ]
       }
     ]
-  },
-  "colorPalette": {
-    "rlvr": "#065f46",
-    "pipeline": "#92400e",
-    "dpo-reward-margin": "#22c55e",
-    "dpo-gradient-weight": "#be185d"
   },
   "terms": {
     "rlvr": {
@@ -566,44 +561,540 @@
       "title": "DPO - Direct Preference Optimization",
       "content": [
         {
-          "type": "insight-box",
-          "title": "The DPO Loss Function",
-          "content": "<div class=\"popup-equation\" style=\"font-size: 22px;\">{term:loss:L}<sup>DPO</sup> = −{term:expectation:E}[ {term:log:log} {term:sigmoid:σ}( {term:beta:β} {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:preferred:y_w})</span><span class=\"frac-den\">{term:reference:π_ref}({term:preferred:y_w})</span></span> − {term:beta:β} {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:rejected:y_l})</span><span class=\"frac-den\">{term:reference:π_ref}({term:rejected:y_l})</span></span> ) ]</div>"
+          "type": "equation",
+          "id": "dpo_objective",
+          "label": "The DPO Objective",
+          "parts": [
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "raw",
+              "text": "^DPO = −"
+            },
+            {
+              "type": "term",
+              "key": "expectation",
+              "text": "E"
+            },
+            {
+              "type": "raw",
+              "text": "["
+            },
+            {
+              "type": "term",
+              "key": "log",
+              "text": "log"
+            },
+            {
+              "type": "raw",
+              "text": " "
+            },
+            {
+              "type": "term",
+              "key": "sigmoid",
+              "text": "σ"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "green",
+              "label": "Winner Boost",
+              "labelColor": "preferred",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "beta",
+                  "text": "β"
+                },
+                {
+                  "type": "term",
+                  "key": "log",
+                  "text": "log"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "policy",
+                  "text": "π_θ"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "preferred",
+                  "text": "y_w"
+                },
+                {
+                  "type": "raw",
+                  "text": ")/"
+                },
+                {
+                  "type": "term",
+                  "key": "reference",
+                  "text": "π_ref"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "preferred",
+                  "text": "y_w"
+                },
+                {
+                  "type": "raw",
+                  "text": "))"
+                }
+              ]
+            },
+            {
+              "type": "operator",
+              "symbol": "−"
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "red",
+              "label": "Loser Penalty",
+              "labelColor": "rejected",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "beta",
+                  "text": "β"
+                },
+                {
+                  "type": "term",
+                  "key": "log",
+                  "text": "log"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "policy",
+                  "text": "π_θ"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "rejected",
+                  "text": "y_l"
+                },
+                {
+                  "type": "raw",
+                  "text": ")/"
+                },
+                {
+                  "type": "term",
+                  "key": "reference",
+                  "text": "π_ref"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "rejected",
+                  "text": "y_l"
+                },
+                {
+                  "type": "raw",
+                  "text": "))"
+                }
+              ]
+            },
+            {
+              "type": "raw",
+              "text": ")]"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>What does this equation mean?</strong>",
+            "template": "<br><br>We compute an {term:implicit-reward:implicit reward} for both the {term:preferred:winner} and {term:rejected:loser} responses. The {term:preferred:Winner Boost} asks: 'How much more does {term:policy:my current model} like the {term:preferred:winner} compared to the {term:reference:original model}?' The {term:rejected:Loser Penalty} asks the same for the {term:rejected:loser}.<br><br>We then subtract them: {term:preferred:winner boost} − {term:rejected:loser penalty}. If our {term:policy:current model} correctly prefers the {term:preferred:winner} over the {term:rejected:loser}, this gap is positive → the {term:sigmoid:σ} gives a high value → the {term:log:log} gives a small negative → low {term:loss:loss}. If our {term:policy:model} wrongly prefers the {term:rejected:loser}, the gap is negative → high {term:loss:loss} → big {term:gradient:gradient} update!<br><br>The {term:beta:β} controls how strongly we weight the preference signal. Higher {term:beta:β} = more aggressive updates."
+          }
         },
+
         {
           "type": "insight-box",
-          "title": "What Each Part Means",
-          "content": "<strong>The left fraction</strong> <span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:preferred:y_w})</span><span class=\"frac-den\">{term:reference:π_ref}({term:preferred:y_w})</span></span><br>How much MORE does my current model like the <strong>winner</strong> compared to the original model?<br>• If > 1: current model likes winner more<br>• If < 1: current model likes winner less<br><br><strong>The right fraction</strong> <span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}({term:rejected:y_l})</span><span class=\"frac-den\">{term:reference:π_ref}({term:rejected:y_l})</span></span><br>How much MORE does my current model like the <strong>loser</strong> compared to the original model?<br><br><strong>The subtraction (left − right)</strong><br>We want: winner ratio > loser ratio → positive margin → low loss<br>If loser ratio > winner ratio → negative margin → high loss → model gets corrected"
-        },
+          "title": "",
+          "content": "<strong>The setup:</strong> You have pairs of responses where humans said 'A is better than B'.<br><br><strong>Example:</strong><br><code class=\"code-block\">Prompt: 'Is raw chicken safe to eat?'\nWinner (A): 'No, raw chicken contains Salmonella...'\nLoser (B): 'Yes, sushi-grade chicken is perfectly safe!'</code><br><br><strong>What DPO does:</strong><br>1. Look at both responses<br>2. Ask: 'Does my model prefer the winner over the loser?'<br>3. If yes → small loss (good job)<br>4. If no → big loss (learn from this mistake)<br>5. Update weights via gradient descent<br><br><strong>No reward model. No sampling. Just supervised learning on pairs.</strong>"
+        }, 
+
         {
           "type": "insight-box",
-          "title": "The Components",
-          "content": "<strong>{term:policy:π_θ} (Current Model):</strong> The LLM being trained. Its {term:theta:weights} change each step.<br><br><strong>{term:reference:π_ref} (Reference Model):</strong> Frozen copy of the {term:sft:SFT} model. Never changes. Keeps the current model from going crazy.<br><br><strong>{term:preferred:y_w}, {term:rejected:y_l} (Winner/Loser):</strong> Human-labeled preference pair. Fixed dataset - no generation during training.<br><br><strong>{term:beta:β} (Temperature):</strong> Controls how much the model can deviate. Typical: 0.1"
+          "title": "The Fractions Explained",
+          "content": "<strong>The {term:preferred:Winner Boost} fraction:</strong><br><code class=\"code-block\">{term:policy:π_θ}({term:preferred:winner}) / {term:reference:π_ref}({term:preferred:winner})</code><br>• If > 1: {term:policy:Current model} likes the {term:preferred:winner} MORE than {term:reference:original} did<br>• If < 1: {term:policy:Current model} likes the {term:preferred:winner} LESS than {term:reference:original} did<br><br><strong>The {term:rejected:Loser Penalty} fraction:</strong> Same thing for the {term:rejected:loser} response<br><br><strong>The subtraction:</strong><br>• We WANT: {term:preferred:winner} ratio > {term:rejected:loser} ratio → positive gap<br>• Positive gap means {term:policy:model} correctly prefers {term:preferred:winner} → low {term:loss:loss}<br>• Negative gap means {term:policy:model} wrongly prefers {term:rejected:loser} → high {term:loss:loss}"
         },
+
+
         {
           "type": "insight-box",
           "title": "What DPO Eliminates vs PPO",
-          "content": "<strong>No Reward Model:</strong> PPO trains a separate neural network to score responses. DPO derives scores directly from the probability ratios above.<br><br><strong>No Sampling:</strong> PPO generates new responses every batch. DPO uses fixed preference pairs like SFT.<br><br><strong>No Critic:</strong> PPO needs a value network for advantages. DPO is pure classification.<br><br><strong>Memory:</strong> PPO needs 4 models (~56GB for 7B). DPO needs 2 models (~28GB for 7B)."
+          "content": "<strong>No {term:reward:Reward Model}:</strong> PPO trains a separate neural network to score responses. DPO derives scores directly from the {term:probability:probability} ratios.<br><br><strong>No Sampling:</strong> PPO generates new {term:output:responses} every batch. DPO uses fixed preference pairs like supervised learning.<br><br><strong>No {term:value:Critic}:</strong> PPO needs a {term:value:value network} for {term:advantage:advantages}. DPO is pure classification.<br><br><strong>Memory:</strong> PPO needs 4 {term:model:models} (~56GB for 7B). DPO needs 2 {term:model:models} (~28GB for 7B)."
         },
         {
-          "type": "insight-box",
-          "title": "The Implicit Reward",
-          "content": "<div class=\"popup-equation\" style=\"font-size: 20px;\">{term:implicit-reward:r̂}(y) = {term:beta:β} × {term:log:log}<span class=\"frac\"><span class=\"frac-num\">{term:policy:π_θ}(y)</span><span class=\"frac-den\">{term:reference:π_ref}(y)</span></span></div><br><strong>In plain terms:</strong> How much more does my current model like this response compared to the original?<br><br>• Current = 15%, Original = 5% → ratio = 3 → log(3) = 1.1 → positive (current likes more)<br>• Current = 2%, Original = 8% → ratio = 0.25 → log(0.25) = -1.4 → negative (current likes less)<br><br>No separate reward model was trained. The 'reward' emerges from comparing the two models."
+          "type": "equation",
+          "id": "implicit_reward",
+          "label": "The Implicit Reward",
+          "parts": [
+            {
+              "type": "term",
+              "key": "implicit-reward",
+              "text": "r̂"
+            },
+            {
+              "type": "raw",
+              "text": "(response) = "
+            },
+            {
+              "type": "term",
+              "key": "beta",
+              "text": "β"
+            },
+            {
+              "type": "raw",
+              "text": " × "
+            },
+            {
+              "type": "term",
+              "key": "log",
+              "text": "log"
+            },
+            {
+              "type": "raw",
+              "text": "("
+            },
+            {
+              "type": "term",
+              "key": "policy",
+              "text": "π_θ"
+            },
+            {
+              "type": "raw",
+              "text": "(response) / "
+            },
+            {
+              "type": "term",
+              "key": "reference",
+              "text": "π_ref"
+            },
+            {
+              "type": "raw",
+              "text": "(response))"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>What it means:</strong> ",
+            "template": "The {term:implicit-reward:implicit reward} measures how much more {term:policy:our current model} likes a response compared to the {term:reference:original model}. We take the ratio of {term:probability:probabilities}, apply {term:log:log} to get a centered score, and scale by {term:beta:β}.<br><br>• {term:policy:Current} = 15%, {term:reference:Original} = 5% → ratio = 3 → {term:log:log}(3) = 1.1 → positive (model likes more)<br>• {term:policy:Current} = 2%, {term:reference:Original} = 8% → ratio = 0.25 → {term:log:log}(0.25) = -1.4 → negative (model likes less)<br><br>No separate {term:reward:reward model} was trained. The '{term:reward:reward}' emerges from comparing the two {term:model:models}."
+          }
         },
         {
           "type": "insight-box",
           "title": "Step-by-Step: One Training Example",
-          "content": "<strong>Input preference pair:</strong><br><code class=\"code-block\">prompt: \"Is raw chicken safe to eat?\"\nwinner: \"No, raw chicken can contain Salmonella...\"\nloser: \"Yes, sushi-grade chicken is perfectly safe!\"</code><br><br><strong>Step 1: Get probabilities from both models</strong><br><code class=\"code-block\">π_θ(winner) = 0.0012    π_ref(winner) = 0.0008\nπ_θ(loser)  = 0.0003    π_ref(loser)  = 0.0005</code><br><br><strong>Step 2: Compute the ratios</strong><br><code class=\"code-block\">winner_ratio = 0.0012 / 0.0008 = 1.5   → model likes winner MORE\nloser_ratio  = 0.0003 / 0.0005 = 0.6   → model likes loser LESS</code><br>Good sign: winner ratio > loser ratio<br><br><strong>Step 3: Compute log ratios and margin (β=0.1)</strong><br><code class=\"code-block\">log(1.5) = 0.405    log(0.6) = -0.511\nmargin = 0.1 × (0.405 - (-0.511)) = 0.092</code><br>Positive margin → correct preference<br><br><strong>Step 4: Compute loss</strong><br><code class=\"code-block\">σ(0.092) = 0.523\nloss = -log(0.523) = 0.648</code><br>Moderate loss - room to improve<br><br><strong>Step 5: Gradient descent</strong><br>Update weights to increase P(winner) and decrease P(loser)"
+          "content": "<strong>Input preference pair:</strong><br><code class=\"code-block\">prompt: \"Is raw chicken safe to eat?\"\n{term:preferred:winner}: \"No, raw chicken can contain Salmonella...\"\n{term:rejected:loser}: \"Yes, sushi-grade chicken is perfectly safe!\"</code><br><br><strong>Step 1: Get {term:probability:probabilities} from both {term:model:models}</strong><br><code class=\"code-block\">{term:policy:π_θ}({term:preferred:winner}) = 0.0012    {term:reference:π_ref}({term:preferred:winner}) = 0.0008\n{term:policy:π_θ}({term:rejected:loser})  = 0.0003    {term:reference:π_ref}({term:rejected:loser})  = 0.0005</code><br><br><strong>Step 2: Compute the ratios</strong><br><code class=\"code-block\">{term:preferred:winner}_ratio = 0.0012 / 0.0008 = 1.5   → {term:policy:model} likes {term:preferred:winner} MORE\n{term:rejected:loser}_ratio  = 0.0003 / 0.0005 = 0.6   → {term:policy:model} likes {term:rejected:loser} LESS</code><br>Good sign: {term:preferred:winner} ratio > {term:rejected:loser} ratio<br><br><strong>Step 3: Compute {term:log:log} ratios and margin ({term:beta:β}=0.1)</strong><br><code class=\"code-block\">{term:log:log}(1.5) = 0.405    {term:log:log}(0.6) = -0.511\nmargin = 0.1 × (0.405 - (-0.511)) = 0.092</code><br>Positive margin → correct preference<br><br><strong>Step 4: Compute {term:loss:loss}</strong><br><code class=\"code-block\">{term:sigmoid:σ}(0.092) = 0.523\n{term:loss:loss} = -{term:log:log}(0.523) = 0.648</code><br>Moderate {term:loss:loss} - room to improve<br><br><strong>Step 5: {term:gradient:Gradient} descent</strong><br>Update {term:theta:weights} to increase P({term:preferred:winner}) and decrease P({term:rejected:loser})"
         },
         {
           "type": "insight-box",
           "title": "The Gradient: Why Some Examples Matter More",
-          "content": "<div class=\"popup-equation\" style=\"font-size: 18px;\">{term:gradient:∇}{term:loss:L} = −{term:beta:β} × {term:expectation:E}[ <span style=\"color: #be185d; font-weight: bold;\">{term:sigmoid:σ}({term:implicit-reward:r̂}<sub>loser</sub> − {term:implicit-reward:r̂}<sub>winner</sub>)</span> × ({term:gradient:∇}log{term:policy:π}({term:preferred:y_w}) − {term:gradient:∇}log{term:policy:π}({term:rejected:y_l})) ]</div><br><strong>The pink term is a weight between 0 and 1:</strong><br><br><strong>When model is WRONG</strong> (loser has higher implicit reward than winner):<br>• r̂_loser − r̂_winner is positive → σ(positive) → close to 1<br>• Large weight → strong gradient → big update<br><br><strong>When model is CORRECT</strong> (winner has higher implicit reward):<br>• r̂_loser − r̂_winner is negative → σ(negative) → close to 0<br>• Small weight → weak gradient → small update<br><br><strong>Result:</strong> The model focuses learning on examples it gets WRONG. This prevents mode collapse."
+          "content": "<strong>The {term:gradient:gradient} has an adaptive weight:</strong><br><br><code class=\"code-block\">weight = {term:sigmoid:σ}({term:implicit-reward:r̂}({term:rejected:loser}) − {term:implicit-reward:r̂}({term:preferred:winner}))</code><br><br><strong>When {term:policy:model} is WRONG</strong> ({term:rejected:loser} has higher {term:implicit-reward:implicit reward} than {term:preferred:winner}):<br>• {term:rejected:loser} − {term:preferred:winner} is positive → {term:sigmoid:σ}(positive) → close to 1<br>• Large weight → strong {term:gradient:gradient} → big update<br><br><strong>When {term:policy:model} is CORRECT</strong> ({term:preferred:winner} has higher {term:implicit-reward:implicit reward}):<br>• {term:rejected:loser} − {term:preferred:winner} is negative → {term:sigmoid:σ}(negative) → close to 0<br>• Small weight → weak {term:gradient:gradient} → small update<br><br><strong>Result:</strong> The {term:model:model} focuses learning on examples it gets WRONG. Already-learned examples get small updates. This prevents overfitting."
         },
         {
           "type": "insight-box",
-          "title": "Why DPO Can Skip the Reward Model",
-          "content": "<strong>The problem with training a reward model:</strong><br>In theory, to find the 'best' policy, you need to score EVERY possible response the model could generate. For a 50K vocabulary generating 100 tokens, that's 50,000^100 possibilities. Impossible.<br><br><strong>The trick DPO uses:</strong><br>DPO only compares TWO responses at a time - the winner and loser for ONE prompt.<br><br>When you compare just two things, you only care about <em>which one is better</em>, not their absolute scores. It's like asking 'Is Alice taller than Bob?' - you don't need to know their exact heights, just who's taller.<br><br><strong>What cancels out:</strong><br><code class=\"code-block\">Score(winner) = (how much model likes winner) + constant\nScore(loser)  = (how much model likes loser)  + constant\n\nDifference = Score(winner) - Score(loser)\n           = (model likes winner) - (model likes loser)\n           ← The constant cancels!</code><br><br><strong>Result:</strong> We never need to compute scores for all possible responses. Just compare two at a time. That's the whole trick that makes DPO work."
+          "title": "Why DPO Can Skip the {term:reward:Reward Model}",
+          "content": "<strong>The problem with {term:reward:reward models}:</strong><br>To find the 'best' {term:policy:policy}, you'd need to score EVERY possible {term:output:response}. For a 50K {term:vocabulary:vocabulary} generating 100 {term:token:tokens}, that's 50,000^100 possibilities. Impossible.<br><br><strong>The DPO trick:</strong><br>DPO only compares TWO {term:output:responses} at a time - the {term:preferred:winner} and {term:rejected:loser} for ONE {term:input:prompt}.<br><br>When you compare just two things, you only care about <em>which one is better</em>, not their absolute scores. It's like asking 'Is Alice taller than Bob?' - you don't need their exact heights.<br><br><strong>What cancels out:</strong><br><code class=\"code-block\">Score({term:preferred:winner}) = ({term:policy:model} preference) + constant\nScore({term:rejected:loser})  = ({term:policy:model} preference) + constant\n\nDifference = Score({term:preferred:winner}) - Score({term:rejected:loser})\n           = ({term:policy:model} likes {term:preferred:winner}) - ({term:policy:model} likes {term:rejected:loser})\n           ← The constant cancels!</code><br><br><strong>Result:</strong> We never need to compute scores for all possible {term:output:responses}. Just compare two at a time."
+        }
+      ]
+    },
+    {
+      "id": "slide-1-3",
+      "sectionIndex": 1,
+      "title": "GRPO - Group Relative Policy Optimization",
+      "content": [
+        {
+          "type": "equation",
+          "id": "grpo_objective",
+          "label": "The GRPO Objective",
+          "parts": [
+            {
+              "type": "term",
+              "key": "loss",
+              "text": "L"
+            },
+            {
+              "type": "raw",
+              "text": "^GRPO = "
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "green",
+              "label": "Clipped Policy Update",
+              "labelColor": "advantage",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "expectation",
+                  "text": "E"
+                },
+                {
+                  "type": "raw",
+                  "text": "[min("
+                },
+                {
+                  "type": "term",
+                  "key": "ppo-ratio",
+                  "text": "r_t"
+                },
+                {
+                  "type": "raw",
+                  "text": " × "
+                },
+                {
+                  "type": "term",
+                  "key": "advantage",
+                  "text": "Â"
+                },
+                {
+                  "type": "raw",
+                  "text": ", clip("
+                },
+                {
+                  "type": "term",
+                  "key": "ppo-ratio",
+                  "text": "r_t"
+                },
+                {
+                  "type": "raw",
+                  "text": "1-"
+                },
+                {
+                  "type": "term",
+                  "key": "clip-epsilon",
+                  "text": "ε"
+                },
+                {
+                  "type": "raw",
+                  "text": ", "
+                },
+                {
+                  "type": "raw",
+                  "text": "1+"
+                },  
+                {
+                  "type": "term",
+                  "key": "clip-epsilon",
+                  "text": "ε"
+                },
+                {
+                  "type": "raw",
+                  "text": " × "
+                },
+                {
+                  "type": "term",
+                  "key": "advantage",
+                  "text": "Â"
+                },
+                {
+                  "type": "raw",
+                  "text": ")]"
+                }
+              ]
+            },
+            {
+              "type": "operator",
+              "symbol": "−"
+            },
+            {
+              "type": "labeled-expression",
+              "underline": "pink",
+              "label": "Drift Penalty",
+              "labelColor": "kl",
+              "content": [
+                {
+                  "type": "term",
+                  "key": "beta",
+                  "text": "β"
+                },
+                {
+                  "type": "raw",
+                  "text": " × "
+                },
+                {
+                  "type": "term",
+                  "key": "kl",
+                  "text": "KL"
+                },
+                {
+                  "type": "raw",
+                  "text": "("
+                },
+                {
+                  "type": "term",
+                  "key": "policy",
+                  "text": "π_θ"
+                },
+                {
+                  "type": "raw",
+                  "text": " || "
+                },
+                {
+                  "type": "term",
+                  "key": "reference",
+                  "text": "π_ref"
+                },
+                {
+                  "type": "raw",
+                  "text": ")"
+                }
+              ]
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>What's happening here?</strong> ",
+            "template": "<br><br><strong>The {term:advantage:Clipped Policy Update}:</strong><br>We generate multiple {term:output:responses} to one {term:input:question} and score each with a {term:reward: Python function}. Then we compute which ones were better/worse than the {term:group-size:group} average → that's the {term:advantage:Advantage Â}. The {term:ppo-ratio:ratio r_t} asks: 'How much more likely are these {term:token:tokens} under {term:policy:our current model} vs {term:policy:the old version}?' The 'clip' bounds this to [{term:clip-epsilon:1-ε}, {term:clip-epsilon:1+ε}] to prevent too aggressive changes.<br><br><strong>The {term:kl:Drift Penalty}:</strong><br>The {term:kl:KL divergence} measures how far {term:policy:our current model π_θ} has drifted from the {term:reference:original model π_ref}. The {term:beta:β} controls how strongly we penalize drift. Many GRPO implementations set {term:beta:β}=0 since well-designed verifiable {term:reward:rewards} don't need this constraint.<br><br><strong>Result:</strong> {term:token:Tokens} in good {term:output:responses} get positive {term:advantage:advantage} → become more likely. {term:token:Tokens} in bad {term:output:responses} get negative {term:advantage:advantage} → become less likely."
+          }
+        },
+         {
+          "type": "insight-box",
+          "title": "",
+          "content": "<strong>In general sense:</strong><br><br><strong>Step 1:</strong> Take a {term:input:question} like 'What is 23 × 17?'<br><br><strong>Step 2:</strong> Ask {term:policy:your LLM} to answer it {term:group-size:G}=8 different times (8 attempts at the same problem)<br><br><strong>Step 3:</strong> For each {term:output:answer}, run a {term:reward:reward function} that checks: 'Is this correct?'<br><code class=\"code-block\">def {term:reward:check_math}({term:output:response}):\n    answer = extract_number({term:output:response})\n    return 1.0 if answer == 391 else 0.0</code><br><br><strong>Step 4:</strong> You now have {term:group-size:G} {term:reward:scores}: [1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0]<br><br><strong>Step 5:</strong> Compute {term:advantage:advantages}: 'Which {term:output:answers} were better than {term:expectation:average}? Which were worse?'<br>• {term:expectation:Average} = 0.625<br>• {term:output:Answer} #1: {term:reward:r}=1.0 → Better than {term:expectation:average} → positive {term:advantage:Â} → <strong>Reinforce these {term:token:tokens}</strong><br>• {term:output:Answer} #2: {term:reward:r}=0.0 → Worse than {term:expectation:average} → negative {term:advantage:Â} → <strong>Discourage these {term:token:tokens}</strong><br><br><strong>Step 6:</strong> Update {term:theta:model weights} so {term:policy:it} generates more {term:output:answers} like #1, fewer like #2<br><br><strong>That's it. No neural {term:reward:reward model}. No {term:value:critic network}. Just: generate, score, compare, update.</strong>"
+        },
+
+        {
+          "type": "equation",
+          "id": "grpo_advantage",
+          "label": "The Group-Relative Advantage (Key Innovation)",
+          "parts": [
+            {
+              "type": "term",
+              "key": "advantage",
+              "text": "Â"
+            },
+            {
+              "type": "raw",
+              "text": "_i = ("
+            },
+            {
+              "type": "term",
+              "key": "reward",
+              "text": "r"
+            },
+            {
+              "type": "raw",
+              "text": "_i − mean("
+            },
+            {
+              "type": "term",
+              "key": "reward",
+              "text": "r"
+            },
+            {
+              "type": "raw",
+              "text": ")) / std("
+            },
+            {
+              "type": "term",
+              "key": "reward",
+              "text": "r"
+            },
+            {
+              "type": "raw",
+              "text": ")"
+            }
+          ],
+          "explanation": {
+            "prefix": "<strong>Reading this formula:</strong> ",
+            "template": "For each {term:output:response} i, its {term:advantage:Advantage Â} equals: take that {term:output:response}'s {term:reward:score r}, subtract the group {term:expectation:mean}, then divide by the group standard deviation.<br><br>• If {term:reward:r}_i > mean → {term:advantage:Â}_i is positive → this set of tokens should come again {term:output:response}'s {term:token:tokens}<br>• If {term:reward:r}_i < mean → {term:advantage:Â}_i is negative → discourage this {term:output:response}'s {term:token:tokens}<br><br><strong>This is just Z-score normalization from statistics!</strong> No {term:value:critic network} needed to predict {term:reward:rewards} — we OBSERVE actual {term:reward:scores} and compare them."
+          }
+        },
+        {
+          "type": "insight-box",
+          "title": "In Code",
+          "content": "<code class=\"code-block\">{term:output:responses} = generate({term:input:prompt}, n={term:group-size:G})  # 8 attempts\n{term:reward:scores} = [{term:reward:reward_fn}(r) for r in {term:output:responses}]  # Score each\nmean = sum({term:reward:scores}) / {term:group-size:G}\nstd = compute_std({term:reward:scores})\n\nfor i, {term:output:response} in enumerate({term:output:responses}):\n    {term:advantage:advantage}[i] = ({term:reward:scores}[i] - mean) / std\n    # If {term:advantage:advantage} > 0: reinforce this {term:output:response}'s {term:token:tokens}\n    # If {term:advantage:advantage} < 0: discourage this {term:output:response}'s {term:token:tokens}</code>"
+        },
+        {
+          "type": "insight-box",
+          "title": "The {term:reward:Reward Functions} (Python, Not Neural Networks)",
+          "content": "<strong>GRPO shines when you can write a function to check correctness.</strong><br><br><strong>1. Final Answer Accuracy (Math, MCQ, Reasoning)</strong><br><code class=\"code-block\">def {term:reward:accuracy_reward}({term:output:response}, ground_truth):\n    predicted = extract_final_answer({term:output:response})\n    return 1.0 if predicted == ground_truth else 0.0</code><br><em>Use case: Focus {term:policy:the model} on getting the final answer right</em><br><br><strong>2. Step-by-Step Verification (When you have GT for each step)</strong><br><code class=\"code-block\">def {term:reward:step_reward}({term:output:response}, step_ground_truths):\n    steps = extract_steps({term:output:response})\n    {term:reward:score} = 0\n    for i, (pred, gt) in enumerate(zip(steps, step_ground_truths)):\n        if pred == gt:\n            {term:reward:score} += 1\n    return {term:reward:score} / len(step_ground_truths)</code><br><em>Use case: Train {term:policy:the model} to reason correctly at each step</em><br><br><strong>3. Structure/Format (JSON, XML, Tags)</strong><br><code class=\"code-block\">def {term:reward:format_reward}({term:output:response}):\n    has_think = '&lt;think&gt;' in {term:output:response} and '&lt;/think&gt;' in {term:output:response}\n    has_answer = '&lt;answer&gt;' in {term:output:response} and '&lt;/answer&gt;' in {term:output:response}\n    return 1.0 if (has_think and has_answer) else 0.0</code><br><em>Use case: Force {term:policy:the model} to use specific output structure</em><br><br><strong>4. Length Constraints</strong><br><code class=\"code-block\">def {term:reward:length_reward}({term:output:response}, min_words=50, max_words=200):\n    word_count = len({term:output:response}.split())\n    if word_count < min_words:\n        return -0.5  # Too short\n    elif word_count > max_words:\n        return -0.5  # Too verbose\n    return 1.0</code><br><em>Use case: Optimal blog writing, concise {term:output:answers}</em><br><br><strong>5. What if you CAN'T verify with a function?</strong><br><code class=\"code-block\">def {term:reward:llm_judge_reward}({term:output:response}, {term:input:prompt}):\n    judge_prompt = f\"Rate this {term:output:response} 1-10: {{term:output:response}}\"\n    {term:reward:score} = call_judge_llm(judge_prompt)\n    return {term:reward:score} / 10.0</code><br><em>Use case: Subjective quality (writing style, helpfulness)</em>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Combining Multiple {term:reward:Rewards}",
+          "content": "<strong>Real training uses weighted combinations:</strong><br><br><code class=\"code-block\">def {term:reward:combined_reward}({term:output:response}, ground_truth):\n    accuracy = {term:reward:accuracy_reward}({term:output:response}, ground_truth)   # 0 or 1\n    format_ok = {term:reward:format_reward}({term:output:response})                  # 0 or 1\n    length_ok = {term:reward:length_reward}({term:output:response})                  # -0.5, 0, or 1\n    \n    # Weight by importance\n    return 0.7 * accuracy + 0.2 * format_ok + 0.1 * length_ok</code><br><br><strong>This lets you:</strong><br>• Focus 70% on correctness ({term:reward:accuracy})<br>• 20% on proper formatting ({term:reward:format})<br>• 10% on length ({term:reward:length})<br><br><strong>{term:policy:The model} learns to optimize ALL objectives simultaneously.</strong>"
+        },
+        {
+          "type": "insight-box",
+          "title": "Step-by-Step: One Complete Training Iteration",
+          "content": "<strong>{term:input:Prompt}:</strong> 'What is 23 × 17?'<br><br><strong>1. GENERATE {term:group-size:G}=8 {term:output:responses} from {term:policy:π_θ}:</strong><br><code class=\"code-block\">R1: 'Let me calculate: 23×17 = 391' \nR2: '23 times 17 equals 381'\nR3: '391'\nR4: 'I think it's around 400'\nR5: '23×17 = 23×10 + 23×7 = 230+161 = 391'\nR6: '392'\nR7: 'The answer is 391.'\nR8: '23*17=391'</code><br><br><strong>2. SCORE each with your {term:reward:reward function}:</strong><br><code class=\"code-block\">{term:reward:scores} = [1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0]</code><br><br><strong>3. COMPUTE group statistics:</strong><br><code class=\"code-block\">{term:expectation:mean} = 0.625\nstd = 0.484</code><br><br><strong>4. COMPUTE {term:advantage:advantage} for each {term:output:response}:</strong><br><code class=\"code-block\">R1: ({term:reward:r} - {term:expectation:mean}) / std = (1.0 - 0.625) / 0.484 = +0.77  ← {term:token:Tokens} reinforced\nR2: (0.0 - 0.625) / 0.484 = -1.29  ← {term:token:Tokens} discouraged\nR5: (1.0 - 0.625) / 0.484 = +0.77  ← Step-by-step reasoning worked!</code><br><br><strong>5. UPDATE {term:theta:model weights}:</strong><br>• For R1, R3, R5, R7, R8: Positive {term:advantage:Â} → increase {term:probability:P} of these {term:token:token} sequences<br>• For R2, R4, R6: Negative {term:advantage:Â} → decrease {term:probability:P} of these {term:token:token} sequences<br><br><strong>6. REPEAT with next batch of {term:input:prompts}</strong><br><br><strong>After thousands of iterations:</strong> {term:policy:The model} reliably produces correct answers with good formatting."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Aspect",
+            "PPO-{term:rlhf:RLHF}",
+            "{term:dpo:DPO}",
+            "{term:grpo:GRPO}"
+          ],
+          "rows": [
+            [
+              "{term:model:Models} Required",
+              "4 ({term:policy:policy}, {term:reference:reference}, {term:reward:reward model}, {term:value:critic})",
+              "2 ({term:policy:policy}, {term:reference:reference})",
+              "2 ({term:policy:policy}, {term:reference:reference})"
+            ],
+            [
+              "How {term:reward:Rewards} Work",
+              "Neural network trained on human preferences",
+              "{term:implicit-reward:Implicit} from {term:probability:probability} ratios",
+              "Python {term:reward:functions} you write"
+            ],
+            [
+              "How {term:advantage:Advantage} Works",
+              "{term:value:Critic network} predicts {term:expectation:expected} {term:reward:reward}",
+              "N/A (direct optimization)",
+              "Group {term:expectation:mean}/std comparison"
+            ],
+            [
+              "{term:data:Data} During Training",
+              "Generates new {term:output:responses} each batch",
+              "Fixed preference pairs ({term:preferred:winner}/{term:rejected:loser})",
+              "Generates {term:group-size:G} {term:output:responses} per {term:input:prompt}"
+            ],
+            [
+              "Best Use Case",
+              "General alignment (helpful, harmless)",
+              "Learning from preference pairs",
+              "Verifiable tasks (math, code, format)"
+            ],
+            [
+              "Memory (7B {term:model:model})",
+              "~56GB (4 {term:model:models})",
+              "~28GB (2 {term:model:models})",
+              "~28GB (2 {term:model:models})"
+            ]
+          ]
+        },
+        {
+          "type": "insight-box",
+          "title": "Why GRPO Works Without a {term:value:Critic}",
+          "content": "<strong>PPO's approach:</strong> Train a {term:value:critic network V} to predict 'How good will the final {term:output:response} be?' at each {term:token:token}. This is expensive and hard to train.<br><br><strong>GRPO's insight:</strong> Why predict {term:reward:rewards} when you can just observe them?<br><br><strong>1.</strong> Generate {term:group-size:G} complete {term:output:responses} from {term:policy:π_θ}<br><strong>2.</strong> Score them with your actual {term:reward:reward function}<br><strong>3.</strong> The {term:reward:scores} ARE the ground truth - no prediction needed<br><strong>4.</strong> {term:output:Responses} with {term:reward:r} > {term:expectation:mean} = good. Below {term:expectation:mean} = bad.<br><br><strong>The trade-off:</strong> You need to generate {term:group-size:G} {term:output:responses} per {term:input:prompt} (more compute during training), but you skip training a {term:value:critic network} entirely.<br><br><strong>For verifiable tasks (math, code):</strong> This trade-off is excellent. Your {term:reward:reward function} is perfect (correct = 1, wrong = 0), so the signal is clean."
         }
       ]
     }

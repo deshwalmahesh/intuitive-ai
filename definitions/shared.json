@@ -142,6 +142,12 @@
     },
     "dpo": {
       "display": "DPO"
+    },
+    "grpo": {
+      "display": "GRPO"
+    },
+    "group-size": {
+      "display": "G"
     }
   },
   "popups": {
@@ -1082,6 +1088,54 @@
           "type": "example",
           "title": "What You Need",
           "content": "<strong>Models:</strong> 2 (current + frozen reference) vs PPO's 4<br><strong>Data:</strong> Fixed preference pairs (no generation during training)<br><strong>Hyperparameters:</strong> Just β and learning rate"
+        }
+      ]
+    },
+    "grpo": {
+      "title": "GRPO - Group Relative Policy Optimization",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "<strong>The Core Trick:</strong> Instead of training a separate {term:value:critic} network to predict 'how good is this state?', GRPO generates MULTIPLE responses to the same {term:input:prompt} and compares them against each other.<br><br><strong>The Question it Asks:</strong> 'Was this response better or worse than the average of its group?'<br><br>If you generated 8 responses and response #3 scored 0.9 while the group average was 0.5, that's a significant {term:advantage:advantage}. No critic needed — just basic statistics!"
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "A variant of PPO that replaces the learned {term:value:value function} with group-relative baseline estimation. Samples {term:group-size:G} outputs per {term:input:prompt}, computes normalized {term:advantage:advantages} via Z-score standardization within each group.",
+          "formula": "{term:advantage:Â}_i = ({term:reward:r}_i − mean({term:reward:r})) / std({term:reward:r})"
+        },
+        {
+          "type": "example",
+          "title": "Why This Works",
+          "content": "<strong>Traditional PPO:</strong> Train a critic to predict V(state) = 0.65<br>Actual reward R = 0.85 → Advantage = 0.85 - 0.65 = +0.20<br><br><strong>GRPO:</strong> Generate 8 responses, get rewards [0.3, 0.7, 0.5, 0.85, 0.2, 0.6, 0.4, 0.9]<br>Mean = 0.55, Std = 0.23<br>Response #4 (0.85): Advantage = (0.85 - 0.55) / 0.23 = +1.30<br><br>Same signal, no extra network to train!"
+        }
+      ]
+    },
+    "group-size": {
+      "title": "G - Group Size",
+      "sections": [
+        {
+          "type": "intuitive",
+          "title": "Intuitive Definition",
+          "content": "How many different responses do we generate for each {term:input:prompt}? If {term:group-size:G}=8, we ask the {term:model:model} to solve the same problem 8 different ways, then compare which attempts worked best.<br><br><strong>Why multiple?</strong> More samples = more reliable statistics. With only 2 responses, 'average' is noisy. With 8-16, we get stable estimates of what's good vs bad."
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "scientific",
+          "title": "",
+          "content": "The number of completions sampled per {term:input:prompt} for computing group-relative {term:advantage:advantages}. Typical values: 4-16 for training, 64+ for evaluation.",
+          "formula": "{o_1, o_2, ..., o_G} ~ {term:policy:π}_θ(·|q)"
+        },
+        {
+          "type": "example",
+          "title": "Practical Values",
+          "content": "<strong>G = 4:</strong> Fast but noisy statistics<br><strong>G = 8:</strong> Good balance (DeepSeek default)<br><strong>G = 16:</strong> Stable but more compute<br><br><strong>Trade-off:</strong> Higher G = better statistics but more GPU memory for generation"
         }
       ]
     }

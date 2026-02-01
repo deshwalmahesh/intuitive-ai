@@ -882,7 +882,7 @@
                 },
                 {
                   "type": "raw",
-                  "text": "1-"
+                  "text": ", 1-"
                 },
                 {
                   "type": "term",
@@ -896,7 +896,7 @@
                 {
                   "type": "raw",
                   "text": "1+"
-                },  
+                },
                 {
                   "type": "term",
                   "key": "clip-epsilon",
@@ -904,7 +904,7 @@
                 },
                 {
                   "type": "raw",
-                  "text": " × "
+                  "text": ") × "
                 },
                 {
                   "type": "term",
@@ -1049,8 +1049,8 @@
           "headers": [
             "Aspect",
             "PPO-{term:rlhf:RLHF}",
-            "{term:dpo:DPO}",
-            "{term:grpo:GRPO}"
+            "DPO",
+            "GRPO"
           ],
           "rows": [
             [

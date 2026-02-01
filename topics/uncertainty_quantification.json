@@ -1009,14 +1009,6 @@
       ]
     }
   ],
-  "colorPalette": {
-    "mutual-info": "#a21caf",
-    "epistemic-var": "#2563eb",
-    "aleatoric-var": "#7f1d1d",
-    "epistemic-info": "#818cf8",
-    "aleatoric-info": "#e11d48",
-    "total": "#581c87"
-  },
   "terms": {
     "mutual-info": {
       "display": "I"
